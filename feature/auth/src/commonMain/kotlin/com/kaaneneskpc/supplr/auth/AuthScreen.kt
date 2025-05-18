@@ -62,7 +62,7 @@ fun AuthScreen() {
                     )
                 }
                 GoogleButton(
-                    loading = true,
+                    loading = false,
                     onClick = {}
                 )
             }
