@@ -47,8 +47,10 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.messagebar.kmp)
+            implementation(libs.auth.kmp)
+            implementation(libs.auth.firebase.kmp)
             implementation(project(":shared"))
-            // implementation(libs.auth.kmp)
+
 
             // implementation(libs.koin.compose)
 
