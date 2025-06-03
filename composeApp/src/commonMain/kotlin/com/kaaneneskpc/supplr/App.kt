@@ -10,7 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.kaaneneskpc.supplr.navigation.NavGraph
-import com.kaaneneskpc.supplr.shared.fonts.Constants.WEB_CLIENT_ID
+import com.kaaneneskpc.supplr.shared.Consts.WEB_CLIENT_ID
 import com.mmk.kmpauth.google.GoogleAuthCredentials
 import com.mmk.kmpauth.google.GoogleAuthProvider
 import org.jetbrains.compose.resources.painterResource
