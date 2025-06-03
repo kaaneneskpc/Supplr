@@ -51,6 +51,7 @@ kotlin {
             implementation(libs.auth.firebase.kmp)
             implementation(project(":navigation"))
             implementation(project(":shared"))
+            implementation(project(":di"))
 
             //implementation(libs.koin.compose)
 
