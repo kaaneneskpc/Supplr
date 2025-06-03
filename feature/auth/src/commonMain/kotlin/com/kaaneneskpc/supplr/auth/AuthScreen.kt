@@ -30,10 +30,12 @@ import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.fonts.TextSecondary
 import com.kaaneneskpc.supplr.shared.fonts.TextWhite
 import com.mmk.kmpauth.firebase.google.GoogleButtonUiContainerFirebase
+import org.koin.compose.viewmodel.koinViewModel
 import rememberMessageBarState
 
 @Composable
 fun AuthScreen() {
+    val viewModel = koinViewModel<AuthViewModel>()
     val messageBarState = rememberMessageBarState()
     var loadingState by remember { mutableStateOf(false) }
 
@@ -84,7 +86,15 @@ fun AuthScreen() {
                     linkAccount = false,
                     onResult = { result ->
                         result.onSuccess { user ->
-                            messageBarState.addSuccess("Authentication successful!")
+                            viewModel.createCustomer(
+                                user = user,
+                                onSuccess = {
+                                    messageBarState.addSuccess("Customer created successfully!")
+                                },
+                                onError = { errorMessage ->
+                                    messageBarState.addError(errorMessage)
+                                }
+                            )
                             loadingState = false
                         }.onFailure { error ->
                             if (error.message?.contains("A network error") == true) {

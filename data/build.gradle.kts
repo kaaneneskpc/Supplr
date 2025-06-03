@@ -13,7 +13,7 @@ kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
 
@@ -23,7 +23,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "Di"
+            baseName = "Data"
             isStatic = true
             //export(libs.kmp.notifier)
         }
@@ -39,25 +39,23 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
-            implementation(project(":feature:auth"))
-            implementation(project(":data"))
+            implementation(libs.firebase.firestore)
+            implementation(libs.auth.firebase.kmp)
+            implementation(project(":shared"))
         }
     }
 }
 
 android {
-    namespace = "com.kaaneneskpc.supplr.di"
+    namespace = "com.kaaneneskpc.supplr.data"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     lint {
         targetSdk = libs.versions.android.targetSdk.get().toInt()

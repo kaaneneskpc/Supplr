@@ -25,7 +25,6 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "Auth"
             isStatic = true
-            //export(libs.kmp.notifier)
         }
     }
 
@@ -42,12 +41,10 @@ kotlin {
             implementation(libs.messagebar.kmp)
             implementation(libs.auth.kmp)
             implementation(libs.auth.firebase.kmp)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
             implementation(project(":shared"))
-
-
-            // implementation(libs.koin.compose)
-
-            //api(libs.kmp.notifier)
+            implementation(project(":data"))
         }
     }
 }
