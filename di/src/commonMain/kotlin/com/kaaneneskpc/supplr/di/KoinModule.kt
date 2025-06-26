@@ -6,8 +6,8 @@ import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import com.kaaneneskpc.supplr.auth.AuthViewModel
-import com.kaaneneskpc.supplr.customer.CustomerRepository
-import com.kaaneneskpc.supplr.customer.CustomerRepositoryImpl
+import com.kaaneneskpc.supplr.data.CustomerRepository
+import com.kaaneneskpc.supplr.data.CustomerRepositoryImpl
 
 val sharedModule = module {
     single<CustomerRepository> { CustomerRepositoryImpl() }

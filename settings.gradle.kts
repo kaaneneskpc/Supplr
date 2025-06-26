@@ -29,7 +29,7 @@ dependencyResolutionManagement {
 }
 include(":data")
 include(":di")
-
+include(":feature:home")
 include(":navigation")
 include(":feature:auth")
 include(":navigation")
