@@ -7,7 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.kaaneneskpc.supplr.data.CustomerRepository
 import com.kaaneneskpc.supplr.navigation.NavGraph
-import com.kaaneneskpc.supplr.navigation.Screen
+import com.kaaneneskpc.supplr.shared.navigation.Screen
 import com.kaaneneskpc.supplr.shared.Consts.WEB_CLIENT_ID
 import com.mmk.kmpauth.google.GoogleAuthCredentials
 import com.mmk.kmpauth.google.GoogleAuthProvider

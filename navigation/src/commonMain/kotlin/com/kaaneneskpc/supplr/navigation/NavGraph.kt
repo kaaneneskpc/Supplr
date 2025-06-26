@@ -1,12 +1,12 @@
 package com.kaaneneskpc.supplr.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kaaneneskpc.supplr.auth.AuthScreen
 import com.kaaneneskpc.supplr.home.HomeScreen
+import com.kaaneneskpc.supplr.shared.navigation.Screen
 
 @Composable
 fun NavGraph(startDestination: Screen = Screen.Auth) {
