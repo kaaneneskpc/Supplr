@@ -16,7 +16,13 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
         startDestination = startDestination
     ) {
         composable<Screen.Auth> {
-            AuthScreen()
+            AuthScreen(
+                navigateToHome = {
+                    navController.navigate(Screen.Home) {
+                        popUpTo<Screen.Auth> { inclusive = true }
+                    }
+                }
+            )
         }
         composable<Screen.Home> {
             HomeScreen()

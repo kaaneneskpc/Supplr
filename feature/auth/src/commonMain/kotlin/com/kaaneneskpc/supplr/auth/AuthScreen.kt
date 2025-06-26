@@ -30,14 +30,19 @@ import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.fonts.TextSecondary
 import com.kaaneneskpc.supplr.shared.fonts.TextWhite
 import com.mmk.kmpauth.firebase.google.GoogleButtonUiContainerFirebase
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import rememberMessageBarState
 
 @Composable
-fun AuthScreen() {
+fun AuthScreen(
+    navigateToHome: () -> Unit
+) {
     val viewModel = koinViewModel<AuthViewModel>()
     val messageBarState = rememberMessageBarState()
     var loadingState by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold { padding ->
         ContentWithMessageBar(
@@ -89,7 +94,11 @@ fun AuthScreen() {
                             viewModel.createCustomer(
                                 user = user,
                                 onSuccess = {
-                                    messageBarState.addSuccess("Customer created successfully!")
+                                    coroutineScope.launch {
+                                        messageBarState.addSuccess("Customer created successfully!")
+                                        delay(2000)
+                                        navigateToHome()
+                                    }
                                 },
                                 onError = { errorMessage ->
                                     messageBarState.addError(errorMessage)
