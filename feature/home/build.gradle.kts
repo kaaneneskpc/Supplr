@@ -40,6 +40,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.compose.navigation)
             implementation(project(":shared"))
             implementation(project(":data"))
         }
