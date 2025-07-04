@@ -43,7 +43,6 @@ fun BottomBar(
             val animatedTint by animateColorAsState(
                 targetValue = if (selected == destination) IconSecondary else IconPrimary
             )
-            // IconButton(onClick = { onSelect(destination) }) {
             Icon(
                 modifier = Modifier.clickable { onSelect(destination) },
                 painter = painterResource(destination.icon),

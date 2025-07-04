@@ -1,12 +1,19 @@
 package com.kaaneneskpc.supplr.home
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -19,9 +26,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kaaneneskpc.supplr.home.component.BottomBar
 import com.kaaneneskpc.supplr.home.domain.BottomBarDestination
+import com.kaaneneskpc.supplr.shared.fonts.BebasNeueFont
+import com.kaaneneskpc.supplr.shared.fonts.FontSize
+import com.kaaneneskpc.supplr.shared.fonts.IconPrimary
+import com.kaaneneskpc.supplr.shared.fonts.Resources
 import com.kaaneneskpc.supplr.shared.fonts.Surface
+import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.navigation.Screen
+import org.jetbrains.compose.resources.painterResource
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
     val navController = rememberNavController()
@@ -33,13 +47,45 @@ fun HomeScreen() {
                 route.contains(BottomBarDestination.Products.screen.toString()) -> BottomBarDestination.Products
                 route.contains(BottomBarDestination.Cart.screen.toString()) -> BottomBarDestination.Cart
                 route.contains(BottomBarDestination.Categories.screen.toString()) -> BottomBarDestination.Categories
-                else -> BottomBarDestination.Products // Default to Products if no match
+                else -> BottomBarDestination.Products
             }
         }
 
     }
     Scaffold(
-        containerColor = Surface
+        containerColor = Surface,
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    AnimatedContent(
+                        targetState = selectedDestination
+                    ) {
+                        Text(
+                            text = selectedDestination.title,
+                            fontFamily = BebasNeueFont(),
+                            fontSize = FontSize.LARGE,
+                            color = TextPrimary
+                        )
+                    }
+                },
+                navigationIcon = {
+                    IconButton(onClick = {}) {
+                        Icon(
+                            painter = painterResource(Resources.Icon.Menu),
+                            contentDescription = "Menu Icon",
+                            tint = IconPrimary
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Surface,
+                    scrolledContainerColor = Surface,
+                    navigationIconContentColor = IconPrimary,
+                    titleContentColor = TextPrimary,
+                    actionIconContentColor = IconPrimary
+                )
+            )
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier.fillMaxSize().padding(
