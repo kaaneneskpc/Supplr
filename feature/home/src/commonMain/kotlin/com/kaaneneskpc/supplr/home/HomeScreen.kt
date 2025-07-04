@@ -1,12 +1,14 @@
 package com.kaaneneskpc.supplr.home
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,12 +27,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kaaneneskpc.supplr.home.component.BottomBar
+import com.kaaneneskpc.supplr.home.component.CustomDrawer
 import com.kaaneneskpc.supplr.home.domain.BottomBarDestination
 import com.kaaneneskpc.supplr.shared.fonts.BebasNeueFont
 import com.kaaneneskpc.supplr.shared.fonts.FontSize
 import com.kaaneneskpc.supplr.shared.fonts.IconPrimary
 import com.kaaneneskpc.supplr.shared.fonts.Resources
 import com.kaaneneskpc.supplr.shared.fonts.Surface
+import com.kaaneneskpc.supplr.shared.fonts.SurfaceLighter
 import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.navigation.Screen
 import org.jetbrains.compose.resources.painterResource
@@ -52,11 +56,17 @@ fun HomeScreen() {
         }
 
     }
-    Scaffold(
-        containerColor = Surface,
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
+    Box(modifier = Modifier.fillMaxSize().background(SurfaceLighter).systemBarsPadding()) {
+        CustomDrawer(
+            onProfileClick = { /* TODO: Handle profile click */ },
+            onContactUsClick = { /* TODO: Handle contact us click */ },
+            onSignOutClick = { /* TODO: Handle sign out click */ },
+            onAdminPanelClick = { /* TODO: Handle admin panel click */ }
+        )
+        /* Scaffold(
+            containerColor = Surface, topBar = {
+                CenterAlignedTopAppBar(
+                    title = {
                     AnimatedContent(
                         targetState = selectedDestination
                     ) {
@@ -67,8 +77,7 @@ fun HomeScreen() {
                             color = TextPrimary
                         )
                     }
-                },
-                navigationIcon = {
+                }, navigationIcon = {
                     IconButton(onClick = {}) {
                         Icon(
                             painter = painterResource(Resources.Icon.Menu),
@@ -76,51 +85,48 @@ fun HomeScreen() {
                             tint = IconPrimary
                         )
                     }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Surface,
                     scrolledContainerColor = Surface,
                     navigationIconContentColor = IconPrimary,
                     titleContentColor = TextPrimary,
                     actionIconContentColor = IconPrimary
                 )
-            )
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier.fillMaxSize().padding(
-                top = paddingValues.calculateTopPadding(),
-                bottom = paddingValues.calculateBottomPadding()
-            )
-        ) {
-            NavHost(
-                navController = navController,
-                startDestination = Screen.Products,
-                modifier = Modifier.weight(1f)
-            ) {
-                composable<Screen.Products> { }
-                composable<Screen.Cart> { }
-                composable<Screen.Categories> { }
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-            Box(
-                modifier = Modifier.padding(all = 12.dp)
-            ) {
-                BottomBar(
-                    selected = selectedDestination,
-                    onSelect = {
-                        navController.navigate(it.screen) {
-                            launchSingleTop = true
-                            popUpTo<Screen.Products> {
-                                saveState = true
-                                inclusive = false
-                            }
-                            restoreState = true
-                        }
-                    }
                 )
+            }) { paddingValues ->
+            Column(
+                modifier = Modifier.fillMaxSize().padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding()
+                )
+            ) {
+                NavHost(
+                    navController = navController,
+                    startDestination = Screen.Products,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    composable<Screen.Products> { }
+                    composable<Screen.Cart> { }
+                    composable<Screen.Categories> { }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+                Box(
+                    modifier = Modifier.padding(all = 12.dp)
+                ) {
+                    BottomBar(
+                        selected = selectedDestination, onSelect = {
+                            navController.navigate(it.screen) {
+                                launchSingleTop = true
+                                popUpTo<Screen.Products> {
+                                    saveState = true
+                                    inclusive = false
+                                }
+                                restoreState = true
+                            }
+                        })
+                }
             }
-        }
+        } */
     }
 }
