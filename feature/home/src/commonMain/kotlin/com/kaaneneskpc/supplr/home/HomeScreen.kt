@@ -1,5 +1,6 @@
 package com.kaaneneskpc.supplr.home
 
+import ContentWithMessageBar
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -54,10 +55,14 @@ import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.navigation.Screen
 import com.kaaneneskpc.supplr.shared.util.getScreenWidth
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
+import rememberMessageBarState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navigateToAuth: () -> Unit,
+) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState()
     val selectedDestination by remember {
@@ -71,6 +76,8 @@ fun HomeScreen() {
             }
         }
     }
+
+    val homeViewModel = koinViewModel<HomeViewModel>()
 
     val screenWidth = remember { getScreenWidth() }
     var drawerState by remember { mutableStateOf(CustomDrawerState.Closed) }
@@ -92,11 +99,20 @@ fun HomeScreen() {
         targetValue = if (drawerState.isOpened()) 20.dp else 0.dp
     )
 
+    val messageBarState = rememberMessageBarState()
+
     Box(modifier = Modifier.fillMaxSize().background(animatedBackground).systemBarsPadding()) {
         CustomDrawer(
             onProfileClick = { /* TODO: Handle profile click */ },
             onContactUsClick = { /* TODO: Handle contact us click */ },
-            onSignOutClick = { /* TODO: Handle sign out click */ },
+            onSignOutClick = {
+                homeViewModel.signOut(
+                    onSuccess = navigateToAuth ,
+                    onError = { errorMessage ->
+                        messageBarState.addError(errorMessage)
+                    }
+                )
+            },
             onAdminPanelClick = { /* TODO: Handle admin panel click */ }
         )
         Box(
@@ -156,38 +172,52 @@ fun HomeScreen() {
                             actionIconContentColor = IconPrimary
                         )
                     )
-                }) { paddingValues ->
-                Column(
-                    modifier = Modifier.fillMaxSize().padding(
-                        top = paddingValues.calculateTopPadding(),
-                        bottom = paddingValues.calculateBottomPadding()
-                    )
+                }
+            ) { paddingValues ->
+                ContentWithMessageBar(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            top = paddingValues.calculateTopPadding(),
+                            bottom = paddingValues.calculateBottomPadding()
+                        ),
+                    messageBarState = messageBarState,
+                    errorMaxLines = 2,
+                    contentBackgroundColor = Surface
                 ) {
-                    NavHost(
-                        navController = navController,
-                        startDestination = Screen.Products,
-                        modifier = Modifier.weight(1f)
+                    Column(
+                        modifier = Modifier.fillMaxSize().padding(
+                            top = paddingValues.calculateTopPadding(),
+                            bottom = paddingValues.calculateBottomPadding()
+                        )
                     ) {
-                        composable<Screen.Products> { }
-                        composable<Screen.Cart> { }
-                        composable<Screen.Categories> { }
-                    }
+                        NavHost(
+                            navController = navController,
+                            startDestination = Screen.Products,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            composable<Screen.Products> { }
+                            composable<Screen.Cart> { }
+                            composable<Screen.Categories> { }
+                        }
 
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Box(
-                        modifier = Modifier.padding(all = 12.dp)
-                    ) {
-                        BottomBar(
-                            selected = selectedDestination, onSelect = {
-                                navController.navigate(it.screen) {
-                                    launchSingleTop = true
-                                    popUpTo<Screen.Products> {
-                                        saveState = true
-                                        inclusive = false
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Box(
+                            modifier = Modifier.padding(all = 12.dp)
+                        ) {
+                            BottomBar(
+                                selected = selectedDestination, onSelect = {
+                                    navController.navigate(it.screen) {
+                                        launchSingleTop = true
+                                        popUpTo<Screen.Products> {
+                                            saveState = true
+                                            inclusive = false
+                                        }
+                                        restoreState = true
                                     }
-                                    restoreState = true
                                 }
-                            })
+                            )
+                        }
                     }
                 }
             }

@@ -41,6 +41,7 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.compose.navigation)
+            implementation(libs.messagebar.kmp)
             implementation(project(":shared"))
             implementation(project(":data"))
         }

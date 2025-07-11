@@ -8,10 +8,12 @@ import org.koin.dsl.module
 import com.kaaneneskpc.supplr.auth.AuthViewModel
 import com.kaaneneskpc.supplr.data.CustomerRepository
 import com.kaaneneskpc.supplr.data.CustomerRepositoryImpl
+import com.kaaneneskpc.supplr.home.HomeViewModel
 
 val sharedModule = module {
     single<CustomerRepository> { CustomerRepositoryImpl() }
     viewModelOf(::AuthViewModel)
+    viewModelOf(::HomeViewModel)
 }
 
 fun initializeKoin(

@@ -1,6 +1,7 @@
 package com.kaaneneskpc.supplr.data
 
 import com.kaaneneskpc.supplr.shared.domain.Customer
+import com.kaaneneskpc.supplr.shared.util.RequestState
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.FirebaseUser
 import dev.gitlive.firebase.auth.auth
@@ -43,6 +44,15 @@ class CustomerRepositoryImpl : CustomerRepository {
             }
         } catch (e: Exception) {
             onError(e.message ?: "An error occurred while creating the customer.")
+        }
+    }
+
+    override suspend fun signOut(): RequestState<Unit> {
+        return try {
+            Firebase.auth.signOut()
+            RequestState.Success(data = Unit)
+        } catch (e: Exception) {
+            RequestState.Error(e.message ?: "An error occurred while signing out.")
         }
     }
 }
