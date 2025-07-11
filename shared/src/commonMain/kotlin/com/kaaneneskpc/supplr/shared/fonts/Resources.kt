@@ -1,8 +1,10 @@
 package com.kaaneneskpc.supplr.shared.fonts
 
 import supplr.shared.generated.resources.Res
+import supplr.shared.generated.resources.australia
 import supplr.shared.generated.resources.back_arrow
 import supplr.shared.generated.resources.book
+import supplr.shared.generated.resources.canada
 import supplr.shared.generated.resources.cat
 import supplr.shared.generated.resources.check
 import supplr.shared.generated.resources.checkmark_image
@@ -10,6 +12,8 @@ import supplr.shared.generated.resources.close
 import supplr.shared.generated.resources.delete
 import supplr.shared.generated.resources.dollar
 import supplr.shared.generated.resources.edit
+import supplr.shared.generated.resources.france
+import supplr.shared.generated.resources.germany
 import supplr.shared.generated.resources.google_logo
 import supplr.shared.generated.resources.grid
 import supplr.shared.generated.resources.home
@@ -26,6 +30,8 @@ import supplr.shared.generated.resources.search
 import supplr.shared.generated.resources.serbia
 import supplr.shared.generated.resources.shopping_cart
 import supplr.shared.generated.resources.shopping_cart_image
+import supplr.shared.generated.resources.turkey
+import supplr.shared.generated.resources.uk
 import supplr.shared.generated.resources.unlock
 import supplr.shared.generated.resources.usa
 import supplr.shared.generated.resources.user
@@ -70,5 +76,11 @@ object Resources {
         val India = Res.drawable.india
         val Usa = Res.drawable.usa
         val Serbia = Res.drawable.serbia
+        val Turkey = Res.drawable.turkey
+        val UnitedKingdom = Res.drawable.uk
+        val Germany = Res.drawable.germany
+        val France = Res.drawable.france
+        val Canada = Res.drawable.canada
+        val Australia = Res.drawable.australia
     }
 }

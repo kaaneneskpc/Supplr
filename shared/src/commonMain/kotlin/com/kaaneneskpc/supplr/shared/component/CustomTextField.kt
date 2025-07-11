@@ -1,4 +1,4 @@
-package com.kaaneneskpc.supplr.profile.component
+package com.kaaneneskpc.supplr.shared.component
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.border

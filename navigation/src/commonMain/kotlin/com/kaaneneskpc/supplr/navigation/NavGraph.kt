@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kaaneneskpc.supplr.auth.AuthScreen
 import com.kaaneneskpc.supplr.home.HomeScreen
+import com.kaaneneskpc.supplr.profile.ProfileScreen
 import com.kaaneneskpc.supplr.shared.navigation.Screen
 
 @Composable
@@ -30,8 +31,14 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                     navController.navigate(Screen.Auth) {
                         popUpTo<Screen.Auth> { inclusive = true }
                     }
+                },
+                navigateToProfile = {
+                    navController.navigate(Screen.Profile)
                 }
             )
+        }
+        composable<Screen.Profile> {
+            ProfileScreen()
         }
     }
 

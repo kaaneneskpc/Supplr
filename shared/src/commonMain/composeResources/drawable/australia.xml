@@ -1,0 +1,42 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+  <!-- Rounded dark blue background -->
+  <path
+      android:fillColor="#00247D"
+      android:pathData="M2,0h20a2,2 0 0 1 2,2v20a2,2 0 0 1 -2,2h-20a2,2 0 0 1 -2,-2v-20a2,2 0 0 1 2,-2z" />
+
+  <!-- Union Jack (simplified in top-left corner) -->
+  <!-- White background cross -->
+  <path
+      android:fillColor="#FFFFFF"
+      android:pathData="M0,0h10v5h-10z M0,5h10v5h-10z" />
+  <!-- Red cross -->
+  <path
+      android:fillColor="#CF142B"
+      android:pathData="M0,2.2h10v0.6h-10z M4.7,0h0.6v10h-0.6z" />
+  <!-- Diagonal white lines -->
+  <path
+      android:fillColor="#FFFFFF"
+      android:pathData="M0,0l10,10m0,-10l-10,10" />
+  <!-- Red diagonal overlay (approximation) -->
+  <path
+      android:fillColor="#CF142B"
+      android:strokeWidth="0"
+      android:pathData="M0,0l1.2,0l8.8,8.8v1.2z M10,0l-1.2,0l-8.8,8.8v1.2z" />
+
+  <!-- Commonwealth Star (below Union Jack) -->
+  <path
+      android:fillColor="#FFFFFF"
+      android:pathData="M5,11l0.4,1.2h1.2l-1,0.7l0.4,1.2l-1,-0.7l-1,0.7l0.4,-1.2l-1,-0.7h1.2z" />
+
+  <!-- Southern Cross stars -->
+  <path android:fillColor="#FFFFFF" android:pathData="M16,4.5l0.3,0.9h1l-0.8,0.6l0.3,0.9l-0.8,-0.6l-0.8,0.6l0.3,-0.9l-0.8,-0.6h1z"/>
+  <path android:fillColor="#FFFFFF" android:pathData="M20,7l0.3,0.9h1l-0.8,0.6l0.3,0.9l-0.8,-0.6l-0.8,0.6l0.3,-0.9l-0.8,-0.6h1z"/>
+  <path android:fillColor="#FFFFFF" android:pathData="M18,10l0.3,0.9h1l-0.8,0.6l0.3,0.9l-0.8,-0.6l-0.8,0.6l0.3,-0.9l-0.8,-0.6h1z"/>
+  <path android:fillColor="#FFFFFF" android:pathData="M20,13l0.3,0.9h1l-0.8,0.6l0.3,0.9l-0.8,-0.6l-0.8,0.6l0.3,-0.9l-0.8,-0.6h1z"/>
+  <path android:fillColor="#FFFFFF" android:pathData="M16,16l0.3,0.9h1l-0.8,0.6l0.3,0.9l-0.8,-0.6l-0.8,0.6l0.3,-0.9l-0.8,-0.6h1z"/>
+</vector>
