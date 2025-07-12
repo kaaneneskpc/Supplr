@@ -67,7 +67,7 @@ fun ProfileForm(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(state = rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
