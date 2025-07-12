@@ -11,6 +11,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,34 +69,46 @@ fun ProfileForm(
             .verticalScroll(state = rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        CustomTextField(
-            value = firstName,
-            onValueChange = onFirstNameChange,
-            placeholder = "First Name",
-            error = firstName.length !in 3..50
-        )
-        CustomTextField(
-            value = lastName,
-            onValueChange = onLastNameChange,
-            placeholder = "Last Name",
-            error = lastName.length !in 3..50
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            CustomTextField(
+                modifier = Modifier.weight(1f),
+                value = firstName,
+                onValueChange = onFirstNameChange,
+                label = "First Name",
+                leadingIcon = Icons.Default.Person,
+                error = firstName.length !in 3..50
+            )
+            CustomTextField(
+                modifier = Modifier.weight(1f),
+                value = lastName,
+                onValueChange = onLastNameChange,
+                label = "Last Name",
+                leadingIcon = Icons.Default.Person,
+                error = lastName.length !in 3..50
+            )
+        }
         CustomTextField(
             value = email,
             onValueChange = {},
-            placeholder = "Email",
+            label = "Email",
+            leadingIcon = Icons.Default.Email,
             enabled = false
         )
         CustomTextField(
             value = city ?: "",
             onValueChange = onCityChange,
-            placeholder = "City",
+            label = "City",
+            leadingIcon = Icons.Default.LocationOn,
             error = city?.length !in 3..50
         )
         CustomTextField(
             value = "${postalCode ?: ""}",
             onValueChange = { onPostalCodeChange(it.toIntOrNull()) },
-            placeholder = "Postal Code",
+            label = "Postal Code",
+            leadingIcon = Icons.Default.Call,
             error = postalCode == null || postalCode.toString().length !in 3..8,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
@@ -99,7 +117,8 @@ fun ProfileForm(
         CustomTextField(
             value = address ?: "",
             onValueChange = onAddressChange,
-            placeholder = "Address",
+            label = "Address",
+            leadingIcon = Icons.Default.LocationOn,
             error = address?.length !in 3..50
         )
         Row(
@@ -115,7 +134,8 @@ fun ProfileForm(
             CustomTextField(
                 value = phoneNumber ?: "",
                 onValueChange = onPhoneNumberChange,
-                placeholder = "Phone Number",
+                label = "Phone Number",
+                leadingIcon = Icons.Default.Phone,
                 error = phoneNumber.toString().length !in 5..30,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number

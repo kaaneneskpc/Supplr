@@ -6,6 +6,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -14,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.kaaneneskpc.supplr.shared.fonts.Alpha
@@ -21,6 +27,7 @@ import com.kaaneneskpc.supplr.shared.fonts.BorderError
 import com.kaaneneskpc.supplr.shared.fonts.BorderIdle
 import com.kaaneneskpc.supplr.shared.fonts.FontSize
 import com.kaaneneskpc.supplr.shared.fonts.IconSecondary
+import com.kaaneneskpc.supplr.shared.fonts.Resources
 import com.kaaneneskpc.supplr.shared.fonts.SurfaceDarker
 import com.kaaneneskpc.supplr.shared.fonts.SurfaceLighter
 import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
@@ -30,6 +37,8 @@ fun CustomTextField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
+    label: String? = null,
+    leadingIcon: ImageVector? = null,
     placeholder: String? = null,
     enabled: Boolean = true,
     error: Boolean = false,
@@ -54,6 +63,8 @@ fun CustomTextField(
         enabled = enabled,
         value = value,
         onValueChange = onValueChange,
+        label = { Text(text = label ?: "") },
+        leadingIcon = { Icon(imageVector = leadingIcon ?: Icons.Default.Check, contentDescription = null) },
         placeholder = if (placeholder != null) {
             {
                 Text(
