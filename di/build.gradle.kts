@@ -45,6 +45,7 @@ kotlin {
             implementation(project(":feature:auth"))
             implementation(project(":data"))
             implementation(project(":feature:home"))
+            implementation(project(":feature:profile"))
         }
     }
 }
