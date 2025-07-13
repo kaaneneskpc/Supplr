@@ -26,8 +26,11 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -75,6 +78,7 @@ import com.kaaneneskpc.supplr.shared.fonts.TextSecondary
 import com.kaaneneskpc.supplr.shared.fonts.TextWhite
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 import rememberMessageBarState
 
 @Composable
@@ -89,9 +93,77 @@ fun ManageProductScreen(
     val thumbnailUploaderState = viewModel.thumbnailUploaderState
     var showCategoriesDialog by remember { mutableStateOf(false) }
     var dropdownMenuOpened by remember { mutableStateOf(false) }
+
+    val photoPicker = koinInject<PhotoPicker>()
+
+    photoPicker.InitializePhotoPicker(
+        onImageSelect = { file ->
+            viewModel.uploadThumbnailToStorage(
+                file = file,
+                onSuccess = { messageBarState.addSuccess("Thumbnail uploaded successfully!") }
+            )
+        }
+    )
+
+    AnimatedVisibility(
+        visible = showCategoriesDialog
+    ) {
+        CategoriesDialog(
+            category = screenState.category,
+            onDismiss = { showCategoriesDialog = false },
+            onConfirmClick = { selectedCategory ->
+                viewModel.updateCategory(selectedCategory)
+                showCategoriesDialog = false
+            }
+        )
+    }
+
     CommonScaffold(
         title = if (id == null) "New Product" else "Edit Product",
-        navigateBack = navigateBack
+        navigateBack = navigateBack,
+        actions = {
+            id.takeIf { it != null }?.let {
+                Box {
+                    IconButton(onClick = { dropdownMenuOpened = true }) {
+                        Icon(
+                            painter = painterResource(Resources.Icon.VerticalMenu),
+                            contentDescription = "Vertical menu icon",
+                            tint = IconPrimary
+                        )
+                    }
+                    DropdownMenu(
+                        containerColor = Surface,
+                        expanded = dropdownMenuOpened,
+                        onDismissRequest = { dropdownMenuOpened = false }
+                    ) {
+                        DropdownMenuItem(
+                            leadingIcon = {
+                                Icon(
+                                    modifier = Modifier.size(14.dp),
+                                    painter = painterResource(Resources.Icon.Delete),
+                                    contentDescription = "Delete icon",
+                                    tint = IconPrimary
+                                )
+                            },
+                            text = {
+                                Text(
+                                    text = "Delete",
+                                    color = TextPrimary,
+                                    fontSize = FontSize.REGULAR
+                                )
+                            },
+                            onClick = {
+                                dropdownMenuOpened = false
+                                viewModel.deleteProduct(
+                                    onSuccess = navigateBack,
+                                    onError = { message -> messageBarState.addError(message) }
+                                )
+                            }
+                        )
+                    }
+                }
+            }
+        },
     ) { padding ->
         ContentWithMessageBar(
             modifier = Modifier
