@@ -63,6 +63,7 @@ import rememberMessageBarState
 fun HomeScreen(
     navigateToAuth: () -> Unit,
     navigateToProfile: () -> Unit,
+    navigateToAdminPanel: () -> Unit
 ) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState()
@@ -114,7 +115,7 @@ fun HomeScreen(
                     }
                 )
             },
-            onAdminPanelClick = { /* TODO: Handle admin panel click */ }
+            onAdminPanelClick = navigateToAdminPanel
         )
         Box(
             modifier = Modifier

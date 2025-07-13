@@ -10,9 +10,7 @@ import com.kaaneneskpc.supplr.shared.domain.Country
 import com.kaaneneskpc.supplr.shared.domain.Customer
 import com.kaaneneskpc.supplr.shared.domain.PhoneNumber
 import com.kaaneneskpc.supplr.shared.util.RequestState
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 data class ProfileScreenState(
@@ -30,11 +28,6 @@ data class ProfileScreenState(
 class ProfileViewModel(
     private val customerRepository: CustomerRepository
 ) : ViewModel() {
-    val customer = customerRepository.readMeCustomerFlow().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = RequestState.Loading
-    )
 
     var screenReady: RequestState<Unit> by mutableStateOf(RequestState.Loading)
     var screenState: ProfileScreenState by mutableStateOf(ProfileScreenState())
@@ -52,7 +45,7 @@ class ProfileViewModel(
 
     init {
         viewModelScope.launch {
-            customer.collectLatest {
+            customerRepository.readMeCustomerFlow().collectLatest {
                 if (it.isSuccess()) {
                     val fetchedCustomer = it.getSuccessData()
                     screenState = ProfileScreenState(

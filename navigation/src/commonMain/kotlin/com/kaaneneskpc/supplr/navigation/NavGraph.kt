@@ -8,6 +8,7 @@ import com.kaaneneskpc.supplr.auth.AuthScreen
 import com.kaaneneskpc.supplr.home.HomeScreen
 import com.kaaneneskpc.supplr.profile.ProfileScreen
 import com.kaaneneskpc.supplr.shared.navigation.Screen
+import com.kaaneneskpc.supplr.admin_panel.AdminPanelScreen
 
 @Composable
 fun NavGraph(startDestination: Screen = Screen.Auth) {
@@ -34,11 +35,21 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 },
                 navigateToProfile = {
                     navController.navigate(Screen.Profile)
+                },
+                navigateToAdminPanel = {
+                    navController.navigate(Screen.AdminPanel)
                 }
             )
         }
         composable<Screen.Profile> {
             ProfileScreen(
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+        composable<Screen.AdminPanel> {
+            AdminPanelScreen(
                 navigateBack = {
                     navController.navigateUp()
                 }
