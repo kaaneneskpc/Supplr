@@ -62,6 +62,7 @@ import com.kaaneneskpc.supplr.shared.component.CommonScaffold
 import com.kaaneneskpc.supplr.shared.component.CustomTextField
 import com.kaaneneskpc.supplr.shared.component.LoadingCard
 import com.kaaneneskpc.supplr.shared.component.SupplrButton
+import com.kaaneneskpc.supplr.shared.component.dialog.CategoriesDialog
 import com.kaaneneskpc.supplr.shared.fonts.BorderIdle
 import com.kaaneneskpc.supplr.shared.fonts.ButtonPrimary
 import com.kaaneneskpc.supplr.shared.fonts.FontSize
