@@ -31,6 +31,7 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.ktor.android.client)
+            implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -50,6 +51,7 @@ kotlin {
             implementation(libs.coil3.compose)
             implementation(libs.coil3.compose.core)
             implementation(libs.coil3.network.ktor)
+            implementation(libs.firebase.storage)
             implementation(project(":shared"))
             implementation(project(":data"))
         }
