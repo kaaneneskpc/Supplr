@@ -256,14 +256,14 @@ fun ManageProductScreen(
                                             )
                                             .background(ButtonPrimary)
                                             .clickable {
-                                                /*viewModel.deleteThumbnailFromStorage(
+                                                viewModel.deleteThumbnailFromStorage(
                                                     onSuccess = { messageBarState.addSuccess("Thumbnail removed successfully.") },
                                                     onError = { message ->
                                                         messageBarState.addError(
                                                             message
                                                         )
                                                     }
-                                                )*/
+                                                )
                                             }
                                             .padding(all = 12.dp),
                                         contentAlignment = Alignment.Center
