@@ -24,6 +24,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -34,6 +35,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,6 +62,7 @@ import coil3.request.crossfade
 import com.kaaneneskpc.supplr.shared.component.AlertTextField
 import com.kaaneneskpc.supplr.shared.component.CommonScaffold
 import com.kaaneneskpc.supplr.shared.component.CustomTextField
+import com.kaaneneskpc.supplr.shared.component.ErrorCard
 import com.kaaneneskpc.supplr.shared.component.LoadingCard
 import com.kaaneneskpc.supplr.shared.component.SupplrButton
 import com.kaaneneskpc.supplr.shared.component.dialog.CategoriesDialog
@@ -77,6 +80,8 @@ import com.kaaneneskpc.supplr.shared.fonts.SurfaceSecondary
 import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.fonts.TextSecondary
 import com.kaaneneskpc.supplr.shared.fonts.TextWhite
+import com.kaaneneskpc.supplr.shared.util.DisplayResult
+import com.kaaneneskpc.supplr.shared.util.RequestState
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
@@ -96,7 +101,7 @@ fun ManageProductScreen(
     var showCategoriesDialog by remember { mutableStateOf(false) }
     var dropdownMenuOpened by remember { mutableStateOf(false) }
 
-    /*val photoPicker = koinInject<PhotoPicker>()
+    val photoPicker = koinInject<PhotoPicker>()
 
     photoPicker.InitializePhotoPicker(
         onImageSelect = { file ->
@@ -105,7 +110,7 @@ fun ManageProductScreen(
                 onSuccess = { messageBarState.addSuccess("Thumbnail uploaded successfully!") }
             )
         }
-    )*/
+    )
 
     AnimatedVisibility(
         visible = showCategoriesDialog
@@ -211,11 +216,11 @@ fun ManageProductScreen(
                                 enabled = thumbnailUploaderState.isIdle()
                             ) {
                                 println("Triggered!")
-                                //photoPicker.open()
+                                photoPicker.open()
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        /*thumbnailUploaderState.DisplayResult(
+                        thumbnailUploaderState.DisplayResult(
                             onIdle = {
                                 Icon(
                                     modifier = Modifier.size(24.dp),
@@ -251,14 +256,14 @@ fun ManageProductScreen(
                                             )
                                             .background(ButtonPrimary)
                                             .clickable {
-                                                viewModel.deleteThumbnailFromStorage(
+                                                /*viewModel.deleteThumbnailFromStorage(
                                                     onSuccess = { messageBarState.addSuccess("Thumbnail removed successfully.") },
                                                     onError = { message ->
                                                         messageBarState.addError(
                                                             message
                                                         )
                                                     }
-                                                )
+                                                )*/
                                             }
                                             .padding(all = 12.dp),
                                         contentAlignment = Alignment.Center
@@ -295,7 +300,7 @@ fun ManageProductScreen(
                                     }
                                 }
                             }
-                        )*/
+                        )
                     }
                     CustomTextField(
                         value = screenState.title,

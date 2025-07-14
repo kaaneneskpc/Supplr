@@ -40,6 +40,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.firebase.firestore)
+            implementation(libs.firebase.storage)
             implementation(libs.auth.firebase.kmp)
             implementation(project(":shared"))
         }

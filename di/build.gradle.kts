@@ -1,5 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -11,7 +9,6 @@ plugins {
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
@@ -25,7 +22,6 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "Di"
             isStatic = true
-            //export(libs.kmp.notifier)
         }
     }
 
@@ -39,9 +35,11 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+
             implementation(project(":feature:auth"))
             implementation(project(":data"))
             implementation(project(":feature:home"))
@@ -57,13 +55,10 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    lint {
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-    }
 }
-

@@ -10,6 +10,7 @@ import com.kaaneneskpc.supplr.data.domain.AdminRepository
 import com.kaaneneskpc.supplr.shared.domain.Product
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
 import com.kaaneneskpc.supplr.shared.util.RequestState
+import dev.gitlive.firebase.storage.File
 import kotlinx.coroutines.launch
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -149,6 +150,49 @@ class ManageProductViewModel(
                 onSuccess = onSuccess,
                 onError = onError
             )
+        }
+    }
+
+    fun uploadThumbnailToStorage(
+        file: File?,
+        onSuccess: () -> Unit,
+    ) {
+        if (file == null) {
+            updateThumbnailUploaderState(RequestState.Error("File is null. Error while selecting an image."))
+            return
+        }
+
+        updateThumbnailUploaderState(RequestState.Loading)
+
+        viewModelScope.launch {
+            try {
+                val downloadUrl = adminRepository.uploadImageToStorage(file)
+
+                if (downloadUrl.isNullOrEmpty()) {
+                    throw Exception("Failed to retrieve a download URL after the upload.")
+                }
+
+                productId.takeIf { it.isNotEmpty() }?.let { id ->
+                    adminRepository.updateProductThumbnail(
+                        productId = id,
+                        downloadUrl = downloadUrl,
+                        onSuccess = {
+                            onSuccess()
+                            updateThumbnailUploaderState(RequestState.Success(Unit))
+                            updateThumbnail(downloadUrl)
+                        },
+                        onError = { message ->
+                            updateThumbnailUploaderState(RequestState.Error(message))
+                        }
+                    )
+                } ?: run {
+                    onSuccess()
+                    updateThumbnailUploaderState(RequestState.Success(Unit))
+                    updateThumbnail(downloadUrl)
+                }
+            } catch (e: Exception) {
+                updateThumbnailUploaderState(RequestState.Error("Error while uploading: $e"))
+            }
         }
     }
 }
