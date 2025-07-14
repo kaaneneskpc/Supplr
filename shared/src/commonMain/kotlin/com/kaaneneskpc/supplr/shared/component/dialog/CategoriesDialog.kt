@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -45,6 +48,7 @@ fun CategoriesDialog(
     onConfirmClick: (ProductCategory) -> Unit,
 ) {
     var selectedCategory by remember(category) { mutableStateOf(category) }
+    val scrollState = rememberScrollState()
     AlertDialog(
         containerColor = Surface,
         title = {
@@ -55,45 +59,51 @@ fun CategoriesDialog(
             )
         },
         text = {
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(300.dp)
             ) {
-                ProductCategory.entries.forEach { currentCategory ->
-                    val animatedBackground by animateColorAsState(
-                        targetValue = if (currentCategory == selectedCategory) currentCategory.color.copy(
-                            alpha = Alpha.TWENTY_PERCENT
-                        )
-                        else Color.Transparent
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(size = 6.dp))
-                            .background(animatedBackground)
-                            .clickable { selectedCategory = currentCategory }
-                            .padding(
-                                vertical = 16.dp,
-                                horizontal = 12.dp
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(scrollState)
+                ) {
+                    ProductCategory.entries.forEach { currentCategory ->
+                        val animatedBackground by animateColorAsState(
+                            targetValue = if (currentCategory == selectedCategory) currentCategory.color.copy(
+                                alpha = Alpha.TWENTY_PERCENT
                             )
-                    ) {
-                        Text(
-                            modifier = Modifier.weight(1f),
-                            text = currentCategory.title,
-                            color = TextPrimary,
-                            fontSize = FontSize.REGULAR
+                            else Color.Transparent
                         )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        AnimatedVisibility(
-                            visible = selectedCategory == currentCategory
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(size = 6.dp))
+                                .background(animatedBackground)
+                                .clickable { selectedCategory = currentCategory }
+                                .padding(
+                                    vertical = 16.dp,
+                                    horizontal = 12.dp
+                                )
                         ) {
-                            Icon(
-                                modifier = Modifier.size(14.dp),
-                                painter = painterResource(Resources.Icon.Checkmark),
-                                contentDescription = "Checkmark icon",
-                                tint = IconPrimary
+                            Text(
+                                modifier = Modifier.weight(1f),
+                                text = currentCategory.title,
+                                color = TextPrimary,
+                                fontSize = FontSize.REGULAR
                             )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            AnimatedVisibility(
+                                visible = selectedCategory == currentCategory
+                            ) {
+                                Icon(
+                                    modifier = Modifier.size(14.dp),
+                                    painter = painterResource(Resources.Icon.Checkmark),
+                                    contentDescription = "Checkmark icon",
+                                    tint = IconPrimary
+                                )
+                            }
                         }
                     }
                 }
