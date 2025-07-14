@@ -77,38 +77,33 @@ fun ProfileForm(
                 modifier = Modifier.weight(1f),
                 value = firstName,
                 onValueChange = onFirstNameChange,
-                label = "First Name",
-                leadingIcon = Icons.Default.Person,
+                placeholder = "First Name",
                 error = firstName.length !in 3..50
             )
             CustomTextField(
                 modifier = Modifier.weight(1f),
                 value = lastName,
                 onValueChange = onLastNameChange,
-                label = "Last Name",
-                leadingIcon = Icons.Default.Person,
+                placeholder = "Last Name",
                 error = lastName.length !in 3..50
             )
         }
         CustomTextField(
             value = email,
             onValueChange = {},
-            label = "Email",
-            leadingIcon = Icons.Default.Email,
+            placeholder = "Email",
             enabled = false
         )
         CustomTextField(
             value = city ?: "",
             onValueChange = onCityChange,
-            label = "City",
-            leadingIcon = Icons.Default.LocationOn,
+            placeholder = "City",
             error = city?.length !in 3..50
         )
         CustomTextField(
             value = "${postalCode ?: ""}",
             onValueChange = { onPostalCodeChange(it.toIntOrNull()) },
-            label = "Postal Code",
-            leadingIcon = Icons.Default.Call,
+            placeholder = "Postal Code",
             error = postalCode == null || postalCode.toString().length !in 3..8,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
@@ -117,8 +112,7 @@ fun ProfileForm(
         CustomTextField(
             value = address ?: "",
             onValueChange = onAddressChange,
-            label = "Address",
-            leadingIcon = Icons.Default.LocationOn,
+            placeholder = "Address",
             error = address?.length !in 3..50
         )
         Row(
@@ -134,8 +128,7 @@ fun ProfileForm(
             CustomTextField(
                 value = phoneNumber ?: "",
                 onValueChange = onPhoneNumberChange,
-                label = "Phone Number",
-                leadingIcon = Icons.Default.Phone,
+                placeholder = "Phone Number",
                 error = phoneNumber.toString().length !in 5..30,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number

@@ -6,16 +6,21 @@ import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import com.kaaneneskpc.supplr.auth.AuthViewModel
-import com.kaaneneskpc.supplr.data.CustomerRepository
+import com.kaaneneskpc.supplr.data.AdminRepositoryImpl
+import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import com.kaaneneskpc.supplr.data.CustomerRepositoryImpl
+import com.kaaneneskpc.supplr.data.domain.AdminRepository
 import com.kaaneneskpc.supplr.home.HomeViewModel
+import com.kaaneneskpc.supplr.manage_product.ManageProductViewModel
 import com.kaaneneskpc.supplr.profile.ProfileViewModel
 
 val sharedModule = module {
     single<CustomerRepository> { CustomerRepositoryImpl() }
+    single<AdminRepository>{ AdminRepositoryImpl() }
     viewModelOf(::AuthViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::ProfileViewModel)
+    viewModelOf(::ManageProductViewModel)
 }
 
 fun initializeKoin(

@@ -1,5 +1,6 @@
 package com.kaaneneskpc.supplr.data
 
+import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import com.kaaneneskpc.supplr.shared.domain.Customer
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import dev.gitlive.firebase.Firebase

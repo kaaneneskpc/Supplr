@@ -2,7 +2,7 @@ package com.kaaneneskpc.supplr.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaaneneskpc.supplr.data.CustomerRepository
+import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch

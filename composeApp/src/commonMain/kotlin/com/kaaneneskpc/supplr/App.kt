@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import com.kaaneneskpc.supplr.data.CustomerRepository
+import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import com.kaaneneskpc.supplr.navigation.NavGraph
 import com.kaaneneskpc.supplr.shared.navigation.Screen
 import com.kaaneneskpc.supplr.shared.Consts.WEB_CLIENT_ID

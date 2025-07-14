@@ -1,4 +1,4 @@
-package com.kaaneneskpc.supplr.data
+package com.kaaneneskpc.supplr.data.domain
 
 import com.kaaneneskpc.supplr.shared.domain.Customer
 import com.kaaneneskpc.supplr.shared.util.RequestState

@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaaneneskpc.supplr.data.CustomerRepository
+import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import com.kaaneneskpc.supplr.shared.domain.Country
 import com.kaaneneskpc.supplr.shared.domain.Customer
 import com.kaaneneskpc.supplr.shared.domain.PhoneNumber

@@ -80,6 +80,7 @@ import com.kaaneneskpc.supplr.shared.fonts.TextWhite
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import rememberMessageBarState
 
 @Composable
@@ -95,7 +96,7 @@ fun ManageProductScreen(
     var showCategoriesDialog by remember { mutableStateOf(false) }
     var dropdownMenuOpened by remember { mutableStateOf(false) }
 
-    val photoPicker = koinInject<PhotoPicker>()
+    /*val photoPicker = koinInject<PhotoPicker>()
 
     photoPicker.InitializePhotoPicker(
         onImageSelect = { file ->
@@ -104,7 +105,7 @@ fun ManageProductScreen(
                 onSuccess = { messageBarState.addSuccess("Thumbnail uploaded successfully!") }
             )
         }
-    )
+    )*/
 
     AnimatedVisibility(
         visible = showCategoriesDialog
@@ -155,10 +156,10 @@ fun ManageProductScreen(
                             },
                             onClick = {
                                 dropdownMenuOpened = false
-                                viewModel.deleteProduct(
+                                /* viewModel.deleteProduct(
                                     onSuccess = navigateBack,
                                     onError = { message -> messageBarState.addError(message) }
-                                )
+                                )*/
                             }
                         )
                     }
@@ -210,11 +211,11 @@ fun ManageProductScreen(
                                 enabled = thumbnailUploaderState.isIdle()
                             ) {
                                 println("Triggered!")
-                                photoPicker.open()
+                                //photoPicker.open()
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        thumbnailUploaderState.DisplayResult(
+                        /*thumbnailUploaderState.DisplayResult(
                             onIdle = {
                                 Icon(
                                     modifier = Modifier.size(24.dp),
@@ -294,7 +295,7 @@ fun ManageProductScreen(
                                     }
                                 }
                             }
-                        )
+                        )*/
                     }
                     CustomTextField(
                         value = screenState.title,
@@ -314,7 +315,7 @@ fun ManageProductScreen(
                         onClick = { showCategoriesDialog = true }
                     )
                     AnimatedVisibility(
-                        visible = screenState.category != ProductCategory.Accessories
+                        visible = true /*screenState.category != ProductCategory.Accessories*/
                     ) {
                         Column {
                             CustomTextField(
@@ -432,10 +433,10 @@ fun ManageProductScreen(
                     enabled = isFormValid,
                     onClick = {
                         if (id != null) {
-                            viewModel.updateProduct(
+                            /*viewModel.updateProduct(
                                 onSuccess = { messageBarState.addSuccess("Product successfully updated!") },
                                 onError = { message -> messageBarState.addError(message) }
-                            )
+                            )*/
                         } else {
                             viewModel.createNewProduct(
                                 onSuccess = { messageBarState.addSuccess("Product successfully added!") },

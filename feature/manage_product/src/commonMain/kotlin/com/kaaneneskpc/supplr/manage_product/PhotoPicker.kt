@@ -8,5 +8,4 @@ expect class PhotoPicker {
     fun open()
     @Composable
     fun InitializePhotoPicker(onImageSelect: (File?) -> Unit)
-
 }
