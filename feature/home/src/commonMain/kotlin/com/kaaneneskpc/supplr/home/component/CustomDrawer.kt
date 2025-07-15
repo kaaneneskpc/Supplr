@@ -1,5 +1,6 @@
 package com.kaaneneskpc.supplr.home.component
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -12,15 +13,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kaaneneskpc.supplr.home.domain.DrawerItem
+import com.kaaneneskpc.supplr.shared.domain.Customer
 import com.kaaneneskpc.supplr.shared.fonts.BebasNeueFont
 import com.kaaneneskpc.supplr.shared.fonts.FontSize
 import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.fonts.TextSecondary
+import com.kaaneneskpc.supplr.shared.util.RequestState
 
 internal const val DRAWER_ITEM = 5
 
 @Composable
 fun CustomDrawer(
+    customer: RequestState<Customer>,
     onProfileClick: () -> Unit,
     onContactUsClick: () -> Unit,
     onSignOutClick: () -> Unit,
@@ -64,10 +68,14 @@ fun CustomDrawer(
             Spacer(modifier = Modifier.height(12.dp))
         }
         Spacer(modifier = Modifier.weight(1f))
-        DrawerItemCard(
-            drawerItem = DrawerItem.Admin,
-            onCardClick = onAdminPanelClick
-        )
+        AnimatedContent(targetState = customer) { customerState ->
+            if(customerState.isSuccess() && customerState.getSuccessData().isAdmin) {
+                DrawerItemCard(
+                    drawerItem = DrawerItem.Admin,
+                    onCardClick = onAdminPanelClick
+                )
+            }
+        }
         Spacer(modifier = Modifier.height(24.dp))
     }
 }
