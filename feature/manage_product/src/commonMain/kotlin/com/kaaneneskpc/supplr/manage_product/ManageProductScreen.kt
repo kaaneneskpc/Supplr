@@ -66,6 +66,7 @@ import com.kaaneneskpc.supplr.shared.component.ErrorCard
 import com.kaaneneskpc.supplr.shared.component.LoadingCard
 import com.kaaneneskpc.supplr.shared.component.SupplrButton
 import com.kaaneneskpc.supplr.shared.component.dialog.CategoriesDialog
+import com.kaaneneskpc.supplr.shared.domain.ProductCategory
 import com.kaaneneskpc.supplr.shared.fonts.BorderIdle
 import com.kaaneneskpc.supplr.shared.fonts.ButtonPrimary
 import com.kaaneneskpc.supplr.shared.fonts.FontSize
@@ -94,10 +95,10 @@ fun ManageProductScreen(
     navigateBack: () -> Unit
 ) {
     val messageBarState = rememberMessageBarState()
-    val viewModel = koinViewModel<ManageProductViewModel>()
-    val screenState = viewModel.screenState
-    val isFormValid = viewModel.isFormValid
-    val thumbnailUploaderState = viewModel.thumbnailUploaderState
+    val manageProductViewModel = koinViewModel<ManageProductViewModel>()
+    val screenState = manageProductViewModel.screenState
+    val isFormValid = manageProductViewModel.isFormValid
+    val thumbnailUploaderState = manageProductViewModel.thumbnailUploaderState
     var showCategoriesDialog by remember { mutableStateOf(false) }
     var dropdownMenuOpened by remember { mutableStateOf(false) }
 
@@ -105,7 +106,7 @@ fun ManageProductScreen(
 
     photoPicker.InitializePhotoPicker(
         onImageSelect = { file ->
-            viewModel.uploadThumbnailToStorage(
+            manageProductViewModel.uploadThumbnailToStorage(
                 file = file,
                 onSuccess = { messageBarState.addSuccess("Thumbnail uploaded successfully!") }
             )
@@ -119,7 +120,7 @@ fun ManageProductScreen(
             category = screenState.category,
             onDismiss = { showCategoriesDialog = false },
             onConfirmClick = { selectedCategory ->
-                viewModel.updateCategory(selectedCategory)
+                manageProductViewModel.updateCategory(selectedCategory)
                 showCategoriesDialog = false
             }
         )
@@ -161,10 +162,10 @@ fun ManageProductScreen(
                             },
                             onClick = {
                                 dropdownMenuOpened = false
-                                /* viewModel.deleteProduct(
+                                manageProductViewModel.deleteProduct(
                                     onSuccess = navigateBack,
                                     onError = { message -> messageBarState.addError(message) }
-                                )*/
+                                )
                             }
                         )
                     }
@@ -256,7 +257,7 @@ fun ManageProductScreen(
                                             )
                                             .background(ButtonPrimary)
                                             .clickable {
-                                                viewModel.deleteThumbnailFromStorage(
+                                                manageProductViewModel.deleteThumbnailFromStorage(
                                                     onSuccess = { messageBarState.addSuccess("Thumbnail removed successfully.") },
                                                     onError = { message ->
                                                         messageBarState.addError(
@@ -286,7 +287,7 @@ fun ManageProductScreen(
                                     Spacer(modifier = Modifier.height(12.dp))
                                     TextButton(
                                         onClick = {
-                                            viewModel.updateThumbnailUploaderState(RequestState.Idle)
+                                            manageProductViewModel.updateThumbnailUploaderState(RequestState.Idle)
                                         },
                                         colors = ButtonDefaults.textButtonColors(
                                             containerColor = Color.Transparent
@@ -304,13 +305,13 @@ fun ManageProductScreen(
                     }
                     CustomTextField(
                         value = screenState.title,
-                        onValueChange = viewModel::updateTitle,
+                        onValueChange = manageProductViewModel::updateTitle,
                         placeholder = "Title"
                     )
                     CustomTextField(
                         modifier = Modifier.height(168.dp),
                         value = screenState.description,
-                        onValueChange = viewModel::updateDescription,
+                        onValueChange = manageProductViewModel::updateDescription,
                         placeholder = "Description",
                         expanded = true
                     )
@@ -320,12 +321,12 @@ fun ManageProductScreen(
                         onClick = { showCategoriesDialog = true }
                     )
                     AnimatedVisibility(
-                        visible = true /*screenState.category != ProductCategory.Accessories*/
+                        visible = screenState.category != ProductCategory.Accessories
                     ) {
                         Column {
                             CustomTextField(
                                 value = "${screenState.weight ?: ""}",
-                                onValueChange = { viewModel.updateWeight(it.toIntOrNull() ?: 0) },
+                                onValueChange = { manageProductViewModel.updateWeight(it.toIntOrNull() ?: 0) },
                                 placeholder = "Weight",
                                 keyboardOptions = KeyboardOptions(
                                     keyboardType = KeyboardType.Number
@@ -334,7 +335,7 @@ fun ManageProductScreen(
                             Spacer(modifier = Modifier.height(12.dp))
                             CustomTextField(
                                 value = screenState.flavors,
-                                onValueChange = viewModel::updateFlavors,
+                                onValueChange = manageProductViewModel::updateFlavors,
                                 placeholder = "Flavors"
                             )
                         }
@@ -343,7 +344,7 @@ fun ManageProductScreen(
                         value = "${screenState.price}",
                         onValueChange = { value ->
                             if (value.isEmpty() || value.toDoubleOrNull() != null) {
-                                viewModel.updatePrice(value.toDoubleOrNull() ?: 0.0)
+                                manageProductViewModel.updatePrice(value.toDoubleOrNull() ?: 0.0)
                             }
                         },
                         placeholder = "Price",
@@ -368,7 +369,7 @@ fun ManageProductScreen(
                             )
                             Switch(
                                 checked = screenState.isNew,
-                                onCheckedChange = viewModel::updateNew,
+                                onCheckedChange = manageProductViewModel::updateNew,
                                 colors = SwitchDefaults.colors(
                                     checkedTrackColor = SurfaceSecondary,
                                     uncheckedTrackColor = SurfaceDarker,
@@ -392,7 +393,7 @@ fun ManageProductScreen(
                             )
                             Switch(
                                 checked = screenState.isPopular,
-                                onCheckedChange = viewModel::updatePopular,
+                                onCheckedChange = manageProductViewModel::updatePopular,
                                 colors = SwitchDefaults.colors(
                                     checkedTrackColor = SurfaceSecondary,
                                     uncheckedTrackColor = SurfaceDarker,
@@ -416,7 +417,7 @@ fun ManageProductScreen(
                             )
                             Switch(
                                 checked = screenState.isDiscounted,
-                                onCheckedChange = viewModel::updateDiscounted,
+                                onCheckedChange = manageProductViewModel::updateDiscounted,
                                 colors = SwitchDefaults.colors(
                                     checkedTrackColor = SurfaceSecondary,
                                     uncheckedTrackColor = SurfaceDarker,
@@ -438,12 +439,12 @@ fun ManageProductScreen(
                     enabled = isFormValid,
                     onClick = {
                         if (id != null) {
-                            /*viewModel.updateProduct(
+                            manageProductViewModel.updateProduct(
                                 onSuccess = { messageBarState.addSuccess("Product successfully updated!") },
                                 onError = { message -> messageBarState.addError(message) }
-                            )*/
+                            )
                         } else {
-                            viewModel.createNewProduct(
+                            manageProductViewModel.createNewProduct(
                                 onSuccess = { messageBarState.addSuccess("Product successfully added!") },
                                 onError = { message -> messageBarState.addError(message) }
                             )

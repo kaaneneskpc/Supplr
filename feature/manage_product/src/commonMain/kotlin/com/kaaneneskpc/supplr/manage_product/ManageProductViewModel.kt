@@ -23,7 +23,7 @@ data class ManageProductState(
     val createdAt: Long = Clock.System.now().toEpochMilliseconds(),
     val title: String = "",
     val description: String = "",
-    val thumbnail: String = "thumbnail image",
+    val thumbnail: String = "",
     val category: ProductCategory = ProductCategory.Protein,
     val flavors: String = "",
     val weight: Int? = null,
@@ -48,7 +48,7 @@ class ManageProductViewModel(
     val isFormValid: Boolean
         get() = screenState.title.isNotEmpty() &&
                 screenState.description.isNotEmpty() &&
-                screenState.thumbnail.isNotEmpty() &&
+                screenState.thumbnail.isNotEmpty()  &&
                 screenState.price != 0.0
 
     init {
@@ -196,6 +196,35 @@ class ManageProductViewModel(
         }
     }
 
+    fun updateProduct(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        if (isFormValid) {
+            viewModelScope.launch {
+                adminRepository.updateProduct(
+                    product = Product(
+                        id = screenState.id,
+                        createdAt = screenState.createdAt,
+                        title = screenState.title,
+                        description = screenState.description,
+                        thumbnail = screenState.thumbnail,
+                        category = screenState.category.name,
+                        flavors = screenState.flavors.split(",").map { it.trim() }
+                            .filter { it.isNotEmpty() },
+                        weight = screenState.weight,
+                        price = screenState.price
+                    ),
+                    onSuccess = onSuccess,
+                    onError = onError
+                )
+            }
+        } else {
+            onError("Please fill the information")
+        }
+
+    }
+
     fun deleteThumbnailFromStorage(
         onSuccess: () -> Unit,
         onError: (String) -> Unit,
@@ -225,6 +254,27 @@ class ManageProductViewModel(
                 },
                 onError = onError
             )
+        }
+    }
+
+    fun deleteProduct(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit,
+    ) {
+        productId.takeIf { it.isNotEmpty() }?.let { id ->
+            viewModelScope.launch {
+                adminRepository.deleteProduct(
+                    productId = id,
+                    onSuccess = {
+                        deleteThumbnailFromStorage(
+                            onSuccess = {},
+                            onError = {}
+                        )
+                        onSuccess()
+                    },
+                    onError = { message -> onError(message) }
+                )
+            }
         }
     }
 }
