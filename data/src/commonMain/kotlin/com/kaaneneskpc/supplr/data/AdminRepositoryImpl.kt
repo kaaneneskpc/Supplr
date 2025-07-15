@@ -5,9 +5,13 @@ import com.kaaneneskpc.supplr.shared.domain.Product
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
+import dev.gitlive.firebase.firestore.Direction
 import dev.gitlive.firebase.firestore.firestore
 import dev.gitlive.firebase.storage.File
 import dev.gitlive.firebase.storage.storage
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.withTimeout
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -130,6 +134,40 @@ class AdminRepositoryImpl : AdminRepository {
             }
         } catch (e: Exception) {
             onError("Error while updating a thumbnail image: ${e.message}")
+        }
+    }
+
+    override fun readLastTenProducts(): Flow<RequestState<List<Product>>> = channelFlow {
+        try {
+            val userId = getCurrentUserId()
+            if (userId != null) {
+                val database = Firebase.firestore
+                database.collection("product")
+                    .orderBy("createdAt", Direction.DESCENDING)
+                    .limit(10).snapshots.collectLatest {
+                        val products = it.documents.map { productDocument ->
+                            Product(
+                                id = productDocument.id,
+                                title = productDocument.get(field = "title"),
+                                createdAt = productDocument.get(field = "createdAt"),
+                                description = productDocument.get(field = "description"),
+                                thumbnail = productDocument.get(field = "thumbnail"),
+                                category = productDocument.get(field = "category"),
+                                flavors = productDocument.get(field = "flavors"),
+                                weight = productDocument.get(field = "weight"),
+                                price = productDocument.get(field = "price"),
+                                isPopular = productDocument.get(field = "isPopular"),
+                                isDiscounted = productDocument.get(field = "isDiscounted"),
+                                isNew = productDocument.get(field = "isNew")
+                            )
+                        }
+                        send(RequestState.Success(data = products))
+                    }
+            } else {
+                RequestState.Error("User is not available.")
+            }
+        } catch (e: Exception) {
+            send(RequestState.Error("Error while reading last 10 products ${e.message.toString()}"))
         }
     }
 
