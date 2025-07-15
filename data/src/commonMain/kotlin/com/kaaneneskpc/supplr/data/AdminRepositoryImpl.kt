@@ -50,7 +50,7 @@ class AdminRepositoryImpl : AdminRepository {
                     imagePath.putFile(file)
                     imagePath.getDownloadUrl()
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 null
             }
         } else null
@@ -257,13 +257,7 @@ class AdminRepositoryImpl : AdminRepository {
                 if (userId != null) {
                     val database = Firebase.firestore
 
-//                    val queryText = searchQuery.trim().lowercase()
-//                    val endText = queryText + "\uf8ff"
-
                     database.collection(collectionPath = "product")
-//                        .orderBy("title")
-//                        .startAt(queryText)
-//                        .endAt(endText)
                         .snapshots
                         .collectLatest { query ->
                             val products = query.documents.map { document ->
