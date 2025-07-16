@@ -45,6 +45,7 @@ import com.kaaneneskpc.supplr.home.domain.BottomBarDestination
 import com.kaaneneskpc.supplr.home.domain.CustomDrawerState
 import com.kaaneneskpc.supplr.home.domain.isOpened
 import com.kaaneneskpc.supplr.home.domain.opposite
+import com.kaaneneskpc.supplr.products_overview.ProductsOverviewScreen
 import com.kaaneneskpc.supplr.shared.fonts.Alpha
 import com.kaaneneskpc.supplr.shared.fonts.BebasNeueFont
 import com.kaaneneskpc.supplr.shared.fonts.FontSize
@@ -200,7 +201,9 @@ fun HomeScreen(
                             startDestination = Screen.Products,
                             modifier = Modifier.weight(1f)
                         ) {
-                            composable<Screen.Products> { }
+                            composable<Screen.Products> {
+                                ProductsOverviewScreen()
+                            }
                             composable<Screen.Cart> { }
                             composable<Screen.Categories> { }
                         }

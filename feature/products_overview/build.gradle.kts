@@ -23,7 +23,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "Home"
+            baseName = "Products_overview"
             isStatic = true
         }
     }
@@ -40,17 +40,14 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-            implementation(libs.compose.navigation)
-            implementation(libs.messagebar.kmp)
             implementation(project(":shared"))
             implementation(project(":data"))
-            implementation(project(":feature:products_overview"))
         }
     }
 }
 
 android {
-    namespace = "com.kaaneneskpc.supplr.home"
+    namespace = "com.kaaneneskpc.supplr.products_overview"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
