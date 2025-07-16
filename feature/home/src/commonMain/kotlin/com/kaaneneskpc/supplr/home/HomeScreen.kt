@@ -65,7 +65,8 @@ import rememberMessageBarState
 fun HomeScreen(
     navigateToAuth: () -> Unit,
     navigateToProfile: () -> Unit,
-    navigateToAdminPanel: () -> Unit
+    navigateToAdminPanel: () -> Unit,
+    navigateToDetails: (String) -> Unit,
 ) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState()
@@ -202,7 +203,9 @@ fun HomeScreen(
                             modifier = Modifier.weight(1f)
                         ) {
                             composable<Screen.Products> {
-                                ProductsOverviewScreen()
+                                ProductsOverviewScreen(
+                                    navigateToDetails = navigateToDetails
+                                )
                             }
                             composable<Screen.Cart> { }
                             composable<Screen.Categories> { }
