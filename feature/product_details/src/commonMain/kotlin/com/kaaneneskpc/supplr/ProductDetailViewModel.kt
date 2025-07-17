@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import com.kaaneneskpc.supplr.data.domain.ProductRepository
+import com.kaaneneskpc.supplr.shared.domain.CartItem
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -47,7 +48,7 @@ class ProductDetailViewModel (
         viewModelScope.launch {
             val productId = savedStateHandle.get<String>("id")
             if (productId != null) {
-                /*customerRepository.addItemToCard(
+                customerRepository.addItemToCard(
                     cartItem = CartItem(
                         productId = productId,
                         flavor = selectedFlavor,
@@ -55,7 +56,7 @@ class ProductDetailViewModel (
                     ),
                     onSuccess = onSuccess,
                     onError = onError
-                )*/
+                )
             } else {
                 onError("Product id is not found.")
             }

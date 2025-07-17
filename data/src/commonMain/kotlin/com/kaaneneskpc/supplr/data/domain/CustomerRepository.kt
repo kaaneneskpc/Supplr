@@ -1,5 +1,6 @@
 package com.kaaneneskpc.supplr.data.domain
 
+import com.kaaneneskpc.supplr.shared.domain.CartItem
 import com.kaaneneskpc.supplr.shared.domain.Customer
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import dev.gitlive.firebase.auth.FirebaseUser
@@ -16,6 +17,12 @@ interface CustomerRepository {
     fun readMeCustomerFlow(): Flow<RequestState<Customer>>
     suspend fun updateCustomer(
         customer: Customer,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    )
+
+    suspend fun addItemToCard(
+        cartItem: CartItem,
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     )
