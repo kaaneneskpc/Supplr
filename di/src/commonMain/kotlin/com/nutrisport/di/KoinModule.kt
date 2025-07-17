@@ -1,5 +1,6 @@
 package com.kaaneneskpc.supplr.di
 
+import com.kaaneneskpc.supplr.ProductDetailViewModel
 import com.kaaneneskpc.supplr.admin_panel.AdminPanelViewModel
 import com.kaaneneskpc.supplr.auth.AuthViewModel
 import com.kaaneneskpc.supplr.data.AdminRepositoryImpl
@@ -28,6 +29,7 @@ val sharedModule = module {
     viewModelOf(::ManageProductViewModel)
     viewModelOf(::AdminPanelViewModel)
     viewModelOf(::ProductsOverviewViewModel)
+    viewModelOf(::ProductDetailViewModel)
 }
 
 expect val targetModule: Module

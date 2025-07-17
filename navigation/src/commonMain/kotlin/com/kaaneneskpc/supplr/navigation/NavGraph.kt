@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.kaaneneskpc.supplr.ProductDetailsScreen
 import com.kaaneneskpc.supplr.auth.AuthScreen
 import com.kaaneneskpc.supplr.home.HomeScreen
 import com.kaaneneskpc.supplr.profile.ProfileScreen
@@ -42,7 +43,7 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                     navController.navigate(Screen.AdminPanel)
                 },
                 navigateToDetails = { productId ->
-                    //navController.navigate(Screen.Details(id = productId))
+                    navController.navigate(Screen.ProductDetails(id = productId))
                 },
             )
         }
@@ -66,6 +67,15 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
         composable<Screen.ManageProduct> {
             val id = it.toRoute<Screen.ManageProduct>().id
             ManageProductScreen(
+                id = id,
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+        composable<Screen.ProductDetails> {
+            val id = it.toRoute<Screen.ProductDetails>().id
+            ProductDetailsScreen(
                 id = id,
                 navigateBack = {
                     navController.navigateUp()
