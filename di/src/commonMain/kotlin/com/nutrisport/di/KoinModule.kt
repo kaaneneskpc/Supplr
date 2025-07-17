@@ -4,6 +4,7 @@ import com.kaaneneskpc.supplr.ProductDetailViewModel
 import com.kaaneneskpc.supplr.admin_panel.AdminPanelViewModel
 import com.kaaneneskpc.supplr.auth.AuthViewModel
 import com.kaaneneskpc.supplr.cart.CartViewModel
+import com.kaaneneskpc.supplr.categories.category_search.CategorySearchViewModel
 import com.kaaneneskpc.supplr.data.AdminRepositoryImpl
 import com.kaaneneskpc.supplr.data.CustomerRepositoryImpl
 import com.kaaneneskpc.supplr.data.ProductRepositoryImpl
@@ -32,6 +33,7 @@ val sharedModule = module {
     viewModelOf(::ProductsOverviewViewModel)
     viewModelOf(::ProductDetailViewModel)
     viewModelOf(::CartViewModel)
+    viewModelOf(::CategorySearchViewModel)
 }
 
 expect val targetModule: Module

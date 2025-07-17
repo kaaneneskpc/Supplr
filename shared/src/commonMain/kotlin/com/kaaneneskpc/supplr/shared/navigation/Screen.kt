@@ -23,4 +23,8 @@ sealed class Screen {
     data class ManageProduct(val id: String? = null) : Screen()
     @Serializable
     data class ProductDetails(val id: String) : Screen()
+    @Serializable
+    data class CategorySearch(
+        val category: String
+    ) : Screen()
 }

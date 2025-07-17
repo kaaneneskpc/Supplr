@@ -11,7 +11,9 @@ import com.kaaneneskpc.supplr.home.HomeScreen
 import com.kaaneneskpc.supplr.profile.ProfileScreen
 import com.kaaneneskpc.supplr.shared.navigation.Screen
 import com.kaaneneskpc.supplr.admin_panel.AdminPanelScreen
+import com.kaaneneskpc.supplr.categories.category_search.CategorySearchScreen
 import com.kaaneneskpc.supplr.manage_product.ManageProductScreen
+import com.kaaneneskpc.supplr.shared.domain.ProductCategory
 
 @Composable
 fun NavGraph(startDestination: Screen = Screen.Auth) {
@@ -45,8 +47,8 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 navigateToDetails = { productId ->
                     navController.navigate(Screen.ProductDetails(id = productId))
                 },
-                navigateToCategorySearch = {
-
+                navigateToCategorySearch = { categoryName ->
+                    navController.navigate(Screen.CategorySearch(categoryName))
                 }
             )
         }
@@ -80,6 +82,19 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
             val id = it.toRoute<Screen.ProductDetails>().id
             ProductDetailsScreen(
                 id = id,
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable<Screen.CategorySearch> {
+            val category = ProductCategory.valueOf(it.toRoute<Screen.CategorySearch>().category)
+            CategorySearchScreen(
+                category = category,
+                navigateToDetails = { id ->
+                    navController.navigate(Screen.ProductDetails(id))
+                },
                 navigateBack = {
                     navController.navigateUp()
                 }
