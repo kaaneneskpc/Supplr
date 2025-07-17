@@ -39,6 +39,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.kaaneneskpc.supplr.cart.CartScreen
 import com.kaaneneskpc.supplr.home.component.BottomBar
 import com.kaaneneskpc.supplr.home.component.CustomDrawer
 import com.kaaneneskpc.supplr.home.domain.BottomBarDestination
@@ -207,7 +208,9 @@ fun HomeScreen(
                                     navigateToDetails = navigateToDetails
                                 )
                             }
-                            composable<Screen.Cart> { }
+                            composable<Screen.Cart> {
+                                CartScreen()
+                            }
                             composable<Screen.Categories> { }
                         }
 

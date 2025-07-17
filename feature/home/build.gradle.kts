@@ -45,6 +45,7 @@ kotlin {
             implementation(project(":shared"))
             implementation(project(":data"))
             implementation(project(":feature:products_overview"))
+            implementation(project(":feature:cart"))
         }
     }
 }
