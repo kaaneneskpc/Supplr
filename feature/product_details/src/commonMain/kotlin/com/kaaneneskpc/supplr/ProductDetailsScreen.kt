@@ -38,8 +38,10 @@ import com.kaaneneskpc.supplr.component.FlavorChip
 import com.kaaneneskpc.supplr.shared.component.CommonScaffold
 import com.kaaneneskpc.supplr.shared.component.InfoCard
 import com.kaaneneskpc.supplr.shared.component.LoadingCard
+import com.kaaneneskpc.supplr.shared.component.QuantityCounter
 import com.kaaneneskpc.supplr.shared.component.SupplrButton
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
+import com.kaaneneskpc.supplr.shared.domain.QuantityCounterSize
 import com.kaaneneskpc.supplr.shared.fonts.BorderIdle
 import com.kaaneneskpc.supplr.shared.fonts.FontSize
 import com.kaaneneskpc.supplr.shared.fonts.Resources
@@ -71,6 +73,15 @@ fun ProductDetailsScreen(
     CommonScaffold(
         title = "Product Details",
         navigateBack = navigateBack,
+        actions = {
+            QuantityCounter(
+                size = QuantityCounterSize.Large,
+                value = quantity,
+                onMinusClick = productDetailViewModel::updateQuantity,
+                onPlusClick = productDetailViewModel::updateQuantity
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+        }
     ) { paddingValues ->
         product.DisplayResult(
             onLoading = { LoadingCard(modifier = Modifier.fillMaxSize()) },
