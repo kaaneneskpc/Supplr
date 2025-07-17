@@ -23,7 +23,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "Home"
+            baseName = "Categories"
             isStatic = true
         }
     }
@@ -38,21 +38,15 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
-            implementation(libs.compose.navigation)
-            implementation(libs.messagebar.kmp)
-            implementation(project(":shared"))
-            implementation(project(":data"))
-            implementation(project(":feature:products_overview"))
-            implementation(project(":feature:cart"))
-            implementation(project(":feature:categories"))
+
+            implementation(project(path = ":shared"))
+            implementation(project(path = ":data"))
         }
     }
 }
 
 android {
-    namespace = "com.kaaneneskpc.supplr.home"
+    namespace = "com.kaaneneskpc.supplr.categories"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

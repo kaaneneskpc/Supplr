@@ -45,6 +45,9 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 navigateToDetails = { productId ->
                     navController.navigate(Screen.ProductDetails(id = productId))
                 },
+                navigateToCategorySearch = {
+
+                }
             )
         }
         composable<Screen.Profile> {

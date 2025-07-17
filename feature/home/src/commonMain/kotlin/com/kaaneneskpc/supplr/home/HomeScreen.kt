@@ -40,6 +40,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kaaneneskpc.supplr.cart.CartScreen
+import com.kaaneneskpc.supplr.categories.CategoriesScreen
 import com.kaaneneskpc.supplr.home.component.BottomBar
 import com.kaaneneskpc.supplr.home.component.CustomDrawer
 import com.kaaneneskpc.supplr.home.domain.BottomBarDestination
@@ -53,8 +54,11 @@ import com.kaaneneskpc.supplr.shared.fonts.FontSize
 import com.kaaneneskpc.supplr.shared.fonts.IconPrimary
 import com.kaaneneskpc.supplr.shared.fonts.Resources
 import com.kaaneneskpc.supplr.shared.fonts.Surface
+import com.kaaneneskpc.supplr.shared.fonts.SurfaceBrand
+import com.kaaneneskpc.supplr.shared.fonts.SurfaceError
 import com.kaaneneskpc.supplr.shared.fonts.SurfaceLighter
 import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
+import com.kaaneneskpc.supplr.shared.fonts.TextWhite
 import com.kaaneneskpc.supplr.shared.navigation.Screen
 import com.kaaneneskpc.supplr.shared.util.getScreenWidth
 import org.jetbrains.compose.resources.painterResource
@@ -68,6 +72,7 @@ fun HomeScreen(
     navigateToProfile: () -> Unit,
     navigateToAdminPanel: () -> Unit,
     navigateToDetails: (String) -> Unit,
+    navigateToCategorySearch: (String) -> Unit,
 ) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState()
@@ -136,7 +141,8 @@ fun HomeScreen(
                 )
         ) {
             Scaffold(
-                containerColor = Surface, topBar = {
+                containerColor = Surface,
+                topBar = {
                     CenterAlignedTopAppBar(
                         title = {
                             AnimatedContent(
@@ -193,10 +199,7 @@ fun HomeScreen(
                     contentBackgroundColor = Surface
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxSize().padding(
-                            top = paddingValues.calculateTopPadding(),
-                            bottom = paddingValues.calculateBottomPadding()
-                        )
+                        modifier = Modifier.fillMaxSize()
                     ) {
                         NavHost(
                             navController = navController,
@@ -211,7 +214,11 @@ fun HomeScreen(
                             composable<Screen.Cart> {
                                 CartScreen()
                             }
-                            composable<Screen.Categories> { }
+                            composable<Screen.Categories> {
+                                CategoriesScreen(
+                                    navigateToCategorySearch = navigateToCategorySearch
+                                )
+                            }
                         }
 
                         Spacer(modifier = Modifier.height(12.dp))
