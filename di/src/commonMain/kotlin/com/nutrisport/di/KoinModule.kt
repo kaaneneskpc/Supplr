@@ -3,7 +3,7 @@ package com.kaaneneskpc.supplr.di
 import com.kaaneneskpc.supplr.ProductDetailViewModel
 import com.kaaneneskpc.supplr.admin_panel.AdminPanelViewModel
 import com.kaaneneskpc.supplr.auth.AuthViewModel
-import com.kaaneneskpc.supplr.cart.component.CartViewModel
+import com.kaaneneskpc.supplr.cart.CartViewModel
 import com.kaaneneskpc.supplr.data.AdminRepositoryImpl
 import com.kaaneneskpc.supplr.data.CustomerRepositoryImpl
 import com.kaaneneskpc.supplr.data.ProductRepositoryImpl

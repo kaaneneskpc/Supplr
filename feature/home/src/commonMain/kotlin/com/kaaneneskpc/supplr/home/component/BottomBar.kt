@@ -21,9 +21,18 @@ import com.kaaneneskpc.supplr.shared.fonts.IconSecondary
 import com.kaaneneskpc.supplr.shared.fonts.SurfaceLighter
 import org.jetbrains.compose.resources.painterResource
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import com.kaaneneskpc.supplr.shared.domain.Customer
+import com.kaaneneskpc.supplr.shared.util.RequestState
+
 @Composable
 fun BottomBar(
     modifier: Modifier = Modifier,
+    customer: RequestState<Customer>,
     selected: BottomBarDestination,
     onSelect: (BottomBarDestination) -> Unit,
 ) {
@@ -43,12 +52,29 @@ fun BottomBar(
             val animatedTint by animateColorAsState(
                 targetValue = if (selected == destination) IconSecondary else IconPrimary
             )
-            Icon(
-                modifier = Modifier.clickable { onSelect(destination) },
-                painter = painterResource(destination.icon),
-                contentDescription = "Bottom Bar Icon",
-                tint = animatedTint
-            )
+            Box(contentAlignment = Alignment.TopEnd) {
+                Icon(
+                    modifier = Modifier.clickable { onSelect(destination) },
+                    painter = painterResource(destination.icon),
+                    contentDescription = "Bottom Bar destination icon",
+                    tint = animatedTint
+                )
+                if (destination == BottomBarDestination.Cart) {
+                    AnimatedContent(
+                        targetState = customer
+                    ) { customerState ->
+                        if (customerState.isSuccess() && customerState.getSuccessData().cart.isNotEmpty()) {
+                            Box(
+                                modifier = Modifier
+                                    .size(8.dp)
+                                    .offset(x = 4.dp, y = (-4).dp)
+                                    .clip(CircleShape)
+                                    .background(IconSecondary)
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }

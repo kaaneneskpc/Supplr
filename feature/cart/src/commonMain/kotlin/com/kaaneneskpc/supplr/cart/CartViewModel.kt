@@ -1,4 +1,4 @@
-package com.kaaneneskpc.supplr.cart.component
+package com.kaaneneskpc.supplr.cart
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

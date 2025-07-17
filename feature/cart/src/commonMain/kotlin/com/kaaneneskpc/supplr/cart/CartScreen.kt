@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kaaneneskpc.supplr.cart.component.CartItemCard
-import com.kaaneneskpc.supplr.cart.component.CartViewModel
 import com.kaaneneskpc.supplr.shared.component.InfoCard
 import com.kaaneneskpc.supplr.shared.component.LoadingCard
 import com.kaaneneskpc.supplr.shared.fonts.Resources
