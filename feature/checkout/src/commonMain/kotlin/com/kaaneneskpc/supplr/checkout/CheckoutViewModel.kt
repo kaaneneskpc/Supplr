@@ -7,9 +7,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaaneneskpc.supplr.data.domain.CustomerRepository
+import com.kaaneneskpc.supplr.data.domain.OrderRepository
 import com.kaaneneskpc.supplr.shared.domain.CartItem
 import com.kaaneneskpc.supplr.shared.domain.Country
 import com.kaaneneskpc.supplr.shared.domain.Customer
+import com.kaaneneskpc.supplr.shared.domain.Order
 import com.kaaneneskpc.supplr.shared.domain.PhoneNumber
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import kotlinx.coroutines.flow.collectLatest
@@ -31,7 +33,7 @@ data class CheckoutScreenState(
 
 class CheckoutViewModel(
     private val customerRepository: CustomerRepository,
-    // private val orderRepository: OrderRepository,
+    private val orderRepository: OrderRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     var screenReady: RequestState<Unit> by mutableStateOf(RequestState.Loading)
@@ -127,6 +129,38 @@ class CheckoutViewModel(
                     postalCode = screenState.postalCode,
                     address = screenState.address,
                     phoneNumber = screenState.phoneNumber
+                ),
+                onSuccess = onSuccess,
+                onError = onError
+            )
+        }
+    }
+
+    fun payOnDelivery(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit,
+    ) {
+        updateCustomer(
+            onSuccess = {
+                createOrder(
+                    onSuccess = onSuccess,
+                    onError = onError
+                )
+            },
+            onError = onError
+        )
+    }
+
+    private fun createOrder(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit,
+    ) {
+        viewModelScope.launch {
+            orderRepository.createTheOrder(
+                order = Order(
+                    customerId = screenState.id,
+                    items = screenState.cart,
+                    totalAmount = savedStateHandle.get<String>("totalAmount")?.toDoubleOrNull() ?: 0.0,
                 ),
                 onSuccess = onSuccess,
                 onError = onError

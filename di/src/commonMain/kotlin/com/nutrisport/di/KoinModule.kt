@@ -8,12 +8,15 @@ import com.kaaneneskpc.supplr.categories.category_search.CategorySearchViewModel
 import com.kaaneneskpc.supplr.checkout.CheckoutViewModel
 import com.kaaneneskpc.supplr.data.AdminRepositoryImpl
 import com.kaaneneskpc.supplr.data.CustomerRepositoryImpl
+import com.kaaneneskpc.supplr.data.OrderRepositoryImpl
 import com.kaaneneskpc.supplr.data.ProductRepositoryImpl
 import com.kaaneneskpc.supplr.data.domain.AdminRepository
 import com.kaaneneskpc.supplr.data.domain.CustomerRepository
+import com.kaaneneskpc.supplr.data.domain.OrderRepository
 import com.kaaneneskpc.supplr.data.domain.ProductRepository
 import com.kaaneneskpc.supplr.home.HomeViewModel
 import com.kaaneneskpc.supplr.manage_product.ManageProductViewModel
+import com.kaaneneskpc.supplr.payment_completed.PaymentCompletedViewModel
 import com.kaaneneskpc.supplr.products_overview.ProductsOverviewViewModel
 import com.kaaneneskpc.supplr.profile.ProfileViewModel
 import org.koin.core.KoinApplication
@@ -26,6 +29,7 @@ val sharedModule = module {
     single<CustomerRepository> { CustomerRepositoryImpl() }
     single<AdminRepository> { AdminRepositoryImpl() }
     single<ProductRepository> { ProductRepositoryImpl() }
+    single<OrderRepository> { OrderRepositoryImpl(get()) }
     viewModelOf(::AuthViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::ProfileViewModel)
@@ -36,6 +40,7 @@ val sharedModule = module {
     viewModelOf(::CartViewModel)
     viewModelOf(::CategorySearchViewModel)
     viewModelOf(::CheckoutViewModel)
+    viewModelOf(::PaymentCompletedViewModel)
 }
 
 expect val targetModule: Module

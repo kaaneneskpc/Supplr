@@ -169,22 +169,24 @@ fun HomeScreen(
                             AnimatedVisibility(
                                 visible = selectedDestination == BottomBarDestination.Cart
                             ) {
-                                IconButton(onClick = {
-                                    if (totalAmount.isSuccess()) {
-                                        navigateToCheckout(
-                                            totalAmount.getSuccessData().toString()
-                                        )
-                                    } else if (totalAmount.isError()) {
-                                        messageBarState.addError(
-                                            "Error while fetching total amount: ${totalAmount.getErrorMessage()}"
+                                if (customer.isSuccess() && customer.getSuccessData().cart.isNotEmpty()) {
+                                    IconButton(onClick = {
+                                        if (totalAmount.isSuccess()) {
+                                            navigateToCheckout(
+                                                totalAmount.getSuccessData().toString()
+                                            )
+                                        } else if (totalAmount.isError()) {
+                                            messageBarState.addError(
+                                                "Error while fetching total amount: ${totalAmount.getErrorMessage()}"
+                                            )
+                                        }
+                                    }) {
+                                        Icon(
+                                            painter = painterResource(Resources.Icon.RightArrow),
+                                            contentDescription = "Right Icon",
+                                            tint = IconPrimary
                                         )
                                     }
-                                }) {
-                                    Icon(
-                                        painter = painterResource(Resources.Icon.RightArrow),
-                                        contentDescription = "Right Icon",
-                                        tint = IconPrimary
-                                    )
                                 }
                             }
                         },

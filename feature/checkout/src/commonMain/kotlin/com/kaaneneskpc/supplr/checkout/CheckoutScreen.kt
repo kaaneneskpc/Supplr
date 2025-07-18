@@ -115,14 +115,14 @@ fun CheckoutScreen(
                         secondary = true,
                         enabled = isFormValid,
                         onClick = {
-                            /*viewModel.payOnDelivery(
+                            checkoutViewModel.payOnDelivery(
                                 onSuccess = {
                                     navigateToPaymentCompleted(true, null)
                                 },
                                 onError = { message ->
                                     navigateToPaymentCompleted(null, message)
                                 }
-                            )*/
+                            )
                         }
                     )
                 }

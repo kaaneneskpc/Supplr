@@ -51,6 +51,7 @@ kotlin {
             implementation(project(":feature:cart"))
             implementation(project(":feature:categories:category_search"))
             implementation(project(":feature:checkout"))
+            implementation(project(":feature:payment_completed"))
         }
     }
 }

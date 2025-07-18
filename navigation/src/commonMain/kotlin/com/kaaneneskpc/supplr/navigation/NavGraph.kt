@@ -14,6 +14,7 @@ import com.kaaneneskpc.supplr.admin_panel.AdminPanelScreen
 import com.kaaneneskpc.supplr.categories.category_search.CategorySearchScreen
 import com.kaaneneskpc.supplr.checkout.CheckoutScreen
 import com.kaaneneskpc.supplr.manage_product.ManageProductScreen
+import com.kaaneneskpc.supplr.payment_completed.PaymentCompletedScreen
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
 
 @Composable
@@ -109,6 +110,14 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
             val totalAmount = it.toRoute<Screen.Checkout>().totalAmount
             CheckoutScreen(
                 totalAmount = totalAmount.toDoubleOrNull() ?: 0.0,
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable<Screen.PaymentCompleted> {
+            PaymentCompletedScreen(
                 navigateBack = {
                     navController.navigateUp()
                 }
