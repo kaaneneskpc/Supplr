@@ -112,6 +112,9 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 totalAmount = totalAmount.toDoubleOrNull() ?: 0.0,
                 navigateBack = {
                     navController.navigateUp()
+                },
+                navigateToPaymentCompleted = { isSuccess, error ->
+                    navController.navigate(Screen.PaymentCompleted(isSuccess, error))
                 }
             )
         }
@@ -119,7 +122,10 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
         composable<Screen.PaymentCompleted> {
             PaymentCompletedScreen(
                 navigateBack = {
-                    navController.navigateUp()
+                    navController.navigate(Screen.Home) {
+                        launchSingleTop = true
+                        popUpTo(0) { inclusive = true }
+                    }
                 }
             )
         }

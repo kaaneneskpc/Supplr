@@ -30,6 +30,7 @@ import rememberMessageBarState
 fun CheckoutScreen(
     totalAmount: Double,
     navigateBack: () -> Unit,
+    navigateToPaymentCompleted: (Boolean?, String?) -> Unit,
 ) {
     val messageBarState = rememberMessageBarState()
     val checkoutViewModel = koinViewModel<CheckoutViewModel>()
