@@ -2,6 +2,7 @@ package com.kaaneneskpc.supplr.home
 
 import ContentWithMessageBar
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -23,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -60,6 +62,7 @@ import com.kaaneneskpc.supplr.shared.fonts.SurfaceLighter
 import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.fonts.TextWhite
 import com.kaaneneskpc.supplr.shared.navigation.Screen
+import com.kaaneneskpc.supplr.shared.util.RequestState
 import com.kaaneneskpc.supplr.shared.util.getScreenWidth
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -73,6 +76,7 @@ fun HomeScreen(
     navigateToAdminPanel: () -> Unit,
     navigateToDetails: (String) -> Unit,
     navigateToCategorySearch: (String) -> Unit,
+    navigateToCheckout: (String) -> Unit
 ) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState()
@@ -92,6 +96,11 @@ fun HomeScreen(
     val customer by homeViewModel.customer.collectAsState()
     val screenWidth = remember { getScreenWidth() }
     var drawerState by remember { mutableStateOf(CustomDrawerState.Closed) }
+    val totalAmount by homeViewModel.totalAmountFlow.collectAsState(RequestState.Loading)
+
+    LaunchedEffect(totalAmount) {
+        println("TOTAL AMOUNT: $totalAmount")
+    }
 
     val offsetValue by remember { derivedStateOf { (screenWidth / 1.5).dp } }
     val animatedOffset by animateDpAsState(
@@ -119,7 +128,7 @@ fun HomeScreen(
             onContactUsClick = { /* TODO: Handle contact us click */ },
             onSignOutClick = {
                 homeViewModel.signOut(
-                    onSuccess = navigateToAuth ,
+                    onSuccess = navigateToAuth,
                     onError = { errorMessage ->
                         messageBarState.addError(errorMessage)
                     }
@@ -155,7 +164,31 @@ fun HomeScreen(
                                     color = TextPrimary
                                 )
                             }
-                        }, navigationIcon = {
+                        },
+                        actions = {
+                            AnimatedVisibility(
+                                visible = selectedDestination == BottomBarDestination.Cart
+                            ) {
+                                IconButton(onClick = {
+                                    if (totalAmount.isSuccess()) {
+                                        navigateToCheckout(
+                                            totalAmount.getSuccessData().toString()
+                                        )
+                                    } else if (totalAmount.isError()) {
+                                        messageBarState.addError(
+                                            "Error while fetching total amount: ${totalAmount.getErrorMessage()}"
+                                        )
+                                    }
+                                }) {
+                                    Icon(
+                                        painter = painterResource(Resources.Icon.RightArrow),
+                                        contentDescription = "Right Icon",
+                                        tint = IconPrimary
+                                    )
+                                }
+                            }
+                        },
+                        navigationIcon = {
                             AnimatedContent(
                                 targetState = drawerState
                             ) { drawer ->
