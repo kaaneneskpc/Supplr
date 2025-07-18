@@ -50,6 +50,7 @@ kotlin {
             implementation(project(":feature:product_details"))
             implementation(project(":feature:cart"))
             implementation(project(":feature:categories:category_search"))
+            implementation(project(":feature:checkout"))
         }
     }
 }
