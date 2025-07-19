@@ -33,10 +33,11 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
     - cart/        : Sepet yönetimi.
     - home/        : Ana ekran ve navigasyon.
     - profile/     : Kullanıcı profil yönetimi.
-    - admin_panel/ : Admin için ürün yönetimi.
-    - manage_product/: Ürün ekleme/düzenleme.
+    - admin_panel/ : Admin için ürün yönetimi ve ürün arama/listeme (yeni).
+    - manage_product/: Admin için ürün ekleme, düzenleme ve silme işlemleri (yeni).
     - product_details/: Ürün detayları.
-    - products_overview/: Ürün listeleme.
+    - products_overview/: Ana ekranda yeni ve indirimli ürünlerin öne çıkarıldığı ürün listeleme (yeni).
+    - payment_completed/: Sipariş tamamlandı ekranı ve sipariş sonrası işlemler (yeni).
     - categories/: Kategori yönetimi.
 - data/            : Veri katmanı, repository ve servisler.
 - shared/          : Ortak domain modelleri, util, constantlar.
@@ -98,6 +99,12 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 - **Modülerlik:** Her feature kendi modülünde, bağımsız geliştirilebilir.
 - **Navigation:** Ekranlar arası geçişler merkezi bir NavGraph ile yönetilir.
 
+### Yeni Feature Modülleri
+  - **admin_panel:** Admin kullanıcılar için ürünleri listeleme, arama ve yönetim paneli sunar.
+  - **manage_product:** Adminlerin ürün ekleme, düzenleme ve silme işlemlerini gerçekleştirdiği ekran ve iş mantığı.
+  - **products_overview:** Ana ekranda yeni ve indirimli ürünlerin öne çıkarıldığı, kullanıcıya hızlı erişim sağlayan ürün listeleme modülü.
+  - **payment_completed:** Sipariş tamamlandıktan sonra kullanıcıya sipariş özeti ve başarı mesajı gösteren ekran.
+
 ---
 
 ## 5. Güvenlik
@@ -145,6 +152,12 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 - **Her feature kendi ViewModel ve repository’sine sahip.**
 - **DI ile bağımlılıklar kolayca yönetilir.**
 - **Kod okunabilirliği ve sürdürülebilirliği yüksek.**
+
+- **Son Eklenen Feature'lar:**
+  - **Admin Panel (admin_panel):** Ürünleri arama, filtreleme ve yönetme.
+  - **Ürün Yönetimi (manage_product):** Ürün ekleme, güncelleme ve silme işlemleri.
+  - **Ürünler Genel Bakış (products_overview):** Ana ekranda yeni ve indirimli ürünlerin listelenmesi.
+  - **Ödeme Tamamlandı (payment_completed):** Sipariş sonrası kullanıcı bilgilendirme ve özet ekranı.
 
 ---
 

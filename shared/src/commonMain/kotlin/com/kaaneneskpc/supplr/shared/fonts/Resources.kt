@@ -23,7 +23,6 @@ import supplr.shared.generated.resources.log_out
 import supplr.shared.generated.resources.map_pin
 import supplr.shared.generated.resources.menu
 import supplr.shared.generated.resources.minus
-import supplr.shared.generated.resources.paypal_logo
 import supplr.shared.generated.resources.plus
 import supplr.shared.generated.resources.right_arrow
 import supplr.shared.generated.resources.search
@@ -70,7 +69,6 @@ object Resources {
         val Checkmark = Res.drawable.checkmark_image
         val Cat = Res.drawable.cat
         val GoogleLogo = Res.drawable.google_logo
-        val PaypalLogo = Res.drawable.paypal_logo
     }
     object Flag {
         val India = Res.drawable.india

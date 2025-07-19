@@ -53,8 +53,7 @@ fun SupplrButton(
                 modifier = Modifier.size(14.dp),
                 painter = painterResource(icon),
                 contentDescription = "Button icon",
-                tint = if (icon == Resources.Image.PaypalLogo) Color.Unspecified
-                else IconPrimary
+                tint = IconPrimary
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
