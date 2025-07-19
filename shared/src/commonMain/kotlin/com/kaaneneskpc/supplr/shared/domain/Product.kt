@@ -32,24 +32,24 @@ enum class ProductCategory(
     val title: String,
     val color: Color
 ) {
-    Protein(
-        title = "Protein",
+    Meat(
+        title = "Meat",
         color = CategoryYellow
     ),
-    Creatine(
-        title = "Creatine",
+    Chicken(
+        title = "Chicken",
         color = CategoryBlue
     ),
-    PreWorkout(
-        title = "Pre-Workout",
+    FastFood(
+        title = "FastFood",
         color = CategoryGreen
     ),
-    Gainers(
-        title = "Gainers",
+    Vegetarian(
+        title = "Vegetarian",
         color = CategoryPurple
     ),
-    Accessories(
-        title = "Accessories",
+    SaladMixed(
+        title = "SaladMixed",
         color = CategoryRed
     ),
     Others(

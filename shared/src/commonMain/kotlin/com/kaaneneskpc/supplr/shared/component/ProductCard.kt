@@ -110,7 +110,7 @@ fun ProductCard(
                 AnimatedContent(
                     targetState = product.category
                 ) { category ->
-                    if (ProductCategory.valueOf(category) == ProductCategory.Accessories) {
+                    if (ProductCategory.valueOf(category) == ProductCategory.SaladMixed) {
                         Spacer(modifier = Modifier.weight(1f))
                     } else {
                         Row(

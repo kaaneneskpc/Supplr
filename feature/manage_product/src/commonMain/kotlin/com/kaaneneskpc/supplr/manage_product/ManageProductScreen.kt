@@ -321,7 +321,7 @@ fun ManageProductScreen(
                         onClick = { showCategoriesDialog = true }
                     )
                     AnimatedVisibility(
-                        visible = screenState.category != ProductCategory.Accessories
+                        visible = screenState.category != ProductCategory.SaladMixed
                     ) {
                         Column {
                             CustomTextField(

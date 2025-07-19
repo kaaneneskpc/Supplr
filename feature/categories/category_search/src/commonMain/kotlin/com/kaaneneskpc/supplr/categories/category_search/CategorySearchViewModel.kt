@@ -23,7 +23,7 @@ class CategorySearchViewModel(
 ) : ViewModel() {
     private val products = productRepository.readProductsByCategoryFlow(
         category = ProductCategory.valueOf(
-            savedStateHandle.get<String>("category") ?: ProductCategory.Protein.name
+            savedStateHandle.get<String>("category") ?: ProductCategory.Meat.name
         )
     ).stateIn(
         scope = viewModelScope,

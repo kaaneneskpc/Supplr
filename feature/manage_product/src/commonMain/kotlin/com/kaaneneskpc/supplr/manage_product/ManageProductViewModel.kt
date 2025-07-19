@@ -24,7 +24,7 @@ data class ManageProductState(
     val title: String = "",
     val description: String = "",
     val thumbnail: String = "",
-    val category: ProductCategory = ProductCategory.Protein,
+    val category: ProductCategory = ProductCategory.Meat,
     val flavors: String = "",
     val weight: Int? = null,
     val price: Double = 0.0,
