@@ -11,7 +11,7 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 - **Kotlin Multiplatform (KMP):** Ortak kodun hem Android hem iOS için kullanılmasını sağlar.
 - **Jetpack Compose Multiplatform:** UI katmanında Compose kullanımı ile modern, deklaratif arayüzler.
 - **Koin:** Dependency Injection (DI) için kullanılır.
-- **Firebase:** Authentication, Firestore (veritabanı), Storage (dosya yönetimi) ve Google Sign-In.
+- **Firebase:** Authentication, Firestore (veritabanı), Storage (dosya yönetimi), Google Sign-In ve **Push Notification** (bildirim).
 - **Ktor:** Network işlemleri için multiplatform HTTP client.
 - **Coil:** Görsel yükleme ve cache işlemleri için.
 - **Coroutines & Flow:** Asenkron işlemler ve reaktif veri akışı.
@@ -135,6 +135,7 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 - **Karanlık ve aydınlık tema desteği.**
 - **Kullanıcıya anlık mesaj ve hata gösterimi (MessageBar).**
 - **BottomBar ve TopBar ile kolay navigasyon.**
+- **Kullanıcıya özel bildirimler (push notification) desteği.**
 
 ---
 
@@ -171,6 +172,7 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 - **Daha detaylı logging ve monitoring.**
 - **Kullanıcıya özel bildirimler (push notification).**
 - **Daha fazla platform (web, desktop) için Compose Multiplatform genişletmesi.**
+- **Push notification desteği eklendi.**
 
 ---
 

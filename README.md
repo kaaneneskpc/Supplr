@@ -24,6 +24,7 @@
 - 🛠️ **Admin Panel**: Add, edit, delete, and search products
 - 🏷️ **Category & Product Listing**
 - 💳 **Checkout & Order Completion**
+- 🔔 **Push Notification Support** (personalized notifications)
 - 🔐 **Firebase Authentication & Firestore**
 - 🏗️ **Dependency Injection with Koin**
 - 🌐 **Networking with Ktor**
@@ -70,7 +71,7 @@
 - **Kotlin Multiplatform (KMP)**
 - **Jetpack Compose Multiplatform**
 - **Koin** (Dependency Injection)
-- **Firebase** (Auth, Firestore, Storage)
+- **Firebase** (Auth, Firestore, Storage, **Push Notification**)
 - **Ktor** (HTTP Client)
 - **Coil** (Image Loading)
 - **Coroutines & Flow**
