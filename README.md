@@ -42,11 +42,11 @@
     - cart/              : Cart management.
     - home/              : Home screen and navigation.
     - profile/           : User profile management.
-    - admin_panel/       : Admin product management and search (new).
-    - manage_product/    : Admin add, edit, delete products (new).
+    - admin_panel/       : Admin product management and search.
+    - manage_product/    : Admin add, edit, delete products.
     - product_details/   : Product details.
-    - products_overview/ : Home screen new & discounted product listing (new).
-    - payment_completed/ : Order completed screen and post-order (new).
+    - products_overview/ : Home screen new & discounted product listing.
+    - payment_completed/ : Order completed screen and post-order.
     - categories/        : Category management.
 - data/            : Data layer, repositories, and services.
 - shared/          : Shared domain models, utils, constants.
