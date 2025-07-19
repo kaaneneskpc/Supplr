@@ -159,4 +159,12 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
+## Contact
+
+**Kaan Enes Kapıcı**
+- LinkedIn: [Kaan Enes Kapıcı](https://www.linkedin.com/in/kaaneneskpc/)
+- GitHub: [@kaaneneskpc](https://github.com/kaaneneskpc)
+- Email: kaaneneskpc1@gmail.com
+
+
 💡 **Open to feedback and collaboration!** If you're interested in modern mobile architecture, feel free to connect. 🚀
