@@ -1,6 +1,5 @@
 package com.kaaneneskpc.supplr
 
-import android.app.NotificationManager
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
