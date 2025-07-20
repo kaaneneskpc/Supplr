@@ -47,7 +47,7 @@ fun CustomDrawer(
         )
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = "Healthy Lifestyle",
+            text = "Moody Lifestyle",
             textAlign = TextAlign.Center,
             color = TextPrimary,
             fontSize = FontSize.REGULAR

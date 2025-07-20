@@ -7,6 +7,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -35,7 +36,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -121,7 +126,18 @@ fun HomeScreen(
 
     val messageBarState = rememberMessageBarState()
 
-    Box(modifier = Modifier.fillMaxSize().background(animatedBackground).systemBarsPadding()) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Canvas(modifier = Modifier.matchParentSize()) {
+            drawRect(
+                brush = Brush.verticalGradient(
+                    colors = listOf(SurfaceBrand.copy(alpha = 0.12f), SurfaceLighter, Surface),
+                    startY = 0f,
+                    endY = size.height,
+                    tileMode = TileMode.Clamp
+                )
+            )
+        }
+        // Drawer
         CustomDrawer(
             customer = customer,
             onProfileClick = navigateToProfile,
@@ -136,33 +152,46 @@ fun HomeScreen(
             },
             onAdminPanelClick = navigateToAdminPanel
         )
+        // İçerik
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(size = animatedRadius))
+                .clip(RoundedCornerShape(size = 28.dp))
                 .offset(x = animatedOffset)
                 .scale(scale = animatedScale)
                 .shadow(
-                    elevation = 20.dp,
+                    elevation = 32.dp,
                     shape = RoundedCornerShape(size = animatedRadius),
                     ambientColor = Color.Black.copy(alpha = Alpha.DISABLED),
                     spotColor = Color.Black.copy(alpha = Alpha.DISABLED)
                 )
+                .background(Surface)
         ) {
             Scaffold(
-                containerColor = Surface,
+                containerColor = Color.Transparent,
                 topBar = {
                     CenterAlignedTopAppBar(
+                        modifier = Modifier.shadow(8.dp),
                         title = {
-                            AnimatedContent(
-                                targetState = selectedDestination
-                            ) {
-                                Text(
-                                    text = selectedDestination.title,
-                                    fontFamily = BebasNeueFont(),
-                                    fontSize = FontSize.LARGE,
-                                    color = TextPrimary
-                                )
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                AnimatedContent(targetState = selectedDestination) {
+                                    Text(
+                                        text = selectedDestination.title,
+                                        fontFamily = BebasNeueFont(),
+                                        fontSize = FontSize.LARGE,
+                                        color = TextPrimary,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                                if (customer.isSuccess()) {
+                                    val user = customer.getSuccessData()
+                                    Text(
+                                        text = "Welcome, ${user.firstName}",
+                                        color = TextPrimary.copy(alpha = 0.7f),
+                                        fontWeight = FontWeight.Medium,
+                                        fontSize = FontSize.REGULAR
+                                    )
+                                }
                             }
                         },
                         actions = {
@@ -212,7 +241,8 @@ fun HomeScreen(
                                     }
                                 }
                             }
-                        }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        },
+                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                             containerColor = Surface,
                             scrolledContainerColor = Surface,
                             navigationIconContentColor = IconPrimary,
@@ -227,11 +257,12 @@ fun HomeScreen(
                         .fillMaxSize()
                         .padding(
                             top = paddingValues.calculateTopPadding(),
-                            bottom = paddingValues.calculateBottomPadding()
+                            bottom = paddingValues.calculateBottomPadding(),
+                            start = 0.dp, end = 0.dp
                         ),
                     messageBarState = messageBarState,
                     errorMaxLines = 2,
-                    contentBackgroundColor = Surface
+                    contentBackgroundColor = Color.Transparent
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize()
@@ -255,10 +286,9 @@ fun HomeScreen(
                                 )
                             }
                         }
-
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
                         Box(
-                            modifier = Modifier.padding(all = 12.dp)
+                            modifier = Modifier.padding(all = 16.dp)
                         ) {
                             BottomBar(
                                 customer = customer,
