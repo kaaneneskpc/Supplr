@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.serialization)
 }
 
 kotlin {
@@ -24,7 +23,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "Navigation"
+            baseName = "Contact_us"
             isStatic = true
         }
     }
@@ -39,25 +38,17 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.kotlinx.serialization)
-            implementation(libs.compose.navigation)
-            implementation(project(":feature:auth"))
-            implementation(project(":feature:home"))
+            implementation(libs.messagebar.kmp)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
             implementation(project(":shared"))
-            implementation(project(":feature:profile"))
-            implementation(project(":feature:admin_panel"))
-            implementation(project(":feature:manage_product"))
-            implementation(project(":feature:product_details"))
-            implementation(project(":feature:categories:category_search"))
-            implementation(project(":feature:checkout"))
-            implementation(project(":feature:payment_completed"))
-            implementation(project(":feature:contact_us"))
+            implementation(project(":data"))
         }
     }
 }
 
 android {
-    namespace = "com.kaaneneskpc.supplr.navigation"
+    namespace = "com.kaaneneskpc.supplr.contact_us"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

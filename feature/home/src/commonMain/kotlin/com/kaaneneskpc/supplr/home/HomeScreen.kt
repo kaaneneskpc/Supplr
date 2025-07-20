@@ -81,7 +81,8 @@ fun HomeScreen(
     navigateToAdminPanel: () -> Unit,
     navigateToDetails: (String) -> Unit,
     navigateToCategorySearch: (String) -> Unit,
-    navigateToCheckout: (String) -> Unit
+    navigateToCheckout: (String) -> Unit,
+    navigateToContactUs: () -> Unit
 ) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState()
@@ -141,7 +142,7 @@ fun HomeScreen(
         CustomDrawer(
             customer = customer,
             onProfileClick = navigateToProfile,
-            onContactUsClick = { /* TODO: Handle contact us click */ },
+            onContactUsClick = navigateToContactUs,
             onSignOutClick = {
                 homeViewModel.signOut(
                     onSuccess = navigateToAuth,

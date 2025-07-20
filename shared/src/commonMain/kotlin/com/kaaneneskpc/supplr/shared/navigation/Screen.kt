@@ -39,4 +39,6 @@ sealed class Screen {
         val error: String? = null,
         val token: String? = null
     ) : Screen()
+    @Serializable
+    data object ContactUs : Screen()
 }

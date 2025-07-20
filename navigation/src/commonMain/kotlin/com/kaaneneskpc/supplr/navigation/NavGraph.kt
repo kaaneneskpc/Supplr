@@ -13,6 +13,7 @@ import com.kaaneneskpc.supplr.shared.navigation.Screen
 import com.kaaneneskpc.supplr.admin_panel.AdminPanelScreen
 import com.kaaneneskpc.supplr.categories.category_search.CategorySearchScreen
 import com.kaaneneskpc.supplr.checkout.CheckoutScreen
+import com.kaaneneskpc.supplr.contact_us.ContactUsScreen
 import com.kaaneneskpc.supplr.manage_product.ManageProductScreen
 import com.kaaneneskpc.supplr.payment_completed.PaymentCompletedScreen
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
@@ -54,6 +55,9 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 },
                 navigateToCheckout = { totalAmount ->
                     navController.navigate(Screen.Checkout(totalAmount))
+                },
+                navigateToContactUs = {
+                    navController.navigate(Screen.ContactUs)
                 }
             )
         }
@@ -126,6 +130,14 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                         launchSingleTop = true
                         popUpTo(0) { inclusive = true }
                     }
+                }
+            )
+        }
+
+        composable<Screen.ContactUs> {
+            ContactUsScreen(
+                navigateBack = {
+                    navController.navigateUp()
                 }
             )
         }
