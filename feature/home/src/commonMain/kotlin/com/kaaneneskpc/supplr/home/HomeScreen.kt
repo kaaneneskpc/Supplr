@@ -138,7 +138,6 @@ fun HomeScreen(
                 )
             )
         }
-        // Drawer
         CustomDrawer(
             customer = customer,
             onProfileClick = navigateToProfile,

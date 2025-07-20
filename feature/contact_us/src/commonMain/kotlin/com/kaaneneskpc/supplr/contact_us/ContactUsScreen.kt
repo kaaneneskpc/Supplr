@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -70,70 +71,75 @@ fun ContactUsScreen(
             successContainerColor = SurfaceBrand,
             successContentColor = TextPrimary
         ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp),
-                shape = RoundedCornerShape(24.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
-                Column(
+                Card(
                     modifier = Modifier
-                        .background(Color.White)
+                        .fillMaxWidth()
                         .padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(18.dp)
+                    shape = RoundedCornerShape(24.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
                 ) {
-                    ContactItem(
-                        icon = Icons.Default.Star,
-                        label = "Website",
-                        value = "supplr.com",
-                        onClick = { uriHandler.openUri("https://supplr.com") }
-                    )
-                    ContactItem(
-                        icon = Icons.Default.Email,
-                        label = "E-mail",
-                        value = "info@supplr.com",
-                        onClick = { uriHandler.openUri("mailto:info@supplr.com") }
-                    )
-                    ContactItem(
-                        icon = Icons.Default.Phone,
-                        label = "Phone",
-                        value = "+90 555 555 55 55",
-                        onClick = { uriHandler.openUri("tel:+905555555555") }
-                    )
-                    ContactItem(
-                        icon = Icons.Default.LocationOn,
-                        label = "Address",
-                        value = "Örnek Mah. Supplr Cad. No:1, İstanbul, Türkiye",
-                        onClick = { /* Optionally open maps */ }
-                    )
-                    HorizontalDivider()
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                    Column(
+                        modifier = Modifier
+                            .background(Color.White)
+                            .padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(18.dp)
                     ) {
-                        SocialIcon(
-                            icon = Icons.Default.Person,
-                            contentDescription = "Facebook",
-                            color = Color(0xFF4267B2),
-                            onClick = { uriHandler.openUri("https://facebook.com/supplr") },
-                            text = "Facebook"
+                        ContactItem(
+                            icon = Icons.Default.Star,
+                            label = "Website",
+                            value = "supplr.com",
+                            onClick = { uriHandler.openUri("https://supplr.com") }
                         )
-                        SocialIcon(
-                            icon = Icons.Default.Person,
-                            contentDescription = "Instagram",
-                            color = Color(0xFFE1306C),
-                            onClick = { uriHandler.openUri("https://instagram.com/supplr") },
-                            text = "Instagram"
+                        ContactItem(
+                            icon = Icons.Default.Email,
+                            label = "E-mail",
+                            value = "info@supplr.com",
+                            onClick = { uriHandler.openUri("mailto:info@supplr.com") }
                         )
-                        SocialIcon(
-                            icon = Icons.Default.Person,
-                            contentDescription = "Twitter",
-                            color = Color(0xFF1DA1F2),
-                            onClick = { uriHandler.openUri("https://twitter.com/supplr") },
-                            text = "Twitter"
+                        ContactItem(
+                            icon = Icons.Default.Phone,
+                            label = "Phone",
+                            value = "+90 555 555 55 55",
+                            onClick = { uriHandler.openUri("tel:+905555555555") }
                         )
+                        ContactItem(
+                            icon = Icons.Default.LocationOn,
+                            label = "Address",
+                            value = "Örnek Mah. Supplr Cad. No:1, İstanbul, Türkiye",
+                            onClick = { /* Optionally open maps */ }
+                        )
+                        HorizontalDivider()
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            SocialIcon(
+                                icon = Icons.Default.Person,
+                                contentDescription = "Facebook",
+                                color = Color(0xFF4267B2),
+                                onClick = { uriHandler.openUri("https://facebook.com/supplr") },
+                                text = "Facebook"
+                            )
+                            SocialIcon(
+                                icon = Icons.Default.Person,
+                                contentDescription = "Instagram",
+                                color = Color(0xFFE1306C),
+                                onClick = { uriHandler.openUri("https://instagram.com/supplr") },
+                                text = "Instagram"
+                            )
+                            SocialIcon(
+                                icon = Icons.Default.Person,
+                                contentDescription = "Twitter",
+                                color = Color(0xFF1DA1F2),
+                                onClick = { uriHandler.openUri("https://twitter.com/supplr") },
+                                text = "Twitter"
+                            )
+                        }
                     }
                 }
             }
