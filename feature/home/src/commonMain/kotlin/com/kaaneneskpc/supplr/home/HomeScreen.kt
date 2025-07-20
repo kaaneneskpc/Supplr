@@ -152,7 +152,6 @@ fun HomeScreen(
             },
             onAdminPanelClick = navigateToAdminPanel
         )
-        // İçerik
         Box(
             modifier = Modifier
                 .fillMaxSize()

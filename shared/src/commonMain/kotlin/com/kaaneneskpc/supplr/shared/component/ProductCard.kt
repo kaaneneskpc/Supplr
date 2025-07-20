@@ -48,23 +48,7 @@ import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.kaaneneskpc.supplr.shared.domain.Product
-import com.kaaneneskpc.supplr.shared.domain.ProductCategory
-import com.kaaneneskpc.supplr.shared.fonts.Alpha
-import com.kaaneneskpc.supplr.shared.fonts.BorderIdle
 import com.kaaneneskpc.supplr.shared.fonts.FontSize
-import com.kaaneneskpc.supplr.shared.fonts.Resources
-import com.kaaneneskpc.supplr.shared.fonts.RobotoCondensedFont
-import com.kaaneneskpc.supplr.shared.fonts.SurfaceLighter
-import com.kaaneneskpc.supplr.shared.fonts.TextBrand
-import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
-import com.kaaneneskpc.supplr.shared.fonts.TextSecondary
-import org.jetbrains.compose.resources.painterResource
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.BlurEffect
 
 @Composable
 fun ProductCard(
@@ -114,19 +98,6 @@ fun ProductCard(
                 .padding(14.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            if (product.category.isNotBlank()) {
-                Surface(
-                    shape = CircleShape,
-                    color = Color(0xFFEEF7FF).copy(alpha = 0.85f)
-                ) {
-                    Text(
-                        text = product.category,
-                        color = Color(0xFF1976D2),
-                        fontSize = FontSize.EXTRA_SMALL,
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)
-                    )
-                }
-            }
             if (product.isDiscounted) {
                 Surface(
                     shape = CircleShape,

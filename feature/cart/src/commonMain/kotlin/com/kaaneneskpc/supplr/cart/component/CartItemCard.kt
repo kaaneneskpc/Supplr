@@ -21,6 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -53,89 +55,96 @@ fun CartItemCard(
     onPlusClick: (Int) -> Unit,
     onDeleteClick: () -> Unit,
 ) {
-    Row(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(120.dp)
-            .clip(RoundedCornerShape(size = 12.dp))
-            .background(SurfaceLighter)
+            .shadow(12.dp, RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(20.dp))
+            .background(Color.White)
+            .padding(vertical = 6.dp, horizontal = 0.dp)
     ) {
-        AsyncImage(
-            modifier = Modifier
-                .width(120.dp)
-                .height(120.dp)
-                .clip(RoundedCornerShape(size = 12.dp))
-                .border(
-                    width = 1.dp,
-                    color = BorderIdle,
-                    shape = RoundedCornerShape(size = 12.dp)
-                ),
-            model = ImageRequest.Builder(LocalPlatformContext.current)
-                .data(product.thumbnail)
-                .crossfade(enable = true)
-                .build(),
-            contentDescription = "Product thumbnail image",
-            contentScale = ContentScale.Crop
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(all = 12.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            Box(
+                modifier = Modifier
+                    .padding(start = 12.dp, end = 0.dp)
+                    .shadow(6.dp, RoundedCornerShape(16.dp))
             ) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = product.title,
-                    fontFamily = RobotoCondensedFont(),
-                    fontSize = FontSize.MEDIUM,
-                    color = TextPrimary,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Box(
+                AsyncImage(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(size = 6.dp))
-                        .background(Surface)
-                        .border(
-                            width = 1.dp,
-                            color = BorderIdle,
-                            shape = RoundedCornerShape(size = 6.dp)
-                        )
-                        .clickable { onDeleteClick() }
-                        .padding(all = 8.dp),
-                    contentAlignment = Alignment.Center
+                        .size(88.dp)
+                        .clip(RoundedCornerShape(16.dp)),
+                    model = ImageRequest.Builder(LocalPlatformContext.current)
+                        .data(product.thumbnail)
+                        .crossfade(enable = true)
+                        .build(),
+                    contentDescription = "Product thumbnail image",
+                    contentScale = ContentScale.Crop
+                )
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Top
                 ) {
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        text = product.title,
+                        fontFamily = RobotoCondensedFont(),
+                        fontSize = FontSize.EXTRA_MEDIUM,
+                        color = TextPrimary,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
                     Icon(
-                        modifier = Modifier.size(14.dp),
+                        modifier = Modifier
+                            .size(22.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color(0xFFFFEBEE))
+                            .clickable { onDeleteClick() }
+                            .padding(4.dp),
                         painter = painterResource(Resources.Icon.Delete),
                         contentDescription = "Delete icon",
-                        tint = IconPrimary
+                        tint = Color(0xFFE53935)
                     )
                 }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "$${product.price}",
-                    fontSize = FontSize.EXTRA_REGULAR,
-                    color = TextSecondary,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1
-                )
-                QuantityCounter(
-                    size = QuantityCounterSize.Small,
-                    value = cartItem.quantity,
-                    onMinusClick = onMinusClick,
-                    onPlusClick = onPlusClick
-                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "$${product.price}",
+                        fontSize = FontSize.MEDIUM,
+                        color = Color(0xFFE53935),
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1
+                    )
+                    QuantityCounter(
+                        size = QuantityCounterSize.Small,
+                        value = cartItem.quantity,
+                        onMinusClick = onMinusClick,
+                        onPlusClick = onPlusClick
+                    )
+                }
+                product.description.takeIf { it.isNotBlank() }?.let {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = it,
+                        fontSize = FontSize.SMALL,
+                        color = TextSecondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
     }
