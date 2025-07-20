@@ -19,6 +19,7 @@
 
 - 🔥 **Kotlin Multiplatform**: Single codebase for Android & iOS
 - 🎨 **Modern UI**: Responsive and animated interface with Jetpack Compose Multiplatform
+- 🗂️ **Contact Us card is now perfectly centered on the page using Box and Alignment.Center for a better user experience.**
 - 🛒 **Cart & Order Management**
 - 👤 **User Profile & Authentication**
 - 🛠️ **Admin Panel**: Add, edit, delete, and search products
@@ -49,6 +50,7 @@
     - products_overview/ : Home screen new & discounted product listing.
     - payment_completed/ : Order completed screen and post-order.
     - categories/        : Category management.
+    - contact_us/        : Contact with Us.
 - data/            : Data layer, repositories, and services.
 - shared/          : Shared domain models, utils, constants.
 - di/              : Dependency injection modules (Koin).

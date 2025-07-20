@@ -136,6 +136,7 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 - **Kullanıcıya anlık mesaj ve hata gösterimi (MessageBar).**
 - **BottomBar ve TopBar ile kolay navigasyon.**
 - **Kullanıcıya özel bildirimler (push notification) desteği.**
+- **Contact Us ekranında iletişim kartı, Box ve Alignment.Center ile sayfanın tam ortasına hizalanmıştır. Böylece tüm cihazlarda ve ekran boyutlarında kart ortalanır ve kullanıcı deneyimi iyileşir.**
 
 ---
 
@@ -159,6 +160,7 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
   - **Ürün Yönetimi (manage_product):** Ürün ekleme, güncelleme ve silme işlemleri.
   - **Ürünler Genel Bakış (products_overview):** Ana ekranda yeni ve indirimli ürünlerin listelenmesi.
   - **Ödeme Tamamlandı (payment_completed):** Sipariş sonrası kullanıcı bilgilendirme ve özet ekranı.
+  - **Contact Us ekranında iletişim kartı ortalandı (Box + Alignment.Center ile).**
 
 ---
 
