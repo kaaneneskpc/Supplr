@@ -11,7 +11,7 @@
 
 ## 🚀 About the Project
 
-**Supplr** is a modern, modular, and scalable e-commerce application targeting both Android and iOS platforms. Built with Kotlin Multiplatform (KMP) and Jetpack Compose Multiplatform, it allows users to browse products, add to cart, place orders, and manage their profiles. An admin panel is available for product management.
+**Supplr** is a modern, modular, and scalable e-commerce application targeting both Android and iOS platforms. Built with Kotlin Multiplatform (KMP) and Jetpack Compose Multiplatform, it allows users to browse products, add to cart, place orders, manage their profiles, and manage their favorite products. An admin panel is available for product management.
 
 ---
 
@@ -25,6 +25,7 @@
 - 🛠️ **Admin Panel**: Add, edit, delete, and search products
 - 🏷️ **Category & Product Listing**
 - 💳 **Checkout & Order Completion**
+- ❤️ **Favorites**
 - 🔔 **Push Notification Support** (personalized notifications)
 - 🔐 **Firebase Authentication & Firestore**
 - 🏗️ **Dependency Injection with Koin**
@@ -51,6 +52,7 @@
     - payment_completed/ : Order completed screen and post-order.
     - categories/        : Category management.
     - contact_us/        : Contact with Us.
+    - favorites/         : Favorites screen and logic (new)
 - data/            : Data layer, repositories, and services.
 - shared/          : Shared domain models, utils, constants.
 - di/              : Dependency injection modules (Koin).

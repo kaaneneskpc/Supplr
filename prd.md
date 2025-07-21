@@ -2,7 +2,7 @@
 
 ## 1. Proje Amacı ve Genel Tanım
 
-Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) ve Jetpack Compose Multiplatform ile geliştirilen, modern, modüler ve ölçeklenebilir bir e-ticaret uygulamasıdır. Kullanıcılar ürünleri inceleyebilir, sepete ekleyebilir, sipariş verebilir ve profil yönetimi yapabilir. Admin paneli ile ürün yönetimi mümkündür.
+Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) ve Jetpack Compose Multiplatform ile geliştirilen, modern, modüler ve ölçeklenebilir bir e-ticaret uygulamasıdır. Kullanıcılar ürünleri inceleyebilir, sepete ekleyebilir, sipariş verebilir, favorilere ekleyebilir ve profil yönetimi yapabilir. Admin paneli ile ürün yönetimi mümkündür.
 
 ---
 
@@ -39,6 +39,7 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
     - products_overview/: Ana ekranda yeni ve indirimli ürünlerin öne çıkarıldığı ürün listeleme (yeni).
     - payment_completed/: Sipariş tamamlandı ekranı ve sipariş sonrası işlemler (yeni).
     - categories/: Kategori yönetimi.
+    - favorites/      : Kullanıcının favori ürünlerini yönettiği ekran ve iş mantığı (yeni).
 - data/            : Veri katmanı, repository ve servisler.
 - shared/          : Ortak domain modelleri, util, constantlar.
 - di/              : Dependency injection modülleri (Koin).
@@ -66,16 +67,16 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
     - AndroidX Lifecycle ViewModel
 
 - **Domain Layer (shared/domain/):**
-  - Temel iş modelleri (Product, Customer, CartItem vs.).
-  - Repository arayüzleri (interface) burada tanımlı.
+  - Temel iş modelleri (Product, Customer, CartItem, **Favorite** vs.).
+  - Repository arayüzleri (ProductRepository, **FavoritesRepository** ...)
   - **Kullanılan Teknolojiler:**
     - Kotlin Multiplatform
     - Kotlinx Serialization
     - Kendi interface’ler (Repository arayüzleri)
 
 - **Data Layer (data/):**
-  - Repository implementasyonları (ör. CustomerRepositoryImpl).
-  - Firebase, Ktor, Storage gibi dış servislerle iletişim.
+  - Repository implementasyonları (ör. CustomerRepositoryImpl, **FavoritesRepositoryImpl**).
+  - Firebase Firestore'da her kullanıcıya özel favorites koleksiyonu.
   - DTO ve veri dönüşümleri.
   - **Kullanılan Teknolojiler:**
     - Firebase (Firestore, Storage, Auth)
@@ -104,6 +105,7 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
   - **manage_product:** Adminlerin ürün ekleme, düzenleme ve silme işlemlerini gerçekleştirdiği ekran ve iş mantığı.
   - **products_overview:** Ana ekranda yeni ve indirimli ürünlerin öne çıkarıldığı, kullanıcıya hızlı erişim sağlayan ürün listeleme modülü.
   - **payment_completed:** Sipariş tamamlandıktan sonra kullanıcıya sipariş özeti ve başarı mesajı gösteren ekran.
+  - **favorites:** Kullanıcıların ürünleri favorilere ekleyebilir, favori ürünlerini ayrı bir ekranda görebilir ve yönetebilir.
 
 ---
 
@@ -136,6 +138,11 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 - **Kullanıcıya anlık mesaj ve hata gösterimi (MessageBar).**
 - **BottomBar ve TopBar ile kolay navigasyon.**
 - **Kullanıcıya özel bildirimler (push notification) desteği.**
+- **Favoriler:**
+  - Ürün detay ekranında sağ üstte kalp ikonu ile favoriye ekleme.
+  - Favoriler ekranında favori ürünlerin listelenmesi, her kartın sağ üstünde favoriden çıkarma butonu.
+  - Favori ürünler anlık olarak güncellenir, ekleme/çıkarma işlemlerinde mesaj bar ile kullanıcı bilgilendirilir.
+  - Favori ürünler Firebase Firestore'da kullanıcıya özel saklanır.
 - **Contact Us ekranında iletişim kartı, Box ve Alignment.Center ile sayfanın tam ortasına hizalanmıştır. Böylece tüm cihazlarda ve ekran boyutlarında kart ortalanır ve kullanıcı deneyimi iyileşir.**
 
 ---
@@ -161,6 +168,7 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
   - **Ürünler Genel Bakış (products_overview):** Ana ekranda yeni ve indirimli ürünlerin listelenmesi.
   - **Ödeme Tamamlandı (payment_completed):** Sipariş sonrası kullanıcı bilgilendirme ve özet ekranı.
   - **Contact Us ekranında iletişim kartı ortalandı (Box + Alignment.Center ile).**
+  - **Favoriler (favorites):** Kullanıcılar ürünleri favorilere ekleyebilir, favori ürünlerini ayrı bir ekranda görebilir ve yönetebilir.
 
 ---
 
@@ -194,6 +202,8 @@ Bu doküman, projeyi geliştirirken ve yeni modüller/özellikler eklerken temel
 ---
 
 ## 12. Yeni Feature Ekleme Rehberi
+
+Örnek modül olarak `favorites` modülüne bakılabilir. Repository, ViewModel, ekran ve DI entegrasyonu ile tam bir Clean Architecture örneği sunar.
 
 ### 12.1. Adım Adım Feature Ekleme
 1. **Yeni modül/folder oluştur:**
@@ -278,8 +288,9 @@ composable<Screen.YourFeature> {
 #### Basit Compose Screen Şablonu
 ```kotlin
 @Composable
-fun YourFeatureScreen(viewModel: YourFeatureViewModel = koinViewModel()) {
-    // UI ve state gözlemi
+fun YourFeatureScreen(navigateToBack: () -> Unit) {
+    val viewModel = koinViewModel<YourFeatureViewModel>()
+    // UI bileşenleri ve state yönetimi
 }
 ```
 
