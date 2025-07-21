@@ -71,7 +71,7 @@ fun AuthScreen(
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "NUTRISPORT",
+                        text = "SUPPLR",
                         textAlign = TextAlign.Center,
                         fontFamily = BebasNeueFont(),
                         fontSize = FontSize.EXTRA_LARGE,

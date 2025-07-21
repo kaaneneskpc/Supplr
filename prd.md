@@ -206,7 +206,7 @@ Bu doküman, projeyi geliştirirken ve yeni modüller/özellikler eklerken temel
    - `data/domain/YourFeatureRepository.kt` (interface)
    - `data/YourFeatureRepositoryImpl.kt` (implementasyon)
 4. **DI (Koin) modülüne ekle:**
-   - `di/src/commonMain/kotlin/com/nutrisport/di/KoinModule.kt` dosyasına yeni ViewModel ve repository’yi ekle.
+   - `di/src/commonMain/kotlin/com/kaaneneskpc/supplr/di/KoinModule.kt` dosyasına yeni ViewModel ve repository’yi ekle.
 5. **Navigation’a yeni ekranı ekle:**
    - `navigation/src/commonMain/kotlin/com/kaaneneskpc/supplr/navigation/NavGraph.kt` dosyasına yeni ekranı ekle.
 6. **Gerekirse shared/domain’e yeni model/interface ekle.**
