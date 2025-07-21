@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,10 +28,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
@@ -57,6 +61,7 @@ import com.kaaneneskpc.supplr.shared.util.DisplayResult
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import rememberMessageBarState
+import com.kaaneneskpc.supplr.shared.util.RequestState
 
 @Composable
 fun ProductDetailsScreen(
@@ -68,6 +73,7 @@ fun ProductDetailsScreen(
     val product by productDetailViewModel.product.collectAsState()
     val quantity = productDetailViewModel.quantity
     val selectedFlavor = productDetailViewModel.selectedFlavor
+    val favoriteProductIdsState by productDetailViewModel.favoriteProductIds.collectAsState()
 
 
     CommonScaffold(
@@ -108,23 +114,48 @@ fun ProductDetailsScreen(
                                 .padding(horizontal = 24.dp)
                                 .padding(top = 12.dp)
                         ) {
-                            AsyncImage(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(300.dp)
-                                    .clip(RoundedCornerShape(size = 12.dp))
-                                    .border(
-                                        width = 1.dp,
-                                        color = BorderIdle,
-                                        shape = RoundedCornerShape(size = 12.dp)
-                                    ),
-                                model = ImageRequest.Builder(LocalPlatformContext.current)
-                                    .data(selectedProduct.thumbnail)
-                                    .crossfade(enable = true)
-                                    .build(),
-                                contentDescription = "Product thumbnail image",
-                                contentScale = ContentScale.Crop
-                            )
+                            Box(modifier = Modifier.fillMaxWidth()) {
+                                AsyncImage(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(300.dp)
+                                        .clip(RoundedCornerShape(size = 12.dp))
+                                        .border(
+                                            width = 1.dp,
+                                            color = BorderIdle,
+                                            shape = RoundedCornerShape(size = 12.dp)
+                                        ),
+                                    model = ImageRequest.Builder(LocalPlatformContext.current)
+                                        .data(selectedProduct.thumbnail)
+                                        .crossfade(enable = true)
+                                        .build(),
+                                    contentDescription = "Product thumbnail image",
+                                    contentScale = ContentScale.Crop
+                                )
+                                val favoriteIds = if (favoriteProductIdsState is RequestState.Success) (favoriteProductIdsState as RequestState.Success<List<String>>).data else emptyList()
+                                IconButton(
+                                    onClick = {
+                                        if (selectedProduct.id in favoriteIds) {
+                                            messageBarState.addError("This product is already in your favorites.")
+                                        } else {
+                                            productDetailViewModel.addToFavorites(
+                                                onSuccess = { messageBarState.addSuccess("Added to favorites!") },
+                                                onError = { message -> messageBarState.addError(message) }
+                                            )
+                                        }
+                                    },
+                                    modifier = Modifier
+                                        .align(Alignment.TopEnd)
+                                        .padding(12.dp)
+                                        .zIndex(2f)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(Resources.Icon.Favorites),
+                                        contentDescription = "Add to favorites",
+                                        tint = if (selectedProduct.id in favoriteIds) Color.Red else Color.Black
+                                    )
+                                }
+                            }
                             Spacer(modifier = Modifier.height(12.dp))
                             Row(
                                 modifier = Modifier.fillMaxWidth(),

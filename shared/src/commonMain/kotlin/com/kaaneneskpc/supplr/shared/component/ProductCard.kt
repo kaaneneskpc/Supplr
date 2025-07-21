@@ -49,12 +49,16 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.kaaneneskpc.supplr.shared.domain.Product
 import com.kaaneneskpc.supplr.shared.fonts.FontSize
+import androidx.compose.ui.zIndex
+import org.jetbrains.compose.resources.painterResource
+import com.kaaneneskpc.supplr.shared.fonts.Resources
 
 @Composable
 fun ProductCard(
     modifier: Modifier = Modifier,
     product: Product,
-    onClick: (String) -> Unit
+    onClick: (String) -> Unit,
+    favoriteIcon: (@Composable () -> Unit)? = null
 ) {
     var pressed by remember { mutableStateOf(false) }
     val animatedScale by animateFloatAsState(targetValue = if (pressed) 1.03f else 1f)
@@ -92,6 +96,16 @@ fun ProductCard(
                 .matchParentSize()
                 .background(Color.Black.copy(alpha = 0.45f))
         )
+        if (favoriteIcon != null) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(10.dp)
+                    .zIndex(2f)
+            ) {
+                favoriteIcon()
+            }
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
