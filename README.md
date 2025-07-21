@@ -19,7 +19,7 @@
 
 - 🔥 **Kotlin Multiplatform**: Single codebase for Android & iOS
 - 🎨 **Modern UI**: Responsive and animated interface with Jetpack Compose Multiplatform
-- 🗂️ **Contact Us card is now perfectly centered on the page using Box and Alignment.Center for a better user experience.**
+- 🗂️ **Contact Us**
 - 🛒 **Cart & Order Management**
 - 👤 **User Profile & Authentication**
 - 🛠️ **Admin Panel**: Add, edit, delete, and search products
