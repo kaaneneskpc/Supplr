@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.serialization)
 }
 
 kotlin {
@@ -24,12 +23,16 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "Navigation"
+            baseName = "Favorites"
             isStatic = true
         }
     }
 
     sourceSets {
+        androidMain.dependencies {
+            implementation(libs.ktor.android.client)
+            implementation(libs.androidx.activity.compose)
+        }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -39,26 +42,23 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.kotlinx.serialization)
-            implementation(libs.compose.navigation)
-            implementation(project(":feature:auth"))
-            implementation(project(":feature:home"))
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.coil3)
+            implementation(libs.coil3.compose)
+            implementation(libs.coil3.compose.core)
+            implementation(libs.coil3.network.ktor)
             implementation(project(":shared"))
-            implementation(project(":feature:profile"))
-            implementation(project(":feature:admin_panel"))
-            implementation(project(":feature:manage_product"))
-            implementation(project(":feature:product_details"))
-            implementation(project(":feature:categories:category_search"))
-            implementation(project(":feature:checkout"))
-            implementation(project(":feature:payment_completed"))
-            implementation(project(":feature:contact_us"))
-            implementation(project(":feature:favorites"))
+            implementation(project(":data"))
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.darwin.client)
         }
     }
 }
 
 android {
-    namespace = "com.kaaneneskpc.supplr.navigation"
+    namespace = "com.kaaneneskpc.supplr.favorites"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

@@ -14,6 +14,7 @@ import com.kaaneneskpc.supplr.admin_panel.AdminPanelScreen
 import com.kaaneneskpc.supplr.categories.category_search.CategorySearchScreen
 import com.kaaneneskpc.supplr.checkout.CheckoutScreen
 import com.kaaneneskpc.supplr.contact_us.ContactUsScreen
+import com.kaaneneskpc.supplr.favorites.FavoritesScreen
 import com.kaaneneskpc.supplr.manage_product.ManageProductScreen
 import com.kaaneneskpc.supplr.payment_completed.PaymentCompletedScreen
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
@@ -58,6 +59,9 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 },
                 navigateToContactUs = {
                     navController.navigate(Screen.ContactUs)
+                },
+                navigateToFavorites = {
+                    navController.navigate(Screen.Favorites)
                 }
             )
         }
@@ -138,6 +142,17 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
             ContactUsScreen(
                 navigateBack = {
                     navController.navigateUp()
+                }
+            )
+        }
+
+        composable<Screen.Favorites> {
+            FavoritesScreen(
+                navigateBack = {
+                    navController.navigateUp()
+                },
+                navigateToDetails = { productId ->
+                    navController.navigate(Screen.ProductDetails(id = productId))
                 }
             )
         }

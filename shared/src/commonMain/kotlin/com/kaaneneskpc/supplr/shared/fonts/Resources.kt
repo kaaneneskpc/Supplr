@@ -12,6 +12,7 @@ import supplr.shared.generated.resources.close
 import supplr.shared.generated.resources.delete
 import supplr.shared.generated.resources.dollar
 import supplr.shared.generated.resources.edit
+import supplr.shared.generated.resources.favorites
 import supplr.shared.generated.resources.france
 import supplr.shared.generated.resources.germany
 import supplr.shared.generated.resources.google_logo
@@ -63,6 +64,7 @@ object Resources {
         val Delete = Res.drawable.delete
         val Warning = Res.drawable.warning
         val Weight = Res.drawable.weight
+        val Favorites = Res.drawable.favorites
     }
     object Image {
         val ShoppingCart = Res.drawable.shopping_cart_image

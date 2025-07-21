@@ -41,4 +41,6 @@ sealed class Screen {
     ) : Screen()
     @Serializable
     data object ContactUs : Screen()
+    @Serializable
+    data object Favorites : Screen()
 }

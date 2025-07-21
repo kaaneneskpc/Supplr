@@ -11,9 +11,9 @@ enum class DrawerItem(
         title = "Profile",
         icon = Resources.Icon.Person
     ),
-    Blog(
-        title = "Blog",
-        icon = Resources.Icon.Book
+    Favorites(
+        title = "Favorites",
+        icon = Resources.Icon.Favorites
     ),
     Locations(
         title = "Locations",

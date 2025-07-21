@@ -82,7 +82,8 @@ fun HomeScreen(
     navigateToDetails: (String) -> Unit,
     navigateToCategorySearch: (String) -> Unit,
     navigateToCheckout: (String) -> Unit,
-    navigateToContactUs: () -> Unit
+    navigateToContactUs: () -> Unit,
+    navigateToFavorites: () -> Unit,
 ) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState()
@@ -150,7 +151,8 @@ fun HomeScreen(
                     }
                 )
             },
-            onAdminPanelClick = navigateToAdminPanel
+            onAdminPanelClick = navigateToAdminPanel,
+            onFavoritesClick = navigateToFavorites
         )
         Box(
             modifier = Modifier
