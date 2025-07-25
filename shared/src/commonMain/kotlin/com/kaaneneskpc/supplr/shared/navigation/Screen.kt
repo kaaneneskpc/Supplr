@@ -45,5 +45,11 @@ sealed class Screen {
     data object Favorites : Screen()
 
     @Serializable
+    data object Locations : Screen()
+    
+    @Serializable
+    data class AddEditLocation(val locationId: String? = null) : Screen()
+
+    @Serializable
     data class Review(val id: String? = null): Screen()
 }

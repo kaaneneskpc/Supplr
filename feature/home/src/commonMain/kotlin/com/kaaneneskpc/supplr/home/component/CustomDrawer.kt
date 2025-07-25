@@ -30,6 +30,7 @@ fun CustomDrawer(
     onSignOutClick: () -> Unit,
     onAdminPanelClick: () -> Unit,
     onFavoritesClick: () -> Unit,
+    onLocationsClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -63,6 +64,7 @@ fun CustomDrawer(
                         DrawerItem.ContactUs -> onContactUsClick()
                         DrawerItem.SignOut -> onSignOutClick()
                         DrawerItem.Favorites -> onFavoritesClick()
+                        DrawerItem.Locations -> onLocationsClick()
                         else -> {}
                     }
                 }

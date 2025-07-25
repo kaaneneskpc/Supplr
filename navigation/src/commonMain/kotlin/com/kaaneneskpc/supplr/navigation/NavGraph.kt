@@ -16,6 +16,8 @@ import com.kaaneneskpc.supplr.categories.category_search.CategorySearchScreen
 import com.kaaneneskpc.supplr.checkout.CheckoutScreen
 import com.kaaneneskpc.supplr.contact_us.ContactUsScreen
 import com.kaaneneskpc.supplr.favorites.FavoritesScreen
+import com.kaaneneskpc.supplr.locations.LocationsScreen
+import com.kaaneneskpc.supplr.locations.AddEditLocationScreen
 import com.kaaneneskpc.supplr.manage_product.ManageProductScreen
 import com.kaaneneskpc.supplr.payment_completed.PaymentCompletedScreen
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
@@ -63,6 +65,9 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 },
                 navigateToFavorites = {
                     navController.navigate(Screen.Favorites)
+                },
+                navigateToLocations = {
+                    navController.navigate(Screen.Locations)
                 }
             )
         }
@@ -157,6 +162,30 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 },
                 navigateToDetails = { productId ->
                     navController.navigate(Screen.ProductDetails(id = productId))
+                }
+            )
+        }
+
+        composable<Screen.Locations> {
+            LocationsScreen(
+                navigateBack = {
+                    navController.navigateUp()
+                },
+                navigateToAddLocation = {
+                    navController.navigate(Screen.AddEditLocation())
+                },
+                navigateToEditLocation = { locationId ->
+                    navController.navigate(Screen.AddEditLocation(locationId))
+                }
+            )
+        }
+
+        composable<Screen.AddEditLocation> {
+            val locationId = it.toRoute<Screen.AddEditLocation>().locationId
+            AddEditLocationScreen(
+                locationId = locationId,
+                navigateBack = {
+                    navController.navigateUp()
                 }
             )
         }
