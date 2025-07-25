@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.kaaneneskpc.supplr.AddReviewScreen
 import com.kaaneneskpc.supplr.ProductDetailsScreen
 import com.kaaneneskpc.supplr.auth.AuthScreen
 import com.kaaneneskpc.supplr.home.HomeScreen
@@ -97,6 +98,9 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 id = id,
                 navigateBack = {
                     navController.navigateUp()
+                },
+                navigateToReviewScreen = { productId ->
+                    navController.navigate(Screen.Review(productId))
                 }
             )
         }
@@ -153,6 +157,16 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 },
                 navigateToDetails = { productId ->
                     navController.navigate(Screen.ProductDetails(id = productId))
+                }
+            )
+        }
+
+        composable<Screen.Review> {
+            val id = it.toRoute<Screen.Review>().id
+            AddReviewScreen(
+                productId = id.orEmpty(),
+                navigateBack = {
+                    navController.navigateUp()
                 }
             )
         }

@@ -9,7 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import com.kaaneneskpc.supplr.data.domain.ProductRepository
 import com.kaaneneskpc.supplr.data.domain.FavoritesRepository
+import com.kaaneneskpc.supplr.data.domain.ReviewRepository
 import com.kaaneneskpc.supplr.shared.domain.CartItem
+import com.kaaneneskpc.supplr.shared.domain.Review
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -20,6 +22,7 @@ class ProductDetailViewModel (
     private val productRepository: ProductRepository,
     private val customerRepository: CustomerRepository,
     private val favoritesRepository: FavoritesRepository,
+    private val reviewRepository: ReviewRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     val product = productRepository.readProductByIdFlow(
@@ -38,10 +41,28 @@ class ProductDetailViewModel (
                 initialValue = RequestState.Loading
             )
 
+    val reviews: StateFlow<RequestState<List<Review>>> =
+        reviewRepository.getReviewsForProduct(
+            savedStateHandle.get<String>("id") ?: ""
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = RequestState.Loading
+        )
+
     var quantity by mutableStateOf(1)
         private set
 
     var selectedFlavor: String? by mutableStateOf(null)
+        private set
+
+    var averageRating by mutableStateOf(0f)
+        private set
+
+    var reviewCount by mutableStateOf(0)
+        private set
+
+    var hasUserReviewed by mutableStateOf(false)
         private set
 
     fun updateQuantity(value: Int) {
@@ -92,5 +113,55 @@ class ProductDetailViewModel (
                 onError("Product id is not found.")
             }
         }
+    }
+
+    fun loadReviewStats() {
+        viewModelScope.launch {
+            val productId = savedStateHandle.get<String>("id") ?: return@launch
+            
+            // Load average rating
+            when (val avgRating = reviewRepository.getProductAverageRating(productId)) {
+                is RequestState.Success -> averageRating = avgRating.data
+                else -> {}
+            }
+            
+            // Load review count
+            when (val count = reviewRepository.getProductReviewCount(productId)) {
+                is RequestState.Success -> reviewCount = count.data
+                else -> {}
+            }
+            
+            // Allow multiple reviews - always show write review button
+            hasUserReviewed = false
+        }
+    }
+
+    fun addReview(
+        rating: Float,
+        comment: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            val productId = savedStateHandle.get<String>("id")
+            if (productId != null) {
+                reviewRepository.addReview(
+                    productId = productId,
+                    rating = rating,
+                    comment = comment,
+                    onSuccess = {
+                        onSuccess()
+                        loadReviewStats() // Refresh stats after adding review
+                    },
+                    onError = onError
+                )
+            } else {
+                onError("Product id is not found.")
+            }
+        }
+    }
+
+    init {
+        loadReviewStats()
     }
 }

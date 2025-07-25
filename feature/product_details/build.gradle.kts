@@ -49,6 +49,7 @@ kotlin {
             implementation(libs.coil3.compose.core)
             implementation(libs.coil3.network.ktor)
             implementation(libs.messagebar.kmp)
+            implementation(libs.kotlinx.datetime)
             implementation(project(":shared"))
             implementation(project(":data"))
         }

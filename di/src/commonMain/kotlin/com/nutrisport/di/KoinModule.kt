@@ -11,11 +11,13 @@ import com.kaaneneskpc.supplr.data.CustomerRepositoryImpl
 import com.kaaneneskpc.supplr.data.FavoritesRepositoryImpl
 import com.kaaneneskpc.supplr.data.OrderRepositoryImpl
 import com.kaaneneskpc.supplr.data.ProductRepositoryImpl
+import com.kaaneneskpc.supplr.data.ReviewRepositoryImpl
 import com.kaaneneskpc.supplr.data.domain.AdminRepository
 import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import com.kaaneneskpc.supplr.data.domain.FavoritesRepository
 import com.kaaneneskpc.supplr.data.domain.OrderRepository
 import com.kaaneneskpc.supplr.data.domain.ProductRepository
+import com.kaaneneskpc.supplr.data.domain.ReviewRepository
 import com.kaaneneskpc.supplr.favorites.FavoritesViewModel
 import com.kaaneneskpc.supplr.home.HomeViewModel
 import com.kaaneneskpc.supplr.manage_product.ManageProductViewModel
@@ -34,6 +36,7 @@ val sharedModule = module {
     single<ProductRepository> { ProductRepositoryImpl() }
     single<FavoritesRepository> { FavoritesRepositoryImpl(get()) }
     single<OrderRepository> { OrderRepositoryImpl(get()) }
+    single<ReviewRepository> { ReviewRepositoryImpl() }
     viewModelOf(::AuthViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::ProfileViewModel)

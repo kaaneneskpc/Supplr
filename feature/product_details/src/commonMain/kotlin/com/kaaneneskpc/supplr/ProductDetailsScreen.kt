@@ -46,6 +46,7 @@ import com.kaaneneskpc.supplr.shared.component.QuantityCounter
 import com.kaaneneskpc.supplr.shared.component.SupplrButton
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
 import com.kaaneneskpc.supplr.shared.domain.QuantityCounterSize
+import com.kaaneneskpc.supplr.component.ReviewsSection
 import com.kaaneneskpc.supplr.shared.fonts.BorderIdle
 import com.kaaneneskpc.supplr.shared.fonts.FontSize
 import com.kaaneneskpc.supplr.shared.fonts.Resources
@@ -57,6 +58,7 @@ import com.kaaneneskpc.supplr.shared.fonts.SurfaceLighter
 import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.fonts.TextSecondary
 import com.kaaneneskpc.supplr.shared.fonts.TextWhite
+import com.kaaneneskpc.supplr.shared.navigation.Screen
 import com.kaaneneskpc.supplr.shared.util.DisplayResult
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -66,7 +68,8 @@ import com.kaaneneskpc.supplr.shared.util.RequestState
 @Composable
 fun ProductDetailsScreen(
     id: String?,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    navigateToReviewScreen: (String?) -> Unit
 ) {
     val messageBarState = rememberMessageBarState()
     val productDetailViewModel = koinViewModel<ProductDetailViewModel>()
@@ -74,6 +77,10 @@ fun ProductDetailsScreen(
     val quantity = productDetailViewModel.quantity
     val selectedFlavor = productDetailViewModel.selectedFlavor
     val favoriteProductIdsState by productDetailViewModel.favoriteProductIds.collectAsState()
+    val reviewsState by productDetailViewModel.reviews.collectAsState()
+    val averageRating = productDetailViewModel.averageRating
+    val reviewCount = productDetailViewModel.reviewCount
+    val hasUserReviewed = productDetailViewModel.hasUserReviewed
 
 
     CommonScaffold(
@@ -245,6 +252,32 @@ fun ProductDetailsScreen(
                                         onSuccess = { messageBarState.addSuccess("Product added to cart.") },
                                         onError = { message -> messageBarState.addError(message) }
                                     )
+                                }
+                            )
+                        }
+                        
+                        // Reviews Section
+                        Column(
+                            modifier = Modifier
+                                .background(Surface)
+                                .padding(all = 24.dp)
+                        ) {
+                            Text(
+                                text = "Reviews",
+                                fontSize = FontSize.EXTRA_LARGE,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = RobotoCondensedFont(),
+                                color = TextPrimary
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            
+                            ReviewsSection(
+                                reviewsState = reviewsState,
+                                averageRating = averageRating,
+                                reviewCount = reviewCount,
+                                hasUserReviewed = hasUserReviewed,
+                                onWriteReviewClick = {
+                                    navigateToReviewScreen(id)
                                 }
                             )
                         }

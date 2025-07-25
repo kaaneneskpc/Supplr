@@ -23,6 +23,7 @@ serialization = "1.7.3"
 coil3 = "3.0.4"
 ktor = "3.0.3"
 coroutines = "1.10.1"
+datetime = "0.6.1"
 messagebar = "1.0.7"
 google = "4.4.2"
 browser = "1.0.4"
@@ -75,6 +76,7 @@ ktor-darwin-client = { module = "io.ktor:ktor-client-darwin", version.ref = "kto
 ktor-android-client = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 
 messagebar-kmp = { module = "com.stevdza-san:messagebarkmp", version.ref = "messagebar" }
 browser-kmp = { module = "com.stevdza-san:browser-kmp", version.ref = "browser" }

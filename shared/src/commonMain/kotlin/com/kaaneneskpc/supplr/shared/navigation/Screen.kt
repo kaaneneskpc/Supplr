@@ -43,4 +43,7 @@ sealed class Screen {
     data object ContactUs : Screen()
     @Serializable
     data object Favorites : Screen()
+
+    @Serializable
+    data class Review(val id: String? = null): Screen()
 }
