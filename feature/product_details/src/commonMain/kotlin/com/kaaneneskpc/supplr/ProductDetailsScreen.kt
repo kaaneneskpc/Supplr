@@ -260,7 +260,7 @@ fun ProductDetailsScreen(
                         Column(
                             modifier = Modifier
                                 .background(Surface)
-                                .padding(all = 24.dp)
+                                .padding(all = 4.dp)
                         ) {
                             Text(
                                 text = "Reviews",

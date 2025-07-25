@@ -36,16 +36,27 @@ fun ReviewsSection(
             onWriteReviewClick = onWriteReviewClick
         )
         
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         
-        // Reviews list
+        // Reviews list with enhanced spacing
         when (reviewsState) {
             is RequestState.Loading -> {
                 Box(
-                    modifier = Modifier.fillMaxWidth().height(100.dp),
+                    modifier = Modifier.fillMaxWidth().height(120.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        CircularProgressIndicator()
+                        Text(
+                            text = "Loading reviews...",
+                            fontFamily = RobotoCondensedFont(),
+                            fontSize = FontSize.SMALL,
+                            color = TextSecondary
+                        )
+                    }
                 }
             }
             is RequestState.Success -> {
@@ -53,9 +64,20 @@ fun ReviewsSection(
                     EmptyReviewsMessage()
                 } else {
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
+                        // Reviews count header
+                        Text(
+                            text = "📝 Customer Reviews (${reviewsState.data.size})",
+                            fontFamily = RobotoCondensedFont(),
+                            fontSize = FontSize.MEDIUM,
+                            fontWeight = FontWeight.SemiBold,
+                            color = TextPrimary,
+                            modifier = Modifier.padding(horizontal = 4.dp)
+                        )
+                        
+                        // Reviews list with enhanced spacing
                         reviewsState.data.forEach { review ->
                             ReviewItem(review = review)
                         }
@@ -63,11 +85,31 @@ fun ReviewsSection(
                 }
             }
             is RequestState.Error -> {
-                Text(
-                    text = "Error loading reviews: ${reviewsState.message}",
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(16.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = "😔 Unable to load reviews",
+                            fontFamily = RobotoCondensedFont(),
+                            fontSize = FontSize.MEDIUM,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                        Text(
+                            text = reviewsState.message,
+                            fontFamily = RobotoCondensedFont(),
+                            fontSize = FontSize.SMALL,
+                            color = TextSecondary
+                        )
+                    }
+                }
             }
             else -> {}
         }
@@ -107,10 +149,11 @@ private fun ReviewsSummaryHeader(
         }
         
         FilledTonalButton(
-            onClick = onWriteReviewClick
+            onClick = onWriteReviewClick,
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp)
         ) {
             Text(
-                text = "Write Review",
+                text = "✍️ Write Review",
                 fontFamily = RobotoCondensedFont(),
                 fontSize = FontSize.MEDIUM
             )
@@ -123,14 +166,30 @@ private fun EmptyReviewsMessage() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp),
+            .height(120.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = "No reviews yet. Be the first to review!",
-            fontFamily = RobotoCondensedFont(),
-            fontSize = FontSize.MEDIUM,
-            color = TextSecondary
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = "📝",
+                fontSize = FontSize.EXTRA_LARGE
+            )
+            Text(
+                text = "No reviews yet",
+                fontFamily = RobotoCondensedFont(),
+                fontSize = FontSize.MEDIUM,
+                fontWeight = FontWeight.Medium,
+                color = TextPrimary
+            )
+            Text(
+                text = "Be the first to review this product!",
+                fontFamily = RobotoCondensedFont(),
+                fontSize = FontSize.SMALL,
+                color = TextSecondary
+            )
+        }
     }
 } 
