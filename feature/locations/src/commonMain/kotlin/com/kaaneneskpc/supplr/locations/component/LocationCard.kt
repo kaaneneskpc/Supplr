@@ -125,7 +125,7 @@ fun LocationCard(
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Text(
-                                    text = if (location.isDefault) "⭐" else "📍",
+                                    text = if (location.isDefault) "⭐" else location.category.icon,
                                     fontSize = FontSize.MEDIUM
                                 )
                             }
@@ -138,7 +138,7 @@ fun LocationCard(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = location.title,
+                                    text = "${location.title} • ${location.category.displayName}",
                                     fontFamily = RobotoCondensedFont(),
                                     fontSize = FontSize.MEDIUM,
                                     fontWeight = FontWeight.SemiBold,

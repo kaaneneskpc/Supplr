@@ -2,6 +2,7 @@ package com.kaaneneskpc.supplr.data
 
 import com.kaaneneskpc.supplr.data.domain.LocationRepository
 import com.kaaneneskpc.supplr.shared.domain.Location
+import com.kaaneneskpc.supplr.shared.domain.LocationCategory
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
@@ -31,6 +32,11 @@ class LocationRepositoryImpl : LocationRepository {
                             id = document.id,
                             userId = document.get("userId"),
                             title = document.get("title"),
+                            category = try {
+                                LocationCategory.valueOf(document.get("category") ?: "OTHER")
+                            } catch (e: Exception) {
+                                LocationCategory.OTHER
+                            },
                             fullAddress = document.get("fullAddress"),
                             city = document.get("city"),
                             state = document.get("state"),
@@ -56,6 +62,7 @@ class LocationRepositoryImpl : LocationRepository {
     @OptIn(ExperimentalUuidApi::class, ExperimentalTime::class)
     override suspend fun addLocation(
         title: String,
+        category: LocationCategory,
         fullAddress: String,
         city: String,
         state: String?,
@@ -100,6 +107,7 @@ class LocationRepositoryImpl : LocationRepository {
             val locationData = mapOf(
                 "userId" to currentUserId,
                 "title" to title,
+                "category" to category.name,
                 "fullAddress" to fullAddress,
                 "city" to city,
                 "state" to state,
@@ -151,6 +159,7 @@ class LocationRepositoryImpl : LocationRepository {
             val locationData = mapOf(
                 "userId" to location.userId,
                 "title" to location.title,
+                "category" to location.category.name,
                 "fullAddress" to location.fullAddress,
                 "city" to location.city,
                 "state" to location.state,
@@ -238,6 +247,11 @@ class LocationRepositoryImpl : LocationRepository {
                     id = document.id,
                     userId = document.get("userId"),
                     title = document.get("title"),
+                    category = try {
+                        LocationCategory.valueOf(document.get("category") ?: "OTHER")
+                    } catch (e: Exception) {
+                        LocationCategory.OTHER
+                    },
                     fullAddress = document.get("fullAddress"),
                     city = document.get("city"),
                     state = document.get("state"),

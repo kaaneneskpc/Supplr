@@ -64,7 +64,7 @@ fun CountryPickerDialog(
     val allCountries = remember { Country.entries.toList() }
     val filteredCountries = remember {
         mutableStateListOf<Country>().apply {
-            addAll(allCountries)
+            addAll(Country.entries)
         }
     }
     var searchQuery by remember { mutableStateOf("") }

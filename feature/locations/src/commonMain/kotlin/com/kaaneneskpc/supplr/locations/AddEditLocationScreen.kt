@@ -1,9 +1,12 @@
 package com.kaaneneskpc.supplr.locations
 
 import ContentWithMessageBar
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import org.jetbrains.compose.resources.painterResource
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +28,9 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kaaneneskpc.supplr.shared.component.CommonScaffold
+import com.kaaneneskpc.supplr.shared.component.dialog.CountryPickerDialog
+import com.kaaneneskpc.supplr.shared.domain.Country
+import com.kaaneneskpc.supplr.shared.domain.LocationCategory
 import com.kaaneneskpc.supplr.shared.fonts.*
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import org.koin.compose.viewmodel.koinViewModel
@@ -39,9 +46,58 @@ fun AddEditLocationScreen(
     val addEditState = locationsViewModel.addEditState
     val screenState = locationsViewModel.screenState
 
-    val isEditMode = locationId != null
+        val isEditMode = locationId != null
     val title = if (isEditMode) "Edit Address" else "Add New Address"
-
+    
+    // Country picker dialog state
+    var showCountryPicker by remember { mutableStateOf(false) }
+    var selectedCountry by remember { mutableStateOf(Country.Turkey) }
+    
+    // Debug: Print when showCountryPicker changes
+    LaunchedEffect(showCountryPicker) {
+        println("DEBUG: showCountryPicker = $showCountryPicker")
+    }
+    
+    // Update country when state changes
+    LaunchedEffect(selectedCountry) {
+        locationsViewModel.updateCountry(selectedCountry.name)
+    }
+    
+    // Country picker dialog - Simple test version
+    if (showCountryPicker) {
+        AlertDialog(
+            onDismissRequest = { showCountryPicker = false },
+            title = {
+                Text("Select Country")
+            },
+            text = {
+                Column {
+                    Country.entries.forEach { country ->
+                        TextButton(
+                            onClick = {
+                                selectedCountry = country
+                                showCountryPicker = false
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "${country.flag} ${country.name}",
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = { showCountryPicker = false }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+    
     // Initialize edit mode if locationId is provided
     LaunchedEffect(locationId) {
         if (locationId != null && !addEditState.isEditMode) {
@@ -51,6 +107,8 @@ fun AddEditLocationScreen(
                 val location = locations.data.find { it.id == locationId }
                 if (location != null) {
                     locationsViewModel.startEditingLocation(location)
+                    // Set the selected country based on location data
+                    selectedCountry = Country.entries.find { it.name == location.country } ?: Country.Turkey
                 }
             }
         } else if (locationId == null && !addEditState.isEditMode) {
@@ -114,7 +172,14 @@ fun AddEditLocationScreen(
                     // Address Title Section
                     AddressTitleSection(
                         title = addEditState.title,
-                        onTitleChange = locationsViewModel::updateTitle
+                        onTitleChange = locationsViewModel::updateTitle,
+                        error = locationsViewModel.getValidationError("title")
+                    )
+                    
+                    // Category Selection Section
+                    CategorySelectionSection(
+                        selectedCategory = addEditState.category,
+                        onCategoryChange = locationsViewModel::updateCategory
                     )
 
                     // Address Details Section
@@ -123,12 +188,18 @@ fun AddEditLocationScreen(
                         city = addEditState.city,
                         state = addEditState.state,
                         postalCode = addEditState.postalCode,
-                        country = addEditState.country,
+                        selectedCountry = selectedCountry,
                         onFullAddressChange = locationsViewModel::updateFullAddress,
                         onCityChange = locationsViewModel::updateCity,
                         onStateChange = locationsViewModel::updateState,
                         onPostalCodeChange = locationsViewModel::updatePostalCode,
-                        onCountryChange = locationsViewModel::updateCountry
+                        onCountryPickerClick = { 
+                            println("DEBUG: onCountryPickerClick called!")
+                            showCountryPicker = true 
+                        },
+                        fullAddressError = locationsViewModel.getValidationError("fullAddress"),
+                        cityError = locationsViewModel.getValidationError("city"),
+                        postalCodeError = locationsViewModel.getValidationError("postalCode")
                     )
 
                     // Default Address Section
@@ -233,7 +304,8 @@ private fun AddEditHeader(isEditMode: Boolean) {
 @Composable
 private fun AddressTitleSection(
     title: String,
-    onTitleChange: (String) -> Unit
+    onTitleChange: (String) -> Unit,
+    error: String? = null
 ) {
     Card(
         modifier = Modifier
@@ -268,37 +340,52 @@ private fun AddressTitleSection(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
-                value = title,
-                onValueChange = onTitleChange,
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = {
+            Column {
+                OutlinedTextField(
+                    value = title,
+                    onValueChange = onTitleChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = {
+                        Text(
+                            text = "e.g., Home, Office, Work",
+                            color = TextSecondary.copy(alpha = 0.7f),
+                            fontFamily = RobotoCondensedFont(),
+                            fontSize = FontSize.MEDIUM
+                        )
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = if (error != null) SurfaceError else SurfaceBrand,
+                        unfocusedBorderColor = if (error != null) SurfaceError else BorderIdle,
+                        focusedTextColor = TextPrimary,
+                        unfocusedTextColor = TextPrimary,
+                        cursorColor = SurfaceBrand,
+                        focusedContainerColor = SurfaceBrand.copy(alpha = 0.05f),
+                        unfocusedContainerColor = SurfaceLighter
+                    ),
+                    shape = RoundedCornerShape(16.dp),
+                    singleLine = true,
+                    isError = error != null,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Title",
+                            tint = if (error != null) SurfaceError else SurfaceBrand
+                        )
+                    }
+                )
+                
+                // Error message
+                if (error != null) {
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "e.g., Home, Office, Work",
-                        color = TextSecondary.copy(alpha = 0.7f),
+                        text = "⚠️ $error",
                         fontFamily = RobotoCondensedFont(),
-                        fontSize = FontSize.MEDIUM
-                    )
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = SurfaceBrand,
-                    unfocusedBorderColor = BorderIdle,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary,
-                    cursorColor = SurfaceBrand,
-                    focusedContainerColor = SurfaceBrand.copy(alpha = 0.05f),
-                    unfocusedContainerColor = SurfaceLighter
-                ),
-                shape = RoundedCornerShape(16.dp),
-                singleLine = true,
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = "Title",
-                        tint = SurfaceBrand
+                        fontSize = FontSize.EXTRA_SMALL,
+                        color = SurfaceError,
+                        modifier = Modifier.padding(start = 16.dp)
                     )
                 }
-            )
+            }
         }
     }
 }
@@ -309,12 +396,15 @@ private fun AddressDetailsSection(
     city: String,
     state: String,
     postalCode: String,
-    country: String,
+    selectedCountry: Country,
     onFullAddressChange: (String) -> Unit,
     onCityChange: (String) -> Unit,
     onStateChange: (String) -> Unit,
     onPostalCodeChange: (String) -> Unit,
-    onCountryChange: (String) -> Unit
+    onCountryPickerClick: () -> Unit,
+    fullAddressError: String? = null,
+    cityError: String? = null,
+    postalCodeError: String? = null
 ) {
     Card(
         modifier = Modifier
@@ -341,39 +431,53 @@ private fun AddressDetailsSection(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Full Address
-            OutlinedTextField(
-                value = fullAddress,
-                onValueChange = onFullAddressChange,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp),
-                placeholder = {
+            Column {
+                OutlinedTextField(
+                    value = fullAddress,
+                    onValueChange = onFullAddressChange,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp),
+                    placeholder = {
+                        Text(
+                            text = "Enter your complete street address including apartment/unit number...",
+                            color = TextSecondary.copy(alpha = 0.7f),
+                            fontFamily = RobotoCondensedFont(),
+                            fontSize = FontSize.SMALL
+                        )
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = if (fullAddressError != null) SurfaceError else SurfaceBrand,
+                        unfocusedBorderColor = if (fullAddressError != null) SurfaceError else BorderIdle,
+                        focusedTextColor = TextPrimary,
+                        unfocusedTextColor = TextPrimary,
+                        cursorColor = SurfaceBrand,
+                        focusedContainerColor = SurfaceBrand.copy(alpha = 0.05f),
+                        unfocusedContainerColor = SurfaceLighter
+                    ),
+                    shape = RoundedCornerShape(16.dp),
+                    maxLines = 4,
+                    isError = fullAddressError != null,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = "Address",
+                            tint = if (fullAddressError != null) SurfaceError else SurfaceBrand
+                        )
+                    }
+                )
+                
+                if (fullAddressError != null) {
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Enter your complete street address including apartment/unit number...",
-                        color = TextSecondary.copy(alpha = 0.7f),
+                        text = "⚠️ $fullAddressError",
                         fontFamily = RobotoCondensedFont(),
-                        fontSize = FontSize.SMALL
-                    )
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = SurfaceBrand,
-                    unfocusedBorderColor = BorderIdle,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary,
-                    cursorColor = SurfaceBrand,
-                    focusedContainerColor = SurfaceBrand.copy(alpha = 0.05f),
-                    unfocusedContainerColor = SurfaceLighter
-                ),
-                shape = RoundedCornerShape(16.dp),
-                maxLines = 4,
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.LocationOn,
-                        contentDescription = "Address",
-                        tint = SurfaceBrand
+                        fontSize = FontSize.EXTRA_SMALL,
+                        color = SurfaceError,
+                        modifier = Modifier.padding(start = 16.dp)
                     )
                 }
-            )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -382,36 +486,50 @@ private fun AddressDetailsSection(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                OutlinedTextField(
-                    value = city,
-                    onValueChange = onCityChange,
-                    modifier = Modifier.weight(1f),
-                    placeholder = {
+                Column(modifier = Modifier.weight(1f)) {
+                    OutlinedTextField(
+                        value = city,
+                        onValueChange = onCityChange,
+                        modifier = Modifier.fillMaxWidth(),
+                        placeholder = {
+                            Text(
+                                text = "City",
+                                color = TextSecondary.copy(alpha = 0.7f),
+                                fontFamily = RobotoCondensedFont()
+                            )
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = if (cityError != null) SurfaceError else SurfaceBrand,
+                            unfocusedBorderColor = if (cityError != null) SurfaceError else BorderIdle,
+                            focusedTextColor = TextPrimary,
+                            unfocusedTextColor = TextPrimary,
+                            cursorColor = SurfaceBrand,
+                            focusedContainerColor = SurfaceBrand.copy(alpha = 0.05f),
+                            unfocusedContainerColor = SurfaceLighter
+                        ),
+                        shape = RoundedCornerShape(16.dp),
+                        singleLine = true,
+                        isError = cityError != null,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.LocationOn,
+                                contentDescription = "City",
+                                tint = if (cityError != null) SurfaceError else SurfaceBrand
+                            )
+                        }
+                    )
+                    
+                    if (cityError != null) {
+                        Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "City",
-                            color = TextSecondary.copy(alpha = 0.7f),
-                            fontFamily = RobotoCondensedFont()
-                        )
-                    },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SurfaceBrand,
-                        unfocusedBorderColor = BorderIdle,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary,
-                        cursorColor = SurfaceBrand,
-                        focusedContainerColor = SurfaceBrand.copy(alpha = 0.05f),
-                        unfocusedContainerColor = SurfaceLighter
-                    ),
-                    shape = RoundedCornerShape(16.dp),
-                    singleLine = true,
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.LocationOn,
-                            contentDescription = "City",
-                            tint = SurfaceBrand
+                            text = "⚠️ $cityError",
+                            fontFamily = RobotoCondensedFont(),
+                            fontSize = FontSize.EXTRA_SMALL,
+                            color = SurfaceError,
+                            modifier = Modifier.padding(start = 16.dp)
                         )
                     }
-                )
+                }
 
                 OutlinedTextField(
                     value = state,
@@ -452,44 +570,63 @@ private fun AddressDetailsSection(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                OutlinedTextField(
-                    value = postalCode,
-                    onValueChange = onPostalCodeChange,
-                    modifier = Modifier.weight(1f),
-                    placeholder = {
+                Column(modifier = Modifier.weight(1f)) {
+                    OutlinedTextField(
+                        value = postalCode,
+                        onValueChange = onPostalCodeChange,
+                        modifier = Modifier.fillMaxWidth(),
+                        placeholder = {
+                            Text(
+                                text = "Postal Code",
+                                color = TextSecondary.copy(alpha = 0.7f),
+                                fontFamily = RobotoCondensedFont()
+                            )
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = if (postalCodeError != null) SurfaceError else SurfaceBrand,
+                            unfocusedBorderColor = if (postalCodeError != null) SurfaceError else BorderIdle,
+                            focusedTextColor = TextPrimary,
+                            unfocusedTextColor = TextPrimary,
+                            cursorColor = SurfaceBrand,
+                            focusedContainerColor = SurfaceBrand.copy(alpha = 0.05f),
+                            unfocusedContainerColor = SurfaceLighter
+                        ),
+                        shape = RoundedCornerShape(16.dp),
+                        singleLine = true,
+                        isError = postalCodeError != null,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.MailOutline,
+                                contentDescription = "Postal Code",
+                                tint = if (postalCodeError != null) SurfaceError else SurfaceBrand
+                            )
+                        }
+                    )
+                    
+                    if (postalCodeError != null) {
+                        Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Postal Code",
-                            color = TextSecondary.copy(alpha = 0.7f),
-                            fontFamily = RobotoCondensedFont()
-                        )
-                    },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SurfaceBrand,
-                        unfocusedBorderColor = BorderIdle,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary,
-                        cursorColor = SurfaceBrand,
-                        focusedContainerColor = SurfaceBrand.copy(alpha = 0.05f),
-                        unfocusedContainerColor = SurfaceLighter
-                    ),
-                    shape = RoundedCornerShape(16.dp),
-                    singleLine = true,
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.MailOutline,
-                            contentDescription = "Postal Code",
-                            tint = SurfaceBrand
+                            text = "⚠️ $postalCodeError",
+                            fontFamily = RobotoCondensedFont(),
+                            fontSize = FontSize.EXTRA_SMALL,
+                            color = SurfaceError,
+                            modifier = Modifier.padding(start = 16.dp)
                         )
                     }
-                )
+                }
 
                 OutlinedTextField(
-                    value = country,
-                    onValueChange = onCountryChange,
-                    modifier = Modifier.weight(1f),
+                    value = selectedCountry.name,
+                    onValueChange = { }, // Read-only
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable { 
+                            println("DEBUG: Country field clicked!")
+                            onCountryPickerClick() 
+                        },
                     placeholder = {
                         Text(
-                            text = "Country",
+                            text = "Select Country",
                             color = TextSecondary.copy(alpha = 0.7f),
                             fontFamily = RobotoCondensedFont()
                         )
@@ -505,10 +642,23 @@ private fun AddressDetailsSection(
                     ),
                     shape = RoundedCornerShape(16.dp),
                     singleLine = true,
+                    readOnly = true,
                     leadingIcon = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(start = 12.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(selectedCountry.flag),
+                                contentDescription = "Flag",
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    },
+                    trailingIcon = {
                         Icon(
-                            imageVector = Icons.Default.Place,
-                            contentDescription = "Country",
+                            imageVector = Icons.Default.ArrowDropDown,
+                            contentDescription = "Select Country",
                             tint = SurfaceBrand
                         )
                     }
@@ -679,6 +829,106 @@ private fun SubmitButton(
                     fontFamily = RobotoCondensedFont()
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun CategorySelectionSection(
+    selectedCategory: LocationCategory,
+    onCategoryChange: (LocationCategory) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 6.dp,
+                shape = RoundedCornerShape(20.dp),
+                spotColor = TextSecondary.copy(alpha = 0.2f)
+            ),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Surface)
+    ) {
+        Column(
+            modifier = Modifier.padding(24.dp)
+        ) {
+            Text(
+                text = "🏷️ Category",
+                fontSize = FontSize.LARGE,
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = BebasNeueFont(),
+                color = TextPrimary
+            )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            Text(
+                text = "Choose a category for easy organization",
+                fontSize = FontSize.SMALL,
+                fontFamily = RobotoCondensedFont(),
+                color = TextSecondary
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Category options in a grid
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                LocationCategory.entries.chunked(3).forEach { rowCategories ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        rowCategories.forEach { category ->
+                            CategoryChip(
+                                category = category,
+                                isSelected = selectedCategory == category,
+                                onSelect = { onCategoryChange(category) },
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                        // Fill remaining slots in the row
+                        repeat(3 - rowCategories.size) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CategoryChip(
+    category: LocationCategory,
+    isSelected: Boolean,
+    onSelect: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier
+            .clickable { onSelect() },
+        color = if (isSelected) SurfaceBrand.copy(alpha = 0.2f) else SurfaceLighter,
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = category.icon,
+                fontSize = FontSize.LARGE
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = category.displayName,
+                fontFamily = RobotoCondensedFont(),
+                fontSize = FontSize.EXTRA_SMALL,
+                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                color = if (isSelected) SurfaceBrand else TextSecondary,
+                maxLines = 1
+            )
         }
     }
 } 

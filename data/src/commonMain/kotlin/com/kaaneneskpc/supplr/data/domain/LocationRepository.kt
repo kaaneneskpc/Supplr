@@ -17,6 +17,7 @@ interface LocationRepository {
      */
     suspend fun addLocation(
         title: String,
+        category: com.kaaneneskpc.supplr.shared.domain.LocationCategory,
         fullAddress: String,
         city: String,
         state: String?,
