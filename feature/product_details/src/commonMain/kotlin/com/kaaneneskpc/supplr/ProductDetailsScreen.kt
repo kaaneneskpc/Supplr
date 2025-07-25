@@ -113,110 +113,110 @@ fun ProductDetailsScreen(
                     successContainerColor = SurfaceBrand,
                     successContentColor = TextPrimary
                 ) {
-                    Column {
-                        Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .verticalScroll(rememberScrollState())
-                                .padding(horizontal = 24.dp)
-                                .padding(top = 12.dp)
-                        ) {
-                            Box(modifier = Modifier.fillMaxWidth()) {
-                                AsyncImage(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(300.dp)
-                                        .clip(RoundedCornerShape(size = 12.dp))
-                                        .border(
-                                            width = 1.dp,
-                                            color = BorderIdle,
-                                            shape = RoundedCornerShape(size = 12.dp)
-                                        ),
-                                    model = ImageRequest.Builder(LocalPlatformContext.current)
-                                        .data(selectedProduct.thumbnail)
-                                        .crossfade(enable = true)
-                                        .build(),
-                                    contentDescription = "Product thumbnail image",
-                                    contentScale = ContentScale.Crop
-                                )
-                                val favoriteIds = if (favoriteProductIdsState is RequestState.Success) (favoriteProductIdsState as RequestState.Success<List<String>>).data else emptyList()
-                                IconButton(
-                                    onClick = {
-                                        if (selectedProduct.id in favoriteIds) {
-                                            messageBarState.addError("This product is already in your favorites.")
-                                        } else {
-                                            productDetailViewModel.addToFavorites(
-                                                onSuccess = { messageBarState.addSuccess("Added to favorites!") },
-                                                onError = { message -> messageBarState.addError(message) }
-                                            )
-                                        }
-                                    },
-                                    modifier = Modifier
-                                        .align(Alignment.TopEnd)
-                                        .padding(12.dp)
-                                        .zIndex(2f)
-                                ) {
-                                    Icon(
-                                        painter = painterResource(Resources.Icon.Favorites),
-                                        contentDescription = "Add to favorites",
-                                        tint = if (selectedProduct.id in favoriteIds) Color.Red else Color.Black
-                                    )
-                                }
-                            }
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                AnimatedContent(
-                                    targetState = selectedProduct.category
-                                ) { category ->
-                                    if (ProductCategory.valueOf(category) == ProductCategory.SaladMixed) {
-                                        Spacer(modifier = Modifier.weight(1f))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                            .padding(horizontal = 24.dp)
+                            .padding(top = 12.dp)
+                    ) {
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            AsyncImage(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(300.dp)
+                                    .clip(RoundedCornerShape(size = 12.dp))
+                                    .border(
+                                        width = 1.dp,
+                                        color = BorderIdle,
+                                        shape = RoundedCornerShape(size = 12.dp)
+                                    ),
+                                model = ImageRequest.Builder(LocalPlatformContext.current)
+                                    .data(selectedProduct.thumbnail)
+                                    .crossfade(enable = true)
+                                    .build(),
+                                contentDescription = "Product thumbnail image",
+                                contentScale = ContentScale.Crop
+                            )
+                            val favoriteIds =
+                                if (favoriteProductIdsState is RequestState.Success) (favoriteProductIdsState as RequestState.Success<List<String>>).data else emptyList()
+                            IconButton(
+                                onClick = {
+                                    if (selectedProduct.id in favoriteIds) {
+                                        messageBarState.addError("This product is already in your favorites.")
                                     } else {
-                                        Row(
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            Icon(
-                                                modifier = Modifier.size(14.dp),
-                                                painter = painterResource(Resources.Icon.Weight),
-                                                contentDescription = "Weight icon"
-                                            )
-                                            Spacer(modifier = Modifier.width(4.dp))
-                                            Text(
-                                                text = "${selectedProduct.weight}g",
-                                                fontSize = FontSize.REGULAR,
-                                                color = TextPrimary
-                                            )
-                                        }
+                                        productDetailViewModel.addToFavorites(
+                                            onSuccess = { messageBarState.addSuccess("Added to favorites!") },
+                                            onError = { message -> messageBarState.addError(message) }
+                                        )
+                                    }
+                                },
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .padding(12.dp)
+                                    .zIndex(2f)
+                            ) {
+                                Icon(
+                                    painter = painterResource(Resources.Icon.Favorites),
+                                    contentDescription = "Add to favorites",
+                                    tint = if (selectedProduct.id in favoriteIds) Color.Red else Color.Black
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            AnimatedContent(
+                                targetState = selectedProduct.category
+                            ) { category ->
+                                if (ProductCategory.valueOf(category) == ProductCategory.SaladMixed) {
+                                    Spacer(modifier = Modifier.weight(1f))
+                                } else {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier.size(14.dp),
+                                            painter = painterResource(Resources.Icon.Weight),
+                                            contentDescription = "Weight icon"
+                                        )
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text(
+                                            text = "${selectedProduct.weight}g",
+                                            fontSize = FontSize.REGULAR,
+                                            color = TextPrimary
+                                        )
                                     }
                                 }
-                                Text(
-                                    text = "$${selectedProduct.price}",
-                                    fontSize = FontSize.MEDIUM,
-                                    color = TextSecondary,
-                                    fontWeight = FontWeight.Medium
-                                )
                             }
-                            Spacer(modifier = Modifier.height(12.dp))
                             Text(
-                                text = selectedProduct.title,
-                                fontSize = FontSize.EXTRA_MEDIUM,
-                                fontWeight = FontWeight.Medium,
-                                fontFamily = RobotoCondensedFont(),
-                                color = TextPrimary,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Text(
-                                text = selectedProduct.description,
-                                fontSize = FontSize.REGULAR,
-                                lineHeight = FontSize.REGULAR * 1.3,
-                                color = TextPrimary
+                                text = "$${selectedProduct.price}",
+                                fontSize = FontSize.MEDIUM,
+                                color = TextSecondary,
+                                fontWeight = FontWeight.Medium
                             )
                         }
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = selectedProduct.title,
+                            fontSize = FontSize.EXTRA_MEDIUM,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = RobotoCondensedFont(),
+                            color = TextPrimary,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = selectedProduct.description,
+                            fontSize = FontSize.REGULAR,
+                            lineHeight = FontSize.REGULAR * 1.3,
+                            color = TextPrimary
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
                         Column(
                             modifier = Modifier
                                 .background(
@@ -255,7 +255,7 @@ fun ProductDetailsScreen(
                                 }
                             )
                         }
-                        
+
                         // Reviews Section
                         Column(
                             modifier = Modifier
@@ -270,7 +270,7 @@ fun ProductDetailsScreen(
                                 color = TextPrimary
                             )
                             Spacer(modifier = Modifier.height(16.dp))
-                            
+
                             ReviewsSection(
                                 reviewsState = reviewsState,
                                 averageRating = averageRating,

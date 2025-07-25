@@ -52,11 +52,11 @@ fun ReviewsSection(
                 if (reviewsState.data.isEmpty()) {
                     EmptyReviewsMessage()
                 } else {
-                    LazyColumn(
+                    Column(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        items(reviewsState.data) { review ->
+                        reviewsState.data.forEach { review ->
                             ReviewItem(review = review)
                         }
                     }
