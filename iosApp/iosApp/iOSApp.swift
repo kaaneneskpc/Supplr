@@ -1,6 +1,8 @@
 import SwiftUI
 import GoogleSignIn
 import Firebase
+import Stripe
+import StripePaymentSheet
 
 class AppDelegate: NSObject, UIApplicationDelegate {
 
@@ -8,7 +10,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         _ app: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        // Configure Firebase
         FirebaseApp.configure()
+        
+        // Note: Stripe will be configured dynamically from Kotlin when needed
+        
         return true
     }
 

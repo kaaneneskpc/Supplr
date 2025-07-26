@@ -12,8 +12,9 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 - **Jetpack Compose Multiplatform:** UI katmanında Compose kullanımı ile modern, deklaratif arayüzler.
 - **Koin:** Dependency Injection (DI) için kullanılır.
 - **Firebase:** Authentication, Firestore (veritabanı), Storage (dosya yönetimi), Google Sign-In ve **Push Notification** (bildirim).
-- **Ktor:** Network işlemleri için multiplatform HTTP client.
+- **Ktor:** Network işlemleri için multiplatform HTTP client ve **Stripe API entegrasyonu**.
 - **Coil:** Görsel yükleme ve cache işlemleri için.
+- **Stripe SDK:** **Android** ve **iOS** için payment processing (**Android:** Real PaymentSheet, **iOS:** Simulated flow).
 - **Coroutines & Flow:** Asenkron işlemler ve reaktif veri akışı.
 - **Material3:** Modern UI bileşenleri.
 - **Navigation Compose:** Ekranlar arası geçişler için.
@@ -38,8 +39,10 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
     - product_details/: Ürün detayları.
     - products_overview/: Ana ekranda yeni ve indirimli ürünlerin öne çıkarıldığı ürün listeleme (yeni).
     - payment_completed/: Sipariş tamamlandı ekranı ve sipariş sonrası işlemler (yeni).
+    - checkout/       : Ödeme işlemleri ve **Stripe entegrasyonu** (Android: Real PaymentSheet, iOS: Simulated flow).
     - categories/: Kategori yönetimi.
     - favorites/      : Kullanıcının favori ürünlerini yönettiği ekran ve iş mantığı (yeni).
+    - locations/      : Kullanıcı adres yönetimi, ekleme/düzenleme, kategorizasyon (Home, Work, Other) (yeni).
 - data/            : Veri katmanı, repository ve servisler.
 - shared/          : Ortak domain modelleri, util, constantlar.
 - di/              : Dependency injection modülleri (Koin).
@@ -67,16 +70,17 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
     - AndroidX Lifecycle ViewModel
 
 - **Domain Layer (shared/domain/):**
-  - Temel iş modelleri (Product, Customer, CartItem, **Favorite** vs.).
-  - Repository arayüzleri (ProductRepository, **FavoritesRepository** ...)
+  - Temel iş modelleri (Product, Customer, CartItem, **Favorite**, **Location**, **PaymentIntent**, **Order** vs.).
+  - Repository arayüzleri (ProductRepository, **FavoritesRepository**, **LocationRepository**, **PaymentRepository** ...)
   - **Kullanılan Teknolojiler:**
     - Kotlin Multiplatform
     - Kotlinx Serialization
     - Kendi interface’ler (Repository arayüzleri)
 
 - **Data Layer (data/):**
-  - Repository implementasyonları (ör. CustomerRepositoryImpl, **FavoritesRepositoryImpl**).
-  - Firebase Firestore'da her kullanıcıya özel favorites koleksiyonu.
+  - Repository implementasyonları (ör. CustomerRepositoryImpl, **FavoritesRepositoryImpl**, **LocationRepositoryImpl**, **PaymentRepositoryImpl**).
+  - Firebase Firestore'da her kullanıcıya özel favorites ve **locations** koleksiyonu.
+  - **Stripe API entegrasyonu** PaymentIntent oluşturma ve order yönetimi için.
   - DTO ve veri dönüşümleri.
   - **Kullanılan Teknolojiler:**
     - Firebase (Firestore, Storage, Auth)
@@ -118,6 +122,9 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 - **Network Güvenliği:** Ktor ile HTTPS kullanımı, Firebase ile güvenli veri transferi.
 - **Rol Bazlı Yetkilendirme:** Admin ve normal kullanıcı ayrımı, admin paneline erişim kontrolü.
 - **Oturum Yönetimi:** Kullanıcı oturumu ve token yönetimi, signOut ile güvenli çıkış.
+- **Payment Security:** **Stripe API keys** güvenli yönetimi (`shared/Consts.kt`), PCI-DSS compliant payment processing.
+- **Location Data Security:** Kullanıcıya özel location verisi, sadece kendi lokasyonlarına erişim hakkı.
+- **Firebase Rules:** **Locations** ve **Orders** collection'ları için detaylı güvenlik kuralları ve veri validasyonu.
 
 ---
 
@@ -143,6 +150,17 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
   - Favoriler ekranında favori ürünlerin listelenmesi, her kartın sağ üstünde favoriden çıkarma butonu.
   - Favori ürünler anlık olarak güncellenir, ekleme/çıkarma işlemlerinde mesaj bar ile kullanıcı bilgilendirilir.
   - Favori ürünler Firebase Firestore'da kullanıcıya özel saklanır.
+- **Locations:**
+  - Kullanıcı adres yönetimi ile kolay adres ekleme/düzenleme.
+  - Location kategorileri (Home 🏠, Work 🏢, Other 📍) ile organize edilmiş adres yapısı.
+  - Custom drawer'dan kolayca erişilebilir lokasyon yönetimi.
+  - Firebase Firestore'da kullanıcıya özel saklanır.
+- **Payment Experience:**
+  - **Android:** Real Stripe PaymentSheet ile native payment deneyimi.
+  - **iOS:** Simulated ama realistic payment flow, Android ile uyumlu UX.
+  - "Pay with Card" 💳 ve "Pay on Delivery" 🚚 seçenekleri.
+  - Payment status tracking ve error handling.
+  - Payment completed screen ile sipariş özeti ve başarı mesajı.
 - **Contact Us ekranında iletişim kartı, Box ve Alignment.Center ile sayfanın tam ortasına hizalanmıştır. Böylece tüm cihazlarda ve ekran boyutlarında kart ortalanır ve kullanıcı deneyimi iyileşir.**
 
 ---
@@ -169,6 +187,17 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
   - **Ödeme Tamamlandı (payment_completed):** Sipariş sonrası kullanıcı bilgilendirme ve özet ekranı.
   - **Contact Us ekranında iletişim kartı ortalandı (Box + Alignment.Center ile).**
   - **Favoriler (favorites):** Kullanıcılar ürünleri favorilere ekleyebilir, favori ürünlerini ayrı bir ekranda görebilir ve yönetebilir.
+  - **🗺️ Locations (locations):** Kullanıcı adres yönetimi sistemi, Phase 1 & 2 tamamlandı:
+    - Location ekleme/düzenleme screens.
+    - Location kategorileri (Home, Work, Other).
+    - Custom drawer entegrasyonu.
+    - Firebase Firestore integration ve security rules.
+  - **💳 Stripe Payment Integration:** Multi-platform payment sistemi:
+    - **Android:** Real PaymentSheet implementation.
+    - **iOS:** Simulated realistic payment flow.
+    - Dynamic API key management (`shared/Consts.kt`).
+    - PaymentRepository ve Order management.
+    - Bottom sheet experience her iki platformda.
 
 ---
 

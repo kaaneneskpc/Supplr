@@ -11,7 +11,7 @@
 
 ## 🚀 About the Project
 
-**Supplr** is a modern, modular, and scalable e-commerce application targeting both Android and iOS platforms. Built with Kotlin Multiplatform (KMP) and Jetpack Compose Multiplatform, it allows users to browse products, add to cart, place orders, manage their profiles, and manage their favorite products. An admin panel is available for product management.
+**Supplr** is a modern, modular, and scalable e-commerce application targeting both Android and iOS platforms. Built with Kotlin Multiplatform (KMP) and Jetpack Compose Multiplatform, it allows users to browse products, add to cart, place orders, manage their profiles, and manage their favorite products. Features include **location management**, **Stripe payment integration**, and an admin panel for product management.
 
 ---
 
@@ -26,6 +26,8 @@
 - 🏷️ **Category & Product Listing**
 - 💳 **Checkout & Order Completion**
 - ❤️ **Favorites**
+- 🗺️ **Location Management** (address management with categories)
+- 💳 **Stripe Payment Integration** (Android: Real PaymentSheet, iOS: Simulated)
 - 🔔 **Push Notification Support** (personalized notifications)
 - 🔐 **Firebase Authentication & Firestore**
 - 🏗️ **Dependency Injection with Koin**
@@ -52,7 +54,9 @@
     - payment_completed/ : Order completed screen and post-order.
     - categories/        : Category management.
     - contact_us/        : Contact with Us.
-    - favorites/         : Favorites screen and logic (new)
+    - favorites/         : Favorites screen and logic.
+    - locations/         : User address management with categories (Home, Work, Other).
+    - checkout/          : Payment processing with Stripe integration.
 - data/            : Data layer, repositories, and services.
 - shared/          : Shared domain models, utils, constants.
 - di/              : Dependency injection modules (Koin).
@@ -76,7 +80,8 @@
 - **Jetpack Compose Multiplatform**
 - **Koin** (Dependency Injection)
 - **Firebase** (Auth, Firestore, Storage, **Push Notification**)
-- **Ktor** (HTTP Client)
+- **Ktor** (HTTP Client & Stripe API Integration)
+- **Stripe SDK** (Android: PaymentSheet, iOS: Simulated Payment Flow)
 - **Coil** (Image Loading)
 - **Coroutines & Flow**
 - **Material3**
@@ -98,6 +103,30 @@
 ### Admin Panel
 ![Admin Panel](docs/screenshots/admin_panel.png)
 -->
+
+---
+
+## 🎉 Recent Updates
+
+### 🗺️ Location Management (Latest)
+- **User-friendly address management** with add/edit functionality
+- **Categorized locations:** Home 🏠, Work 🏢, Other 📍
+- **Integrated into custom drawer** for easy access
+- **Firebase Firestore storage** with user-specific security rules
+
+### 💳 Stripe Payment Integration (Latest)
+- **Multi-platform payment processing** 
+- **Android:** Real Stripe PaymentSheet for native payment experience
+- **iOS:** Realistic simulated payment flow with same UX
+- **Dynamic API key management** from shared constants
+- **Complete order management** with payment tracking
+- **"Pay with Card" 💳 and "Pay on Delivery" 🚚** options
+
+### ❤️ Enhanced User Experience
+- **Modern review system** with improved UI/UX
+- **Favorites management** with instant updates
+- **Responsive design** for all screen sizes
+- **Bottom sheet experiences** consistent across platforms
 
 ---
 

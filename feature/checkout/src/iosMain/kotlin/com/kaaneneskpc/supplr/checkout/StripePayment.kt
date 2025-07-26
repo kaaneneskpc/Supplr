@@ -8,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.kaaneneskpc.supplr.shared.Consts
+import com.kaaneneskpc.supplr.shared.component.LoadingCard
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSLog
 
@@ -42,7 +43,7 @@ actual fun StripePaymentScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text("Processing payment with Stripe...")
+        LoadingCard(modifier = Modifier.align(Alignment.Center))
     }
 }
 
