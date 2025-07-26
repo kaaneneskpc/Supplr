@@ -10,10 +10,10 @@ data class Review(
     val id: String,
     val productId: String,
     val userId: String,
-    val username: String, // Display name for the reviewer
-    val rating: Float, // Rating out of 5
+    val username: String,
+    val rating: Float,
     val comment: String,
     val createdAt: Long = Clock.System.now().toEpochMilliseconds(),
-    val isVerifiedPurchase: Boolean = false, // Whether the user actually bought the product
-    val isApproved: Boolean = true // Admin approval status (default to true for auto-approval)
+    val isVerifiedPurchase: Boolean = false,
+    val isApproved: Boolean = true
 ) 

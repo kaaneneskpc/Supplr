@@ -27,7 +27,6 @@ fun ReviewItem(
     review: Review,
     modifier: Modifier = Modifier
 ) {
-    // Animation for review appearance
     var isVisible by remember { mutableStateOf(false) }
     
     LaunchedEffect(Unit) {
@@ -73,20 +72,17 @@ fun ReviewItem(
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                // Header with user info and enhanced rating
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // User info section
                     Column(
                         modifier = Modifier.weight(1f)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            // User avatar placeholder
                             Surface(
                                 color = SurfaceBrand.copy(alpha = 0.2f),
                                 shape = CircleShape,
@@ -124,14 +120,12 @@ fun ReviewItem(
                             }
                         }
                     }
-                    
-                    // Enhanced rating badge
+
                     EnhancedRatingBadge(rating = review.rating)
                 }
                 
                 Spacer(modifier = Modifier.height(16.dp))
-                
-                // Review comment with enhanced styling
+
                 if (review.comment.isNotBlank()) {
                     Surface(
                         color = Surface,
@@ -160,8 +154,7 @@ fun ReviewItem(
                         }
                     }
                 }
-                
-                // Enhanced badges section
+
                 if (review.isVerifiedPurchase || review.rating >= 4.0f) {
                     Spacer(modifier = Modifier.height(16.dp))
                     
@@ -169,7 +162,6 @@ fun ReviewItem(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Verified purchase badge
                         if (review.isVerifiedPurchase) {
                             EnhancedBadge(
                                 text = "✅ Verified Purchase",
@@ -177,8 +169,7 @@ fun ReviewItem(
                                 textColor = Color(0xFF2E7D32)
                             )
                         }
-                        
-                        // High rating badge
+
                         if (review.rating >= 4.0f) {
                             EnhancedBadge(
                                 text = "⭐ Recommended",

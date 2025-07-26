@@ -28,7 +28,6 @@ fun ReviewsSection(
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
-        // Header with rating summary
         ReviewsSummaryHeader(
             averageRating = averageRating,
             reviewCount = reviewCount,
@@ -37,8 +36,7 @@ fun ReviewsSection(
         )
         
         Spacer(modifier = Modifier.height(24.dp))
-        
-        // Reviews list with enhanced spacing
+
         when (reviewsState) {
             is RequestState.Loading -> {
                 Box(
@@ -67,7 +65,6 @@ fun ReviewsSection(
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        // Reviews count header
                         Text(
                             text = "📝 Customer Reviews (${reviewsState.data.size})",
                             fontFamily = RobotoCondensedFont(),
@@ -76,8 +73,7 @@ fun ReviewsSection(
                             color = TextPrimary,
                             modifier = Modifier.padding(horizontal = 4.dp)
                         )
-                        
-                        // Reviews list with enhanced spacing
+
                         reviewsState.data.forEach { review ->
                             ReviewItem(review = review)
                         }

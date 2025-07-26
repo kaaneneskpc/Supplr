@@ -21,15 +21,15 @@ enum class LocationCategory(
 data class Location(
     val id: String,
     val userId: String,
-    val title: String, // e.g., "Home", "Office", "Work"
+    val title: String,
     val category: LocationCategory = LocationCategory.OTHER,
-    val fullAddress: String, // Complete street address
+    val fullAddress: String,
     val city: String,
-    val state: String? = null, // State/Province (optional)
+    val state: String? = null,
     val postalCode: String,
     val country: String,
-    val isDefault: Boolean = false, // Is this the default delivery address
+    val isDefault: Boolean = false,
     val createdAt: Long = Clock.System.now().toEpochMilliseconds(),
-    val latitude: Double? = null, // For future map integration
-    val longitude: Double? = null // For future map integration
+    val latitude: Double? = null,
+    val longitude: Double? = null
 ) 
