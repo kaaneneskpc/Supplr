@@ -49,6 +49,11 @@ kotlin {
             implementation(libs.coil3.compose)
             implementation(libs.coil3.compose.core)
             implementation(libs.coil3.network.ktor)
+
+            // Ktor for Stripe API requests
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.serialization)
         }
         iosMain.dependencies {
             implementation(libs.ktor.darwin.client)

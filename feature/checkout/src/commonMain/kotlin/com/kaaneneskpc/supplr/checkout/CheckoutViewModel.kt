@@ -8,10 +8,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import com.kaaneneskpc.supplr.data.domain.OrderRepository
+import com.kaaneneskpc.supplr.data.domain.PaymentRepository
 import com.kaaneneskpc.supplr.shared.domain.CartItem
 import com.kaaneneskpc.supplr.shared.domain.Country
 import com.kaaneneskpc.supplr.shared.domain.Customer
 import com.kaaneneskpc.supplr.shared.domain.Order
+import com.kaaneneskpc.supplr.shared.domain.PaymentIntentResponse
 import com.kaaneneskpc.supplr.shared.domain.PhoneNumber
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import kotlinx.coroutines.flow.collectLatest
@@ -29,11 +31,15 @@ data class CheckoutScreenState(
     val country: Country = Country.Serbia,
     val phoneNumber: PhoneNumber? = null,
     val cart: List<CartItem> = emptyList(),
+    val paymentIntent: PaymentIntentResponse? = null,
+    val isCreatingPaymentIntent: Boolean = false,
+    val paymentIntentError: String? = null
 )
 
 class CheckoutViewModel(
     private val customerRepository: CustomerRepository,
     private val orderRepository: OrderRepository,
+    private val paymentRepository: PaymentRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     var screenReady: RequestState<Unit> by mutableStateOf(RequestState.Loading)
@@ -151,6 +157,61 @@ class CheckoutViewModel(
         )
     }
 
+    fun createPaymentIntent(
+        onSuccess: (String) -> Unit, // client_secret
+        onError: (String) -> Unit,
+    ) {
+        viewModelScope.launch {
+            screenState = screenState.copy(
+                isCreatingPaymentIntent = true,
+                paymentIntentError = null
+            )
+            
+            val totalAmount = savedStateHandle.get<String>("totalAmount")?.toDoubleOrNull() ?: 0.0
+            // Convert to cents for Stripe (multiply by 100)
+            val amountInCents = (totalAmount * 100).toLong()
+            
+            val result = paymentRepository.createPaymentIntent(
+                amount = amountInCents,
+                currency = "usd"
+            )
+            
+            result.fold(
+                onSuccess = { paymentIntentResponse ->
+                    screenState = screenState.copy(
+                        paymentIntent = paymentIntentResponse,
+                        isCreatingPaymentIntent = false
+                    )
+                    onSuccess(paymentIntentResponse.client_secret)
+                },
+                onFailure = { error ->
+                    screenState = screenState.copy(
+                        isCreatingPaymentIntent = false,
+                        paymentIntentError = error.message ?: "Failed to create payment intent"
+                    )
+                    onError(error.message ?: "Failed to create payment intent")
+                }
+            )
+        }
+    }
+
+    fun payWithStripe(
+        paymentIntentId: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit,
+    ) {
+        updateCustomer(
+            onSuccess = {
+                createOrderWithPayment(
+                    paymentIntentId = paymentIntentId,
+                    onSuccess = onSuccess,
+                    onError = onError
+                )
+            },
+            onError = onError
+        )
+    }
+
     private fun createOrder(
         onSuccess: () -> Unit,
         onError: (String) -> Unit,
@@ -164,6 +225,38 @@ class CheckoutViewModel(
                 ),
                 onSuccess = onSuccess,
                 onError = onError
+            )
+        }
+    }
+
+    private fun createOrderWithPayment(
+        paymentIntentId: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit,
+    ) {
+        viewModelScope.launch {
+            val order = Order(
+                customerId = screenState.id,
+                items = screenState.cart,
+                totalAmount = savedStateHandle.get<String>("totalAmount")?.toDoubleOrNull() ?: 0.0,
+                currency = "usd",
+                paymentIntentId = paymentIntentId,
+                status = "CONFIRMED",
+                shippingAddress = "${screenState.address}, ${screenState.city}, ${screenState.country.name}"
+            )
+            
+            val result = paymentRepository.saveOrder(order)
+            result.fold(
+                onSuccess = { orderId ->
+                    // Clear cart after successful order
+                    customerRepository.deleteAllCartItems(
+                        onSuccess = { onSuccess() },
+                        onError = { onSuccess() } // Still succeed even if cart clear fails
+                    )
+                },
+                onFailure = { error ->
+                    onError(error.message ?: "Failed to save order")
+                }
             )
         }
     }

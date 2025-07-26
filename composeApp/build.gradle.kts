@@ -37,6 +37,9 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.splash.screen)
             implementation(libs.koin.android)
+            
+            // Stripe Android SDK
+            implementation(libs.stripe.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)

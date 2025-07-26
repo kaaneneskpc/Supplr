@@ -29,6 +29,7 @@ google = "4.4.2"
 browser = "1.0.4"
 settings = "1.3.0"
 splash = "1.0.1"
+stripe = "21.21.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -84,6 +85,8 @@ browser-kmp = { module = "com.stevdza-san:browser-kmp", version.ref = "browser" 
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
 multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "settings" }
 multiplatform-settings-make-observable = { module = "com.russhwolf:multiplatform-settings-make-observable", version.ref = "settings" }
+
+stripe-android = { module = "com.stripe:stripe-android", version.ref = "stripe" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

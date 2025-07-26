@@ -11,5 +11,10 @@ data class Order(
     val customerId: String,
     val items: List<CartItem>,
     val totalAmount: Double,
-    val token: String? = null
+    val token: String? = null,
+    // Stripe payment fields
+    val currency: String = "usd",
+    val paymentIntentId: String? = null,
+    val status: String = "PENDING",
+    val shippingAddress: String = ""
 )

@@ -10,6 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,6 +40,10 @@ fun CheckoutScreen(
     val checkoutViewModel = koinViewModel<CheckoutViewModel>()
     val screenState = checkoutViewModel.screenState
     val isFormValid = checkoutViewModel.isFormValid
+    
+    // Stripe payment state
+    var clientSecret by remember { mutableStateOf("") }
+    var showStripePayment by remember { mutableStateOf(false) }
 
 
     CommonScaffold(
@@ -94,6 +102,27 @@ fun CheckoutScreen(
                     onPhoneNumberChange = checkoutViewModel::updatePhoneNumber
                 )
                 Column {
+                    // Stripe Payment Button
+                    SupplrButton(
+                        text = if (screenState.isCreatingPaymentIntent) "Processing..." else "Pay with Card",
+                        icon = Resources.Icon.Dollar,
+                        enabled = isFormValid && !screenState.isCreatingPaymentIntent,
+                        onClick = {
+                            checkoutViewModel.createPaymentIntent(
+                                onSuccess = { secret ->
+                                    clientSecret = secret
+                                    showStripePayment = true
+                                },
+                                onError = { message ->
+                                    navigateToPaymentCompleted(null, message)
+                                }
+                            )
+                        }
+                    )
+                    
+                    Spacer(modifier = Modifier.height(12.dp))
+                    
+                    // Pay on Delivery Button
                     SupplrButton(
                         text = "Pay on Delivery",
                         icon = Resources.Icon.ShoppingCart,
@@ -110,8 +139,45 @@ fun CheckoutScreen(
                             )
                         }
                     )
+                    
+                    // Show error if payment intent creation fails
+                    screenState.paymentIntentError?.let { error ->
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = error,
+                            color = SurfaceError,
+                            fontSize = FontSize.SMALL
+                        )
+                    }
                 }
             }
         }
+    }
+
+    // Stripe Payment Screen
+    if (showStripePayment && clientSecret.isNotEmpty()) {
+        StripePaymentScreen(
+            clientSecret = clientSecret,
+            onPaymentSuccess = { paymentIntentId ->
+                showStripePayment = false
+                checkoutViewModel.payWithStripe(
+                    paymentIntentId = screenState.paymentIntent?.id ?: "",
+                    onSuccess = {
+                        navigateToPaymentCompleted(true, null)
+                    },
+                    onError = { message ->
+                        navigateToPaymentCompleted(null, message)
+                    }
+                )
+            },
+            onPaymentFailure = { error ->
+                showStripePayment = false
+                navigateToPaymentCompleted(null, error)
+            },
+            onPaymentCanceled = {
+                showStripePayment = false
+                // User canceled, stay on checkout screen
+            }
+        )
     }
 }
