@@ -48,8 +48,8 @@ fun ReviewsSection(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        CircularProgressIndicator()
+                ) {
+                    CircularProgressIndicator()
                         Text(
                             text = "Loading reviews...",
                             fontFamily = RobotoCondensedFont(),
@@ -102,12 +102,12 @@ fun ReviewsSection(
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.error
                         )
-                        Text(
+                Text(
                             text = reviewsState.message,
                             fontFamily = RobotoCondensedFont(),
                             fontSize = FontSize.SMALL,
                             color = TextSecondary
-                        )
+                )
                     }
                 }
             }
@@ -177,10 +177,10 @@ private fun EmptyReviewsMessage() {
                 text = "📝",
                 fontSize = FontSize.EXTRA_LARGE
             )
-            Text(
+        Text(
                 text = "No reviews yet",
-                fontFamily = RobotoCondensedFont(),
-                fontSize = FontSize.MEDIUM,
+            fontFamily = RobotoCondensedFont(),
+            fontSize = FontSize.MEDIUM,
                 fontWeight = FontWeight.Medium,
                 color = TextPrimary
             )
@@ -188,8 +188,8 @@ private fun EmptyReviewsMessage() {
                 text = "Be the first to review this product!",
                 fontFamily = RobotoCondensedFont(),
                 fontSize = FontSize.SMALL,
-                color = TextSecondary
-            )
+            color = TextSecondary
+        )
         }
     }
 } 

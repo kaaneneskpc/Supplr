@@ -4,7 +4,6 @@ import ContentWithMessageBar
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,7 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import org.jetbrains.compose.resources.painterResource
+
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,8 +27,7 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kaaneneskpc.supplr.shared.component.CommonScaffold
-import com.kaaneneskpc.supplr.shared.component.dialog.CountryPickerDialog
-import com.kaaneneskpc.supplr.shared.domain.Country
+
 import com.kaaneneskpc.supplr.shared.domain.LocationCategory
 import com.kaaneneskpc.supplr.shared.fonts.*
 import com.kaaneneskpc.supplr.shared.util.RequestState
@@ -49,55 +47,6 @@ fun AddEditLocationScreen(
         val isEditMode = locationId != null
     val title = if (isEditMode) "Edit Address" else "Add New Address"
     
-    // Country picker dialog state
-    var showCountryPicker by remember { mutableStateOf(false) }
-    var selectedCountry by remember { mutableStateOf(Country.Turkey) }
-    
-    // Debug: Print when showCountryPicker changes
-    LaunchedEffect(showCountryPicker) {
-        println("DEBUG: showCountryPicker = $showCountryPicker")
-    }
-    
-    // Update country when state changes
-    LaunchedEffect(selectedCountry) {
-        locationsViewModel.updateCountry(selectedCountry.name)
-    }
-    
-    // Country picker dialog - Simple test version
-    if (showCountryPicker) {
-        AlertDialog(
-            onDismissRequest = { showCountryPicker = false },
-            title = {
-                Text("Select Country")
-            },
-            text = {
-                Column {
-                    Country.entries.forEach { country ->
-                        TextButton(
-                            onClick = {
-                                selectedCountry = country
-                                showCountryPicker = false
-                            },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                text = "${country.flag} ${country.name}",
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = { showCountryPicker = false }
-                ) {
-                    Text("Cancel")
-                }
-            }
-        )
-    }
-    
     // Initialize edit mode if locationId is provided
     LaunchedEffect(locationId) {
         if (locationId != null && !addEditState.isEditMode) {
@@ -107,8 +56,6 @@ fun AddEditLocationScreen(
                 val location = locations.data.find { it.id == locationId }
                 if (location != null) {
                     locationsViewModel.startEditingLocation(location)
-                    // Set the selected country based on location data
-                    selectedCountry = Country.entries.find { it.name == location.country } ?: Country.Turkey
                 }
             }
         } else if (locationId == null && !addEditState.isEditMode) {
@@ -188,15 +135,12 @@ fun AddEditLocationScreen(
                         city = addEditState.city,
                         state = addEditState.state,
                         postalCode = addEditState.postalCode,
-                        selectedCountry = selectedCountry,
+                        country = addEditState.country,
                         onFullAddressChange = locationsViewModel::updateFullAddress,
                         onCityChange = locationsViewModel::updateCity,
                         onStateChange = locationsViewModel::updateState,
                         onPostalCodeChange = locationsViewModel::updatePostalCode,
-                        onCountryPickerClick = { 
-                            println("DEBUG: onCountryPickerClick called!")
-                            showCountryPicker = true 
-                        },
+                        onCountryChange = locationsViewModel::updateCountry,
                         fullAddressError = locationsViewModel.getValidationError("fullAddress"),
                         cityError = locationsViewModel.getValidationError("city"),
                         postalCodeError = locationsViewModel.getValidationError("postalCode")
@@ -396,12 +340,12 @@ private fun AddressDetailsSection(
     city: String,
     state: String,
     postalCode: String,
-    selectedCountry: Country,
+    country: String,
     onFullAddressChange: (String) -> Unit,
     onCityChange: (String) -> Unit,
     onStateChange: (String) -> Unit,
     onPostalCodeChange: (String) -> Unit,
-    onCountryPickerClick: () -> Unit,
+    onCountryChange: (String) -> Unit,
     fullAddressError: String? = null,
     cityError: String? = null,
     postalCodeError: String? = null
@@ -616,17 +560,12 @@ private fun AddressDetailsSection(
                 }
 
                 OutlinedTextField(
-                    value = selectedCountry.name,
-                    onValueChange = { }, // Read-only
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable { 
-                            println("DEBUG: Country field clicked!")
-                            onCountryPickerClick() 
-                        },
+                    value = country,
+                    onValueChange = onCountryChange,
+                    modifier = Modifier.weight(1f),
                     placeholder = {
                         Text(
-                            text = "Select Country",
+                            text = "Enter Country",
                             color = TextSecondary.copy(alpha = 0.7f),
                             fontFamily = RobotoCondensedFont()
                         )
@@ -641,27 +580,8 @@ private fun AddressDetailsSection(
                         unfocusedContainerColor = SurfaceLighter
                     ),
                     shape = RoundedCornerShape(16.dp),
-                    singleLine = true,
-                    readOnly = true,
-                    leadingIcon = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(start = 12.dp)
-                        ) {
-                            Image(
-                                painter = painterResource(selectedCountry.flag),
-                                contentDescription = "Flag",
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
-                    },
-                    trailingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.ArrowDropDown,
-                            contentDescription = "Select Country",
-                            tint = SurfaceBrand
-                        )
-                    }
+                    singleLine = true
+
                 )
             }
         }
