@@ -1,13 +1,17 @@
 package com.kaaneneskpc.supplr.shared.domain
 
 import kotlinx.serialization.Serializable
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @Serializable
 data class Customer(
     val id: String,
     val firstName: String,
     val lastName: String,
     val email: String,
+    val createdAt: Long = Clock.System.now().toEpochMilliseconds(),
     val city: String? = null,
     val postalCode: Int? = null,
     val address: String? = null,

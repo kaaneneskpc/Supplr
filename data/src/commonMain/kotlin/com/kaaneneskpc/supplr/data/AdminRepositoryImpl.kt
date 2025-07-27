@@ -1,6 +1,8 @@
 package com.kaaneneskpc.supplr.data
 
 import com.kaaneneskpc.supplr.data.domain.AdminRepository
+import com.kaaneneskpc.supplr.shared.domain.Customer
+import com.kaaneneskpc.supplr.shared.domain.Order
 import com.kaaneneskpc.supplr.shared.domain.Product
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import dev.gitlive.firebase.Firebase
@@ -291,4 +293,112 @@ class AdminRepositoryImpl : AdminRepository {
                 send(RequestState.Error("Error while searching products: ${e.message}"))
             }
         }
+    
+    // Analytics Functions Implementation
+    override suspend fun getOrdersByDateRange(
+        startDate: Long,
+        endDate: Long
+    ): RequestState<List<Order>> {
+        return try {
+            val currentUserId = getCurrentUserId()
+            if (currentUserId != null) {
+                val database = Firebase.firestore
+                val querySnapshot = database.collection("orders")
+                    .where { "createdAt" greaterThanOrEqualTo startDate }
+                    .where { "createdAt" lessThanOrEqualTo endDate }
+                    .get()
+                
+                val orders = querySnapshot.documents.mapNotNull { document ->
+                    try {
+                        Order(
+                            orderId = document.id,
+                            customerId = document.get("customerId") ?: "",
+                            items = document.get("items") ?: emptyList(),
+                            totalAmount = document.get("totalAmount") ?: 0.0,
+                            createdAt = document.get("createdAt") ?: 0L,
+                            token = document.get("token"),
+                            currency = document.get("currency") ?: "usd",
+                            paymentIntentId = document.get("paymentIntentId"),
+                            status = document.get("status") ?: "PENDING",
+                            shippingAddress = document.get("shippingAddress") ?: ""
+                        )
+                    } catch (e: Exception) {
+                        null // Skip malformed documents
+                    }
+                }
+                
+                RequestState.Success(orders)
+            } else {
+                RequestState.Error("User not authenticated")
+            }
+        } catch (e: Exception) {
+            RequestState.Error("Error fetching orders: ${e.message}")
+        }
+    }
+    
+    override suspend fun getAllUsers(): RequestState<List<Customer>> {
+        return try {
+            val currentUserId = getCurrentUserId()
+            if (currentUserId != null) {
+                val database = Firebase.firestore
+                val querySnapshot = database.collection("customers").get()
+                
+                val customers = querySnapshot.documents.mapNotNull { document ->
+                    try {
+                        Customer(
+                            id = document.id,
+                            firstName = document.get("firstName") ?: "",
+                            lastName = document.get("lastName") ?: "",
+                            email = document.get("email") ?: "",
+                            createdAt = document.get("createdAt") ?: 0L,
+                            city = document.get("city"),
+                            postalCode = document.get("postalCode"),
+                            address = document.get("address"),
+                            phoneNumber = document.get("phoneNumber"),
+                            cart = document.get("cart") ?: emptyList(),
+                            isAdmin = document.get("isAdmin") ?: false
+                        )
+                    } catch (e: Exception) {
+                        null // Skip malformed documents
+                    }
+                }
+                
+                RequestState.Success(customers)
+            } else {
+                RequestState.Error("User not authenticated")
+            }
+        } catch (e: Exception) {
+            RequestState.Error("Error fetching users: ${e.message}")
+        }
+    }
+    
+    override suspend fun getTotalOrdersCount(): RequestState<Int> {
+        return try {
+            val currentUserId = getCurrentUserId()
+            if (currentUserId != null) {
+                val database = Firebase.firestore
+                val querySnapshot = database.collection("orders").get()
+                RequestState.Success(querySnapshot.documents.size)
+            } else {
+                RequestState.Error("User not authenticated")
+            }
+        } catch (e: Exception) {
+            RequestState.Error("Error fetching orders count: ${e.message}")
+        }
+    }
+    
+    override suspend fun getTotalUsersCount(): RequestState<Int> {
+        return try {
+            val currentUserId = getCurrentUserId()
+            if (currentUserId != null) {
+                val database = Firebase.firestore
+                val querySnapshot = database.collection("customers").get()
+                RequestState.Success(querySnapshot.documents.size)
+            } else {
+                RequestState.Error("User not authenticated")
+            }
+        } catch (e: Exception) {
+            RequestState.Error("Error fetching users count: ${e.message}")
+        }
+    }
 }

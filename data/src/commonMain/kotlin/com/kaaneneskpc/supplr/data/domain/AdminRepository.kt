@@ -1,5 +1,7 @@
 package com.kaaneneskpc.supplr.data.domain
 
+import com.kaaneneskpc.supplr.shared.domain.Customer
+import com.kaaneneskpc.supplr.shared.domain.Order
 import com.kaaneneskpc.supplr.shared.domain.Product
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import dev.gitlive.firebase.storage.File
@@ -44,4 +46,16 @@ interface AdminRepository {
     fun searchProductsByTitle(
         searchQuery: String,
     ): Flow<RequestState<List<Product>>>
+    
+    // Analytics Functions
+    suspend fun getOrdersByDateRange(
+        startDate: Long,
+        endDate: Long
+    ): RequestState<List<Order>>
+    
+    suspend fun getAllUsers(): RequestState<List<Customer>>
+    
+    suspend fun getTotalOrdersCount(): RequestState<Int>
+    
+    suspend fun getTotalUsersCount(): RequestState<Int>
 }

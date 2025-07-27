@@ -79,6 +79,7 @@ class CustomerRepositoryImpl : CustomerRepository {
                             firstName = document.get("firstName"),
                             lastName = document.get("lastName"),
                             email = document.get("email"),
+                            createdAt = document.get("createdAt") ?: 0L,
                             city = document.get("city"),
                             postalCode = document.get("postalCode"),
                             address = document.get("address"),

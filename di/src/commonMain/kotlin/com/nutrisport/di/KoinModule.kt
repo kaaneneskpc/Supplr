@@ -22,6 +22,8 @@ import com.kaaneneskpc.supplr.data.domain.OrderRepository
 import com.kaaneneskpc.supplr.data.domain.PaymentRepository
 import com.kaaneneskpc.supplr.data.domain.ProductRepository
 import com.kaaneneskpc.supplr.data.domain.ReviewRepository
+import com.kaaneneskpc.supplr.data.usecase.GetDashboardAnalyticsUseCase
+import com.kaaneneskpc.supplr.data.usecase.GetUserStatisticsUseCase
 import com.kaaneneskpc.supplr.favorites.FavoritesViewModel
 import com.kaaneneskpc.supplr.home.HomeViewModel
 import com.kaaneneskpc.supplr.locations.LocationsViewModel
@@ -44,6 +46,10 @@ val sharedModule = module {
     single<ReviewRepository> { ReviewRepositoryImpl() }
     single<LocationRepository> { LocationRepositoryImpl() }
     single<PaymentRepository> { PaymentRepositoryImpl() }
+    
+    // Analytics Use Cases
+    single { GetDashboardAnalyticsUseCase(get()) }
+    single { GetUserStatisticsUseCase(get()) }
     viewModelOf(::AuthViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::ProfileViewModel)

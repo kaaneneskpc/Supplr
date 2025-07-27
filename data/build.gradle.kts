@@ -42,6 +42,7 @@ kotlin {
             implementation(libs.firebase.firestore)
             implementation(libs.firebase.storage)
             implementation(libs.auth.firebase.kmp)
+            implementation(libs.kotlinx.datetime)
             implementation(project(":shared"))
         }
     }
