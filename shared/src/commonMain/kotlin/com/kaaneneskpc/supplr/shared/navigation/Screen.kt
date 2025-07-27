@@ -20,6 +20,8 @@ sealed class Screen {
     @Serializable
     data object AdminPanel : Screen()
     @Serializable
+    data object AdminDashboard : Screen()
+    @Serializable
     data class ManageProduct(val id: String? = null) : Screen()
     @Serializable
     data class ProductDetails(val id: String) : Screen()

@@ -11,6 +11,7 @@ import com.kaaneneskpc.supplr.auth.AuthScreen
 import com.kaaneneskpc.supplr.home.HomeScreen
 import com.kaaneneskpc.supplr.profile.ProfileScreen
 import com.kaaneneskpc.supplr.shared.navigation.Screen
+import com.kaaneneskpc.supplr.admin_panel.AdminDashboardScreen
 import com.kaaneneskpc.supplr.admin_panel.AdminPanelScreen
 import com.kaaneneskpc.supplr.categories.category_search.CategorySearchScreen
 import com.kaaneneskpc.supplr.checkout.CheckoutScreen
@@ -85,6 +86,9 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 },
                 navigateToManageProduct = {
                     navController.navigate(Screen.ManageProduct(it))
+                },
+                navigateToStatistics = {
+                    navController.navigate(Screen.AdminDashboard)
                 }
             )
         }
@@ -92,6 +96,13 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
             val id = it.toRoute<Screen.ManageProduct>().id
             ManageProductScreen(
                 id = id,
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+        composable<Screen.AdminDashboard> {
+            AdminDashboardScreen(
                 navigateBack = {
                     navController.navigateUp()
                 }

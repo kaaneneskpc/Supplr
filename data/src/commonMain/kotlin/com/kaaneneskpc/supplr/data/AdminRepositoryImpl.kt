@@ -303,7 +303,7 @@ class AdminRepositoryImpl : AdminRepository {
             val currentUserId = getCurrentUserId()
             if (currentUserId != null) {
                 val database = Firebase.firestore
-                val querySnapshot = database.collection("orders")
+                val querySnapshot = database.collection("order")
                     .where { "createdAt" greaterThanOrEqualTo startDate }
                     .where { "createdAt" lessThanOrEqualTo endDate }
                     .get()
@@ -341,7 +341,7 @@ class AdminRepositoryImpl : AdminRepository {
             val currentUserId = getCurrentUserId()
             if (currentUserId != null) {
                 val database = Firebase.firestore
-                val querySnapshot = database.collection("customers").get()
+                val querySnapshot = database.collection("customer").get()
                 
                 val customers = querySnapshot.documents.mapNotNull { document ->
                     try {
@@ -377,7 +377,7 @@ class AdminRepositoryImpl : AdminRepository {
             val currentUserId = getCurrentUserId()
             if (currentUserId != null) {
                 val database = Firebase.firestore
-                val querySnapshot = database.collection("orders").get()
+                val querySnapshot = database.collection("order").get()
                 RequestState.Success(querySnapshot.documents.size)
             } else {
                 RequestState.Error("User not authenticated")
@@ -392,7 +392,7 @@ class AdminRepositoryImpl : AdminRepository {
             val currentUserId = getCurrentUserId()
             if (currentUserId != null) {
                 val database = Firebase.firestore
-                val querySnapshot = database.collection("customers").get()
+                val querySnapshot = database.collection("customer").get()
                 RequestState.Success(querySnapshot.documents.size)
             } else {
                 RequestState.Error("User not authenticated")

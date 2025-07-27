@@ -18,6 +18,8 @@ class GetDashboardAnalyticsUseCase(
 ) {
     suspend operator fun invoke(dateRange: DateRange): RequestState<DashboardAnalytics> {
         return try {
+            println("📊 Analytics Request: ${dateRange.startDate} to ${dateRange.endDate}")
+            
             // Siparişleri çek
             val ordersResult = adminRepository.getOrdersByDateRange(
                 dateRange.startDate, 
@@ -27,6 +29,10 @@ class GetDashboardAnalyticsUseCase(
             when (ordersResult) {
                 is RequestState.Success -> {
                     val orders = ordersResult.data
+                    println("📦 Orders Found: ${orders.size}")
+                    orders.forEach { order ->
+                        println("  - Order: ${order.orderId}, Amount: ${order.totalAmount}, Items: ${order.items.size}")
+                    }
                     val analytics = calculateAnalytics(orders, dateRange)
                     RequestState.Success(analytics)
                 }

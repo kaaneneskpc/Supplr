@@ -1,6 +1,7 @@
 package com.kaaneneskpc.supplr.di
 
 import com.kaaneneskpc.supplr.ProductDetailViewModel
+import com.kaaneneskpc.supplr.admin_panel.AdminDashboardViewModel
 import com.kaaneneskpc.supplr.admin_panel.AdminPanelViewModel
 import com.kaaneneskpc.supplr.auth.AuthViewModel
 import com.kaaneneskpc.supplr.cart.CartViewModel
@@ -55,6 +56,7 @@ val sharedModule = module {
     viewModelOf(::ProfileViewModel)
     viewModelOf(::ManageProductViewModel)
     viewModelOf(::AdminPanelViewModel)
+    viewModelOf(::AdminDashboardViewModel)
     viewModelOf(::ProductsOverviewViewModel)
     viewModelOf(::ProductDetailViewModel)
     viewModelOf(::CartViewModel)

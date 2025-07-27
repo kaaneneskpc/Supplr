@@ -47,6 +47,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun AdminPanelScreen(
     navigateBack: () -> Unit,
     navigateToManageProduct: (String?) -> Unit,
+    navigateToStatistics: () -> Unit,
 ) {
     val adminPanelViewModel = koinViewModel<AdminPanelViewModel>()
     val products = adminPanelViewModel.filteredProducts.collectAsState()
@@ -123,6 +124,15 @@ fun AdminPanelScreen(
                             }
                         },
                         actions = {
+                            // Statistics Button
+                            IconButton(onClick = navigateToStatistics) {
+                                Icon(
+                                    painter = painterResource(Resources.Icon.Book), // Analytics icon olarak Book kullanıyoruz
+                                    contentDescription = "See Statistics",
+                                    tint = IconPrimary
+                                )
+                            }
+                            // Search Button
                             IconButton(onClick = { searchBarVisible = true }) {
                                 Icon(
                                     painter = painterResource(Resources.Icon.Search),

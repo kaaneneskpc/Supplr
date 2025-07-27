@@ -40,7 +40,7 @@ class PaymentRepositoryImpl : PaymentRepository {
             }
             
             val database = Firebase.firestore
-            val orderCollection = database.collection("orders")
+            val orderCollection = database.collection("order")
             
             val orderId = if (order.orderId.isEmpty()) Uuid.random().toString() else order.orderId
             val orderWithId = order.copy(
@@ -58,7 +58,7 @@ class PaymentRepositoryImpl : PaymentRepository {
     override suspend fun getOrdersForUser(userId: String): Result<List<Order>> {
         return try {
             val database = Firebase.firestore
-            val querySnapshot = database.collection("orders")
+            val querySnapshot = database.collection("order")
                 .where { "customerId" equalTo userId }
                 .get()
             
@@ -85,7 +85,7 @@ class PaymentRepositoryImpl : PaymentRepository {
     override suspend fun getOrderById(orderId: String): Result<Order> {
         return try {
             val database = Firebase.firestore
-            val document = database.collection("orders").document(orderId).get()
+            val document = database.collection("order").document(orderId).get()
             
             if (document.exists) {
                 val order = Order(
@@ -111,7 +111,7 @@ class PaymentRepositoryImpl : PaymentRepository {
     override suspend fun updateOrderStatus(orderId: String, status: String): Result<Unit> {
         return try {
             val database = Firebase.firestore
-            database.collection("orders").document(orderId).update(
+            database.collection("order").document(orderId).update(
                 mapOf("status" to status)
             )
             Result.success(Unit)
