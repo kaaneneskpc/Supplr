@@ -69,10 +69,10 @@ class AdminDashboardViewModel(
                         )
                     }
                     is RequestState.Loading -> {
-                        // State zaten loading olarak set edildi
+
                     }
                     is RequestState.Idle -> {
-                        // İlk yükleme durumu
+
                     }
                 }
             } catch (e: Exception) {

@@ -46,11 +46,9 @@ fun AddEditLocationScreen(
 
         val isEditMode = locationId != null
     val title = if (isEditMode) "Edit Address" else "Add New Address"
-    
-    // Initialize edit mode if locationId is provided
+
     LaunchedEffect(locationId) {
         if (locationId != null && !addEditState.isEditMode) {
-            // Find the location from the current list and populate edit state
             val locations = screenState.locations
             if (locations is RequestState.Success) {
                 val location = locations.data.find { it.id == locationId }
@@ -63,7 +61,6 @@ fun AddEditLocationScreen(
         }
     }
 
-    // Animation for the entire screen
     val animatedVisibility by animateFloatAsState(
         targetValue = 1f,
         animationSpec = tween(durationMillis = 600, easing = EaseOutCubic)
@@ -113,23 +110,19 @@ fun AddEditLocationScreen(
                         .scale(animatedVisibility),
                     verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
-                    // Header Section
                     AddEditHeader(isEditMode = isEditMode)
 
-                    // Address Title Section
                     AddressTitleSection(
                         title = addEditState.title,
                         onTitleChange = locationsViewModel::updateTitle,
                         error = locationsViewModel.getValidationError("title")
                     )
-                    
-                    // Category Selection Section
+
                     CategorySelectionSection(
                         selectedCategory = addEditState.category,
                         onCategoryChange = locationsViewModel::updateCategory
                     )
 
-                    // Address Details Section
                     AddressDetailsSection(
                         fullAddress = addEditState.fullAddress,
                         city = addEditState.city,
@@ -146,7 +139,6 @@ fun AddEditLocationScreen(
                         postalCodeError = locationsViewModel.getValidationError("postalCode")
                     )
 
-                    // Default Address Section
                     DefaultAddressSection(
                         isDefault = addEditState.isDefault,
                         onIsDefaultChange = locationsViewModel::updateIsDefault
@@ -154,7 +146,6 @@ fun AddEditLocationScreen(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    // Submit Button
                     SubmitButton(
                         isEditMode = isEditMode,
                         isEnabled = locationsViewModel.isAddEditFormValid,
@@ -317,8 +308,7 @@ private fun AddressTitleSection(
                         )
                     }
                 )
-                
-                // Error message
+
                 if (error != null) {
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
@@ -374,7 +364,6 @@ private fun AddressDetailsSection(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Full Address
             Column {
                 OutlinedTextField(
                     value = fullAddress,
@@ -425,7 +414,6 @@ private fun AddressDetailsSection(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // City and State Row
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -509,7 +497,6 @@ private fun AddressDetailsSection(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Postal Code and Country Row
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -791,7 +778,6 @@ private fun CategorySelectionSection(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Category options in a grid
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -808,7 +794,6 @@ private fun CategorySelectionSection(
                                 modifier = Modifier.weight(1f)
                             )
                         }
-                        // Fill remaining slots in the row
                         repeat(3 - rowCategories.size) {
                             Spacer(modifier = Modifier.weight(1f))
                         }

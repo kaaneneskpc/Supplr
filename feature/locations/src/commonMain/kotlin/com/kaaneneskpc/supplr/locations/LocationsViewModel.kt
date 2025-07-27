@@ -109,7 +109,7 @@ class LocationsViewModel(
             "USA" -> postalCode.matches(Regex("^\\d{5}(-\\d{4})?$"))
             "INDIA" -> postalCode.matches(Regex("^\\d{6}$"))
             "SERBIA" -> postalCode.matches(Regex("^\\d{5}$"))
-            else -> postalCode.matches(Regex("^[A-Za-z0-9\\s-]{3,10}$")) // Generic format
+            else -> postalCode.matches(Regex("^[A-Za-z0-9\\s-]{3,10}$"))
         }
     }
 
@@ -247,7 +247,6 @@ class LocationsViewModel(
         }
     }
 
-    // UI State Management Methods
     fun showDeleteConfirmDialog(location: Location) {
         screenState = screenState.copy(
             selectedLocationForDelete = location,
@@ -290,10 +289,8 @@ class LocationsViewModel(
         validationErrors = ValidationErrors()
     }
 
-    // Form Field Updates with real-time validation
     fun updateTitle(title: String) {
         addEditState = addEditState.copy(title = title)
-        // Clear validation error when user starts typing
         if (validationErrors.title != null) {
             validationErrors = validationErrors.copy(title = null)
         }

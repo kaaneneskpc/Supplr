@@ -15,7 +15,6 @@ data class Order(
     val totalAmount: Double,
     val createdAt: Long = Clock.System.now().toEpochMilliseconds(),
     val token: String? = null,
-    // Stripe payment fields
     val currency: String = "usd",
     val paymentIntentId: String? = null,
     val status: String = "PENDING",

@@ -28,13 +28,11 @@ fun StripePaymentHandler(
 ) {
     val context = LocalContext.current
     var shouldLaunchPayment by remember { mutableStateOf(false) }
-    
-    // Initialize Stripe
+
     LaunchedEffect(Unit) {
         PaymentConfiguration.init(context, Consts.STRIPE_PUBLISH_KEY)
     }
-    
-    // PaymentSheet launcher - registered at composition time (lifecycle safe)
+
     val paymentSheetLauncher = rememberLauncherForActivityResult(
         contract = PaymentSheetContract()
     ) { result ->
@@ -50,18 +48,16 @@ fun StripePaymentHandler(
             }
         }
     }
-    
-    // Trigger payment when clientSecret is available
+
     LaunchedEffect(clientSecret) {
         if (clientSecret.isNotEmpty()) {
             shouldLaunchPayment = true
         }
     }
-    
-    // Launch payment sheet
+
     LaunchedEffect(shouldLaunchPayment) {
         if (shouldLaunchPayment && clientSecret.isNotEmpty()) {
-            shouldLaunchPayment = false // Prevent multiple launches
+            shouldLaunchPayment = false
             
             val configuration = PaymentSheet.Configuration(
                 merchantDisplayName = "Supplr"
@@ -75,8 +71,7 @@ fun StripePaymentHandler(
             )
         }
     }
-    
-    // Show processing state
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

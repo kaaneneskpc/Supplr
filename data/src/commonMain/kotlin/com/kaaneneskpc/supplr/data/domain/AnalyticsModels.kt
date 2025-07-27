@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class DailySummary(
-    val date: String, // YYYY-MM-DD formatında
+    val date: String,
     val totalRevenue: Double,
     val orderCount: Int,
     val averageOrderValue: Double = if (orderCount > 0) totalRevenue / orderCount else 0.0
@@ -55,8 +55,8 @@ data class DashboardAnalytics(
  */
 @Serializable
 data class DateRange(
-    val startDate: Long, // timestamp
-    val endDate: Long    // timestamp
+    val startDate: Long,
+    val endDate: Long
 ) {
     companion object {
         fun today(): DateRange {

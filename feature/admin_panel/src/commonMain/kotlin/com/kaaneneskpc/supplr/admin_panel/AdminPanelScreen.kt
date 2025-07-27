@@ -124,7 +124,6 @@ fun AdminPanelScreen(
                             }
                         },
                         actions = {
-                            // Statistics Button
                             IconButton(onClick = navigateToStatistics) {
                                 Icon(
                                     painter = painterResource(Resources.Icon.Book), // Analytics icon olarak Book kullanıyoruz

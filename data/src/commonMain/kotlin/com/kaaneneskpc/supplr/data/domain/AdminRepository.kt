@@ -46,8 +46,7 @@ interface AdminRepository {
     fun searchProductsByTitle(
         searchQuery: String,
     ): Flow<RequestState<List<Product>>>
-    
-    // Analytics Functions
+
     suspend fun getOrdersByDateRange(
         startDate: Long,
         endDate: Long

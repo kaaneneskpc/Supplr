@@ -18,13 +18,11 @@ class GetUserStatisticsUseCase(
                 is RequestState.Success -> {
                     val users = usersResult.data
                     val now = Clock.System.now().toEpochMilliseconds()
-                    
-                    // Zaman aralıklarını hesapla
+
                     val oneDayAgo = now - (24 * 60 * 60 * 1000)
                     val oneWeekAgo = now - (7 * 24 * 60 * 60 * 1000)
                     val oneMonthAgo = now - (30 * 24 * 60 * 60 * 1000)
-                    
-                    // Kullanıcıları createdAt tarihine göre filtrele
+
                     val newUsersToday = users.count { user -> 
                         user.createdAt >= oneDayAgo 
                     }

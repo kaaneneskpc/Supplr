@@ -45,8 +45,7 @@ fun LocationsScreen(
     val messageBarState = rememberMessageBarState()
     val locationsViewModel = koinViewModel<LocationsViewModel>()
     val screenState = locationsViewModel.screenState
-    
-    // Delete confirmation dialog
+
     if (screenState.showDeleteConfirmDialog && screenState.selectedLocationForDelete != null) {
         DeleteLocationConfirmDialog(
             location = screenState.selectedLocationForDelete,
@@ -106,14 +105,12 @@ fun LocationsScreen(
                         .fillMaxSize()
                         .padding(horizontal = 20.dp, vertical = 16.dp)
                 ) {
-                    // Header Section
                     LocationsHeader(
                         onAddLocationClick = navigateToAddLocation
                     )
                     
                     Spacer(modifier = Modifier.height(24.dp))
-                    
-                    // Locations List
+
                     when (screenState.locations) {
                         is RequestState.Loading -> {
                             LoadingState()
@@ -149,9 +146,7 @@ fun LocationsScreen(
                         is RequestState.Error -> {
                             ErrorState(
                                 message = screenState.locations.message,
-                                onRetry = {
-                                    // Reload locations by creating a new ViewModel instance
-                                }
+                                onRetry = {}
                             )
                         }
                         else -> {}

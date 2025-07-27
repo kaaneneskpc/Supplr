@@ -38,7 +38,6 @@ class ReviewRepositoryImpl : ReviewRepository {
                             isApproved = document.get("isApproved") ?: true
                         )
                     }
-                    // Filter and sort in code temporarily
                     val filteredReviews = reviews
                         .filter { it.isApproved }
                         .sortedByDescending { it.createdAt }
@@ -62,8 +61,7 @@ class ReviewRepositoryImpl : ReviewRepository {
             if (currentUserId != null) {
                 val currentUser = Firebase.auth.currentUser
                 val username = currentUser?.displayName ?: "Anonymous User"
-                
-                // Allow multiple reviews from same user
+
                 
                 val reviewId = Uuid.random().toString()
                 val review = Review(
@@ -74,7 +72,7 @@ class ReviewRepositoryImpl : ReviewRepository {
                     rating = rating,
                     comment = comment,
                     isVerifiedPurchase = false,
-                    isApproved = true // Auto-approve for now
+                    isApproved = true
                 )
                 
                 val database = Firebase.firestore

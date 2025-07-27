@@ -19,8 +19,7 @@ class GetDashboardAnalyticsUseCase(
     suspend operator fun invoke(dateRange: DateRange): RequestState<DashboardAnalytics> {
         return try {
             println("📊 Analytics Request: ${dateRange.startDate} to ${dateRange.endDate}")
-            
-            // Siparişleri çek
+
             val ordersResult = adminRepository.getOrdersByDateRange(
                 dateRange.startDate, 
                 dateRange.endDate
@@ -49,22 +48,16 @@ class GetDashboardAnalyticsUseCase(
     }
     
     private suspend fun calculateAnalytics(orders: List<Order>, dateRange: DateRange): DashboardAnalytics {
-        // Toplam gelir hesapla (Order'daki totalAmount alanından)
         val totalRevenue = orders.sumOf { it.totalAmount }
-        
-        // Toplam sipariş sayısı
+
         val totalOrders = orders.size
-        
-        // Ortalama sipariş değeri
+
         val averageOrderValue = if (totalOrders > 0) totalRevenue / totalOrders else 0.0
-        
-        // En çok satan ürünleri hesapla
+
         val topSellingProducts = calculateTopSellingProducts(orders)
-        
-        // Günlük özet verileri hesapla
+
         val dailySummaries = calculateDailySummaries(orders)
-        
-        // Kullanıcı istatistiklerini al
+
         val userStatsResult = getUserStats()
         val userStats = when (userStatsResult) {
             is RequestState.Success -> userStatsResult.data
@@ -103,15 +96,15 @@ class GetDashboardAnalyticsUseCase(
         }
         
         return productStats.values
-            .sortedByDescending { it.unitsSold } // Satılan miktar bazında sırala
-            .take(10) // En çok satan 10 ürün
+            .sortedByDescending { it.unitsSold }
+            .take(10)
             .map { stat ->
                 TopSellingProduct(
                     productId = stat.productId,
-                    productName = "Product ${stat.productId}", // Geçici isim, ileride product detayları çekilebilir
+                    productName = "Product ${stat.productId}",
                     unitsSold = stat.unitsSold,
-                    totalRevenue = 0.0, // CartItem'da fiyat bilgisi olmadığı için 0
-                    thumbnail = null // CartItem'da thumbnail bilgisi yok
+                    totalRevenue = 0.0,
+                    thumbnail = null
                 )
             }
     }
@@ -152,13 +145,11 @@ class GetDashboardAnalyticsUseCase(
                 is RequestState.Success -> {
                     val users = usersResult.data
                     val now = Clock.System.now().toEpochMilliseconds()
-                    
-                    // Zaman aralıklarını hesapla
+
                     val oneDayAgo = now - (24 * 60 * 60 * 1000)
                     val oneWeekAgo = now - (7 * 24 * 60 * 60 * 1000)
                     val oneMonthAgo = now - (30 * 24 * 60 * 60 * 1000)
-                    
-                    // Kullanıcıları createdAt tarihine göre filtrele
+
                     val newUsersToday = users.count { user -> 
                         user.createdAt >= oneDayAgo 
                     }
@@ -198,7 +189,7 @@ class GetDashboardAnalyticsUseCase(
             val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
             "${localDateTime.year}-${localDateTime.monthNumber.toString().padStart(2, '0')}-${localDateTime.dayOfMonth.toString().padStart(2, '0')}"
         } catch (e: Exception) {
-            "1970-01-01" // Fallback date
+            "1970-01-01"
         }
     }
     

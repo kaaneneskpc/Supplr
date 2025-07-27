@@ -48,83 +48,256 @@ fun RevenueChart(
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(containerColor = Surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        shape = RoundedCornerShape(16.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(20.dp)
         ) {
-            Text(
-                text = "Daily Revenue",
-                fontFamily = BebasNeueFont(),
-                fontSize = FontSize.LARGE,
-                color = TextPrimary,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-            
-            if (dailySummaries.isEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp),
-                    contentAlignment = Alignment.Center
-                ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Daily Revenue Trend",
+                    fontFamily = BebasNeueFont(),
+                    fontSize = FontSize.LARGE,
+                    color = TextPrimary,
+                    fontWeight = FontWeight.Bold
+                )
+                
+                if (dailySummaries.isNotEmpty()) {
+                    val totalRevenue = dailySummaries.sumOf { it.totalRevenue }
                     Text(
-                        text = "No revenue data available",
-                        color = TextPrimary.copy(alpha = 0.7f),
-                        style = MaterialTheme.typography.bodyMedium
+                        text = "Total: $${totalRevenue.toInt()}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = TextPrimary,
+                        fontWeight = FontWeight.Bold
                     )
                 }
+            }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            if (dailySummaries.isEmpty()) {
+                EmptyRevenueState()
             } else {
-                CustomLineChart(
+                EnhancedLineChart(
                     dailySummaries = dailySummaries,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp)
+                        .height(220.dp)
                 )
+                
+                Spacer(modifier = Modifier.height(16.dp))
+
+                RevenueStatsRow(dailySummaries = dailySummaries)
             }
         }
     }
 }
 
 @Composable
-private fun CustomLineChart(
+private fun EnhancedLineChart(
     dailySummaries: List<DailySummary>,
     modifier: Modifier = Modifier
 ) {
     val maxRevenue = remember(dailySummaries) {
-        dailySummaries.maxOfOrNull { it.totalRevenue } ?: 0.0
+        dailySummaries.maxOfOrNull { it.totalRevenue } ?: 100.0
     }
     
     Canvas(modifier = modifier) {
-        if (dailySummaries.isNotEmpty() && maxRevenue > 0) {
-            drawLineChart(
+        if (dailySummaries.isNotEmpty()) {
+            drawEnhancedLineChart(
                 data = dailySummaries,
                 maxValue = maxRevenue,
-                color = ButtonPrimary
+                primaryColor = ButtonPrimary,
+                secondaryColor = CategoryBlue
             )
         }
     }
 }
 
-private fun DrawScope.drawLineChart(
+@Composable
+private fun RevenueStatsRow(
+    dailySummaries: List<DailySummary>
+) {
+    if (dailySummaries.isEmpty()) return
+    
+    val avgRevenue = dailySummaries.map { it.totalRevenue }.average()
+    val maxRevenue = dailySummaries.maxOf { it.totalRevenue }
+    val minRevenue = dailySummaries.minOf { it.totalRevenue }
+    val trend = if (dailySummaries.size >= 2) {
+        val recent = dailySummaries.takeLast(3).map { it.totalRevenue }.average()
+        val older = dailySummaries.dropLast(3).takeLast(3).map { it.totalRevenue }.average()
+        if (recent > older) "📈" else "📉"
+    } else "📊"
+    
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        StatItem(
+            label = "Average",
+            value = "$${avgRevenue.toInt()}",
+            icon = "📊"
+        )
+        StatItem(
+            label = "Peak",
+            value = "$${maxRevenue.toInt()}",
+            icon = "🔥"
+        )
+        StatItem(
+            label = "Trend",
+            value = "${dailySummaries.size} days",
+            icon = trend
+        )
+    }
+}
+
+@Composable
+private fun StatItem(
+    label: String,
+    value: String,
+    icon: String
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = icon,
+            style = MaterialTheme.typography.headlineSmall
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyMedium,
+            color = TextPrimary,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodySmall,
+            color = TextPrimary.copy(alpha = 0.7f)
+        )
+    }
+}
+
+private fun DrawScope.drawEnhancedLineChart(
     data: List<DailySummary>,
     maxValue: Double,
-    color: Color
+    primaryColor: Color,
+    secondaryColor: Color
 ) {
     val width = size.width
     val height = size.height
-    val padding = 40f
+    val padding = 60f
     
     val chartWidth = width - (padding * 2)
     val chartHeight = height - (padding * 2)
     
-    if (data.size < 2) return
+    if (data.isEmpty()) {
+        drawPlaceholderChart(width, height, padding, primaryColor)
+        return
+    }
+
+    drawGridLines(width, height, padding, Color.Gray.copy(alpha = 0.3f))
+
+    drawAxes(width, height, padding, Color.Black.copy(alpha = 0.6f))
+    
+    if (data.size == 1) {
+        val x = padding + chartWidth / 2
+        val y = padding + chartHeight - (data[0].totalRevenue.toFloat() / maxValue.toFloat()) * chartHeight
+        drawCircle(
+            color = Color.White,
+            radius = 8f,
+            center = Offset(x, y)
+        )
+        drawCircle(
+            color = Color.Black,
+            radius = 6f,
+            center = Offset(x, y)
+        )
+        return
+    }
     
     val path = Path()
-    
+    val fillPath = Path()
+    val points = mutableListOf<Offset>()
+
     data.forEachIndexed { index, summary ->
         val x = padding + (index.toFloat() / (data.size - 1).toFloat()) * chartWidth
         val y = padding + chartHeight - (summary.totalRevenue.toFloat() / maxValue.toFloat()) * chartHeight
+        points.add(Offset(x, y))
+    }
+    
+    // Create the line path
+    if (points.isNotEmpty()) {
+        path.moveTo(points.first().x, points.first().y)
+        for (i in 1 until points.size) {
+            path.lineTo(points[i].x, points[i].y)
+        }
+    }
+    
+    // Create the fill path
+    if (points.isNotEmpty()) {
+        fillPath.moveTo(points.first().x, padding + chartHeight)
+        fillPath.lineTo(points.first().x, points.first().y)
+        for (i in 1 until points.size) {
+            fillPath.lineTo(points[i].x, points[i].y)
+        }
+        fillPath.lineTo(points.last().x, padding + chartHeight)
+        fillPath.close()
+    }
+    
+    // Draw fill area with gradient effect
+    drawPath(
+        path = fillPath,
+        color = primaryColor.copy(alpha = 0.15f)
+    )
+    
+    // Draw main line with better visibility
+    drawPath(
+        path = path,
+        color = primaryColor,
+        style = androidx.compose.ui.graphics.drawscope.Stroke(
+            width = 4f,
+            cap = androidx.compose.ui.graphics.StrokeCap.Round,
+            join = androidx.compose.ui.graphics.StrokeJoin.Round
+        )
+    )
+    
+    // Draw points with better visibility (after the line so they appear on top)
+    points.forEach { point ->
+        drawCircle(
+            color = Color.White,
+            radius = 6f,
+            center = point
+        )
+        drawCircle(
+            color = Color.Black,
+            radius = 4f,
+            center = point
+        )
+    }
+}
+
+private fun DrawScope.drawPlaceholderChart(
+    width: Float,
+    height: Float,
+    padding: Float,
+    color: Color
+) {
+    val chartWidth = width - (padding * 2)
+    val chartHeight = height - (padding * 2)
+    
+    // Draw sample data points
+    val sampleData = listOf(0.2f, 0.7f, 0.4f, 0.9f, 0.6f)
+    val path = Path()
+    
+    sampleData.forEachIndexed { index, value ->
+        val x = padding + (index.toFloat() / (sampleData.size - 1).toFloat()) * chartWidth
+        val y = padding + chartHeight - (value * chartHeight)
         
         if (index == 0) {
             path.moveTo(x, y)
@@ -132,19 +305,73 @@ private fun DrawScope.drawLineChart(
             path.lineTo(x, y)
         }
         
-        // Draw points
         drawCircle(
-            color = color,
-            radius = 4f,
+            color = Color.White,
+            radius = 5f,
+            center = Offset(x, y)
+        )
+        drawCircle(
+            color = color.copy(alpha = 0.7f),
+            radius = 3f,
             center = Offset(x, y)
         )
     }
     
-    // Draw line
     drawPath(
         path = path,
+        color = color.copy(alpha = 0.6f),
+        style = androidx.compose.ui.graphics.drawscope.Stroke(
+            width = 3f,
+            cap = androidx.compose.ui.graphics.StrokeCap.Round,
+            join = androidx.compose.ui.graphics.StrokeJoin.Round
+        )
+    )
+}
+
+private fun DrawScope.drawGridLines(
+    width: Float,
+    height: Float,
+    padding: Float,
+    color: Color
+) {
+    val chartWidth = width - (padding * 2)
+    val chartHeight = height - (padding * 2)
+    
+    // Horizontal grid lines
+    for (i in 0..4) {
+        val y = padding + (i * chartHeight / 4)
+        drawLine(
+            color = color,
+            start = Offset(padding, y),
+            end = Offset(padding + chartWidth, y),
+            strokeWidth = 1f
+        )
+    }
+}
+
+private fun DrawScope.drawAxes(
+    width: Float,
+    height: Float,
+    padding: Float,
+    color: Color
+) {
+    val chartWidth = width - (padding * 2)
+    val chartHeight = height - (padding * 2)
+    
+    // X axis
+    drawLine(
         color = color,
-        style = androidx.compose.ui.graphics.drawscope.Stroke(width = 3f)
+        start = Offset(padding, padding + chartHeight),
+        end = Offset(padding + chartWidth, padding + chartHeight),
+        strokeWidth = 2f
+    )
+    
+    // Y axis
+    drawLine(
+        color = color,
+        start = Offset(padding, padding),
+        end = Offset(padding, padding + chartHeight),
+        strokeWidth = 2f
     )
 }
 

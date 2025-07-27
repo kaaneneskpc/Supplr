@@ -33,7 +33,7 @@ fun AnimatedMetricCardsRow(
     var visible by remember { mutableStateOf(false) }
     
     LaunchedEffect(Unit) {
-        delay(100) // Slight delay for smooth entrance
+        delay(100)
         visible = true
     }
     

@@ -58,7 +58,6 @@ fun EnhancedMetricCard(
                 .padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Icon with background circle
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -75,8 +74,7 @@ fun EnhancedMetricCard(
             }
             
             Spacer(modifier = Modifier.height(12.dp))
-            
-            // Title
+
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium,
@@ -86,8 +84,7 @@ fun EnhancedMetricCard(
             )
             
             Spacer(modifier = Modifier.height(4.dp))
-            
-            // Value
+
             Text(
                 text = value,
                 fontFamily = BebasNeueFont(),
@@ -96,8 +93,7 @@ fun EnhancedMetricCard(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
             )
-            
-            // Subtitle (optional)
+
             subtitle?.let {
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
@@ -126,7 +122,7 @@ fun MetricCardsRow(
         EnhancedMetricCard(
             title = "Total Revenue",
             value = "$${totalRevenue.toInt()}",
-            icon = Resources.Icon.Dollar, // Finance icon'ını kullanıyoruz
+            icon = Resources.Icon.Dollar,
             color = CategoryGreen,
             subtitle = "This period",
             modifier = Modifier.weight(1f)
@@ -135,7 +131,7 @@ fun MetricCardsRow(
         EnhancedMetricCard(
             title = "Total Orders",
             value = totalOrders.toString(),
-            icon = Resources.Icon.Book, // Book icon'ını kullanıyoruz
+            icon = Resources.Icon.Book,
             color = CategoryBlue,
             subtitle = "Orders placed",
             modifier = Modifier.weight(1f)
@@ -144,7 +140,7 @@ fun MetricCardsRow(
         EnhancedMetricCard(
             title = "Avg Order",
             value = "$${averageOrderValue.toInt()}",
-            icon = Resources.Icon.Checkmark, // Order icon'ını kullanıyoruz
+            icon = Resources.Icon.Checkmark,
             color = CategoryRed,
             subtitle = "Per order",
             modifier = Modifier.weight(1f)

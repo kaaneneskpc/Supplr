@@ -2,25 +2,32 @@
 
 ## 1. Proje Amacı ve Genel Tanım
 
-Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) ve Jetpack Compose Multiplatform ile geliştirilen, modern, modüler ve ölçeklenebilir bir e-ticaret uygulamasıdır. Kullanıcılar ürünleri inceleyebilir, sepete ekleyebilir, sipariş verebilir, favorilere ekleyebilir ve profil yönetimi yapabilir. Admin paneli ile ürün yönetimi mümkündür.
+Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) ve Jetpack Compose Multiplatform ile geliştirilen, modern, modüler ve ölçeklenebilir bir e-ticaret uygulamasıdır. Kullanıcılar ürünleri inceleyebilir, sepete ekleyebilir, sipariş verebilir, favorilere ekleyebilir ve profil yönetimi yapabilir. **Gelişmiş admin analytics dashboard** ile iş analitikleri, interaktif grafikler ve gerçek zamanlı veri takibi sağlanır.
 
 ---
 
 ## 2. Kullanılan Teknolojiler
 
+### Core Technologies
 - **Kotlin Multiplatform (KMP):** Ortak kodun hem Android hem iOS için kullanılmasını sağlar.
 - **Jetpack Compose Multiplatform:** UI katmanında Compose kullanımı ile modern, deklaratif arayüzler.
 - **Koin:** Dependency Injection (DI) için kullanılır.
 - **Firebase:** Authentication, Firestore (veritabanı), Storage (dosya yönetimi), Google Sign-In ve **Push Notification** (bildirim).
 - **Ktor:** Network işlemleri için multiplatform HTTP client ve **Stripe API entegrasyonu**.
+
+### UI & Analytics Technologies
+- **Custom Canvas Charts:** Analytics görselleştirmeleri için özel çizim bileşenleri.
+- **Material3:** Modern UI bileşenleri ve responsive design.
+- **Animated Components:** Gelişmiş kullanıcı deneyimi için animasyonlar.
 - **Coil:** Görsel yükleme ve cache işlemleri için.
+- **Loading Shimmer Effects:** Modern loading state'leri için.
+
+### Payment & Integration
 - **Stripe SDK:** **Android** ve **iOS** için payment processing (**Android:** Real PaymentSheet, **iOS:** Simulated flow).
 - **Coroutines & Flow:** Asenkron işlemler ve reaktif veri akışı.
-- **Material3:** Modern UI bileşenleri.
 - **Navigation Compose:** Ekranlar arası geçişler için.
 - **MessageBar KMP:** Kullanıcıya mesaj göstermek için.
 - **Multiplatform Settings:** Platformlar arası ayar ve local storage yönetimi.
-- **Gradle:** Çok modüllü yapı ve multiplatform derleme için.
 
 ---
 
@@ -34,15 +41,16 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
     - cart/        : Sepet yönetimi.
     - home/        : Ana ekran ve navigasyon.
     - profile/     : Kullanıcı profil yönetimi.
-    - admin_panel/ : Admin için ürün yönetimi ve ürün arama/listeme (yeni).
-    - manage_product/: Admin için ürün ekleme, düzenleme ve silme işlemleri (yeni).
+    - admin_panel/ : 📊 Admin analytics dashboard, interaktif grafikler, iş metrikleri.
+    - manage_product/: Admin için ürün ekleme, düzenleme ve silme işlemleri.
     - product_details/: Ürün detayları.
-    - products_overview/: Ana ekranda yeni ve indirimli ürünlerin öne çıkarıldığı ürün listeleme (yeni).
-    - payment_completed/: Sipariş tamamlandı ekranı ve sipariş sonrası işlemler (yeni).
-    - checkout/       : Ödeme işlemleri ve **Stripe entegrasyonu** (Android: Real PaymentSheet, iOS: Simulated flow).
+    - products_overview/: Ana ekranda yeni ve indirimli ürünlerin öne çıkarıldığı ürün listeleme.
+    - payment_completed/: Sipariş tamamlandı ekranı ve sipariş sonrası işlemler.
+    - checkout/       : Ödeme işlemleri ve **Stripe entegrasyonu**.
     - categories/: Kategori yönetimi.
-    - favorites/      : Kullanıcının favori ürünlerini yönettiği ekran ve iş mantığı (yeni).
-    - locations/      : Kullanıcı adres yönetimi, ekleme/düzenleme, kategorizasyon (Home, Work, Other) (yeni).
+    - favorites/      : Kullanıcının favori ürünlerini yönettiği ekran ve iş mantığı.
+    - locations/      : Kullanıcı adres yönetimi, ekleme/düzenleme, kategorizasyon (Home, Work, Other).
+    - contact_us/     : İletişim sayfası.
 - data/            : Veri katmanı, repository ve servisler.
 - shared/          : Ortak domain modelleri, util, constantlar.
 - di/              : Dependency injection modülleri (Koin).
@@ -57,8 +65,9 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 
 - **Presentation Layer (feature/):**
   - Her ekran (Screen) ve ViewModel ayrı modüllerde.
-  - UI, business logic’ten ayrılmıştır.
+  - UI, business logic'ten ayrılmıştır.
   - Compose ile deklaratif UI.
+  - **Admin Analytics Dashboard:** Gerçek zamanlı veri görselleştirme, custom Canvas charts.
   - **Kullanılan Teknolojiler:**
     - Jetpack Compose Multiplatform
     - Material3
@@ -68,18 +77,21 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
     - Coil (coil3, coil3-compose)
     - Kotlin Coroutines & Flow
     - AndroidX Lifecycle ViewModel
+    - Custom Canvas Drawing (Analytics charts)
 
 - **Domain Layer (shared/domain/):**
-  - Temel iş modelleri (Product, Customer, CartItem, **Favorite**, **Location**, **PaymentIntent**, **Order** vs.).
-  - Repository arayüzleri (ProductRepository, **FavoritesRepository**, **LocationRepository**, **PaymentRepository** ...)
+  - Temel iş modelleri (Product, Customer, CartItem, **Favorite**, **Location**, **PaymentIntent**, **Order**, **DashboardAnalytics**, **DailySummary**, **TopSellingProduct** vs.).
+  - Repository arayüzleri (ProductRepository, **FavoritesRepository**, **LocationRepository**, **PaymentRepository**, **AdminRepository** ...)
+  - **Analytics Models:** Dashboard metrikleri ve analytics veri yapıları.
   - **Kullanılan Teknolojiler:**
     - Kotlin Multiplatform
     - Kotlinx Serialization
-    - Kendi interface’ler (Repository arayüzleri)
+    - Kendi interface'ler (Repository arayüzleri)
 
 - **Data Layer (data/):**
-  - Repository implementasyonları (ör. CustomerRepositoryImpl, **FavoritesRepositoryImpl**, **LocationRepositoryImpl**, **PaymentRepositoryImpl**).
+  - Repository implementasyonları (ör. CustomerRepositoryImpl, **FavoritesRepositoryImpl**, **LocationRepositoryImpl**, **PaymentRepositoryImpl**, **AdminRepositoryImpl**).
   - Firebase Firestore'da her kullanıcıya özel favorites ve **locations** koleksiyonu.
+  - **Analytics Data Processing:** Firestore'dan analytics verilerinin işlenmesi ve hesaplanması.
   - **Stripe API entegrasyonu** PaymentIntent oluşturma ve order yönetimi için.
   - DTO ve veri dönüşümleri.
   - **Kullanılan Teknolojiler:**
@@ -92,7 +104,7 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 
 - **DI Layer (di/):**
   - Koin ile bağımlılıkların yönetimi.
-  - Tüm ViewModel ve repository’ler burada inject edilir.
+  - Tüm ViewModel ve repository'ler burada inject edilir.
   - **Kullanılan Teknolojiler:**
     - Koin (koin-core, koin-compose)
     - Kotlin Multiplatform
@@ -103,9 +115,10 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 - **Test Edilebilirlik:** Repository arayüzleri sayesinde kolayca mocklanabilir.
 - **Modülerlik:** Her feature kendi modülünde, bağımsız geliştirilebilir.
 - **Navigation:** Ekranlar arası geçişler merkezi bir NavGraph ile yönetilir.
+- **Analytics Architecture:** Ayrı analytics katmanı ile gerçek zamanlı veri işleme.
 
 ### Yeni Feature Modülleri
-  - **admin_panel:** Admin kullanıcılar için ürünleri listeleme, arama ve yönetim paneli sunar.
+  - **admin_panel:** 📊 **Gelişmiş Analytics Dashboard** - Gerçek zamanlı iş metrikleri, interaktif grafikler, revenue analizi, top-selling products, user statistics.
   - **manage_product:** Adminlerin ürün ekleme, düzenleme ve silme işlemlerini gerçekleştirdiği ekran ve iş mantığı.
   - **products_overview:** Ana ekranda yeni ve indirimli ürünlerin öne çıkarıldığı, kullanıcıya hızlı erişim sağlayan ürün listeleme modülü.
   - **payment_completed:** Sipariş tamamlandıktan sonra kullanıcıya sipariş özeti ve başarı mesajı gösteren ekran.
@@ -113,109 +126,188 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 
 ---
 
-## 5. Güvenlik
+## 5. Admin Analytics Dashboard Özellikleri
 
+### 📊 Dashboard Bileşenleri
+
+#### 5.1. Revenue Analytics
+- **Enhanced Line Charts:** Custom Canvas çizimi ile gelişmiş grafik görselleştirme
+- **Grid Lines ve Axes:** Profesyonel grafik görünümü
+- **Data Points:** Siyah noktalar ve beyaz kenarlar ile net görünürlük
+- **Fill Area:** Gradient efekti ile alan dolgusu
+- **Interactive Elements:** Tıklanabilir noktalar ve hover efektleri
+
+#### 5.2. Metrics Cards
+- **Animated Entry:** Staggered loading efektleri
+- **Real-time Updates:** Otomatik veri yenileme
+- **Key Performance Indicators:**
+  - Total Revenue (Toplam Gelir)
+  - Total Orders (Toplam Sipariş)
+  - Average Order Value (Ortalama Sipariş Değeri)
+
+#### 5.3. Top Selling Products
+- **Visual Indicators:** Ürün performans göstergeleri
+- **Sales Metrics:** Satış adetleri ve trend analizi
+- **Product Cards:** Modern UI ile ürün bilgileri
+
+#### 5.4. User Statistics
+- **User Growth Tracking:** Kullanıcı büyüme metrikleri
+- **Engagement Metrics:** Kullanıcı etkileşim verileri
+- **Demographic Analysis:** Demografik veri analizi
+
+### 📅 Date Range Filtering
+- **Flexible Time Periods:**
+  - Today (Bugün)
+  - Last 7 Days (Son 7 Gün)
+  - Last 30 Days (Son 30 Gün)
+- **Dynamic Data Loading:** Seçilen tarihe göre otomatik veri yükleme
+
+### 🔄 Real-time Features
+- **Auto-refresh:** Otomatik veri yenileme
+- **Pull-to-refresh:** Manuel yenileme desteği
+- **Loading States:** Shimmer efektleri ile modern loading
+- **Error Handling:** Hata durumları için retry mekanizması
+
+---
+
+## 6. Güvenlik ve Firebase Rules
+
+### 6.1. Admin Panel Güvenliği
+- **Role-based Authentication:** Email bazlı admin kontrolü (`isAdmin()` fonksiyonu)
+- **Firestore Security Rules:** Kapsamlı güvenlik kuralları
+- **Data Isolation:** Kullanıcıya özel veri erişim kontrolü
+- **Audit Trail:** Admin işlemlerinin loglanması
+
+### 6.2. Firestore Collections ve Güvenlik Kuralları
+
+#### Analytics Collections
+- **`analytics/`** - Analytics verileri (sadece admin erişimi)
+- **`admin_dashboard/`** - Dashboard konfigürasyonu (sadece admin)
+- **`user_stats/`** - Kullanıcı istatistikleri (sadece admin okuma)
+- **`sales_analytics/`** - Satış verileri (sadece admin)
+- **`product_analytics/`** - Ürün performansı (sadece admin)
+- **`admin_logs/`** - Admin işlem logları (sadece admin okuma, sadece oluşturma)
+
+#### Security Rules Özellikleri
+- **Veri Validasyonu:** Gerekli alanların kontrolü
+- **Timestamp Kontrolü:** İşlem zamanlarının doğrulanması
+- **Audit Trail Koruması:** Log kayıtlarının değiştirilemez olması
+- **Admin ID Doğrulama:** İşlemi yapan admin'in kimlik kontrolü
+
+### 6.3. Genel Güvenlik
 - **Authentication:** Firebase Auth ve Google Sign-In ile kullanıcı doğrulama.
 - **Authorization:** Admin işlemleri için kullanıcıya özel rol kontrolü (isAdmin).
 - **Veri Güvenliği:** Firestore ve Storage erişimleri sadece authenticated kullanıcıya açık.
 - **Güvenli Depolama:** Multiplatform Settings ile hassas veriler local olarak güvenli şekilde saklanır.
 - **Network Güvenliği:** Ktor ile HTTPS kullanımı, Firebase ile güvenli veri transferi.
-- **Rol Bazlı Yetkilendirme:** Admin ve normal kullanıcı ayrımı, admin paneline erişim kontrolü.
-- **Oturum Yönetimi:** Kullanıcı oturumu ve token yönetimi, signOut ile güvenli çıkış.
 - **Payment Security:** **Stripe API keys** güvenli yönetimi (`shared/Consts.kt`), PCI-DSS compliant payment processing.
 - **Location Data Security:** Kullanıcıya özel location verisi, sadece kendi lokasyonlarına erişim hakkı.
-- **Firebase Rules:** **Locations** ve **Orders** collection'ları için detaylı güvenlik kuralları ve veri validasyonu.
 
 ---
 
-## 6. DevOps ve Build
+## 7. DevOps ve Build
 
 - **Gradle ile çoklu modül yönetimi.**
 - **Android ve iOS için ayrı build konfigürasyonları.**
 - **GoogleService-Info.plist ve google-services.json ile platforma özel Firebase entegrasyonu.**
 - **KMP ile tek kod tabanından iki platforma derleme.**
+- **Analytics Build Optimization:** Chart rendering optimizasyonları ve performance tuning.
 
 ---
 
-## 7. UI/UX
+## 8. UI/UX ve Modern Design
 
+### 8.1. Material3 ve Responsive Design
 - **Material3 ve Compose ile modern, responsive arayüz.**
 - **Animasyonlar ve geçiş efektleri.**
 - **Karanlık ve aydınlık tema desteği.**
 - **Kullanıcıya anlık mesaj ve hata gösterimi (MessageBar).**
+
+### 8.2. Admin Dashboard UX
+- **Interactive Charts:** Kullanıcı dostu grafik etkileşimleri
+- **Loading Experience:** Shimmer efektleri ve smooth transitions
+- **Responsive Layout:** Tüm ekran boyutlarında optimize edilmiş tasarım
+- **Error States:** Kullanıcı dostu hata mesajları ve retry options
+- **Data Visualization:** Profesyonel iş analitiği görselleştirme
+
+### 8.3. Kullanıcı Deneyimi Özellikleri
 - **BottomBar ve TopBar ile kolay navigasyon.**
 - **Kullanıcıya özel bildirimler (push notification) desteği.**
 - **Favoriler:**
   - Ürün detay ekranında sağ üstte kalp ikonu ile favoriye ekleme.
   - Favoriler ekranında favori ürünlerin listelenmesi, her kartın sağ üstünde favoriden çıkarma butonu.
   - Favori ürünler anlık olarak güncellenir, ekleme/çıkarma işlemlerinde mesaj bar ile kullanıcı bilgilendirilir.
-  - Favori ürünler Firebase Firestore'da kullanıcıya özel saklanır.
 - **Locations:**
   - Kullanıcı adres yönetimi ile kolay adres ekleme/düzenleme.
   - Location kategorileri (Home 🏠, Work 🏢, Other 📍) ile organize edilmiş adres yapısı.
   - Custom drawer'dan kolayca erişilebilir lokasyon yönetimi.
-  - Firebase Firestore'da kullanıcıya özel saklanır.
 - **Payment Experience:**
   - **Android:** Real Stripe PaymentSheet ile native payment deneyimi.
   - **iOS:** Simulated ama realistic payment flow, Android ile uyumlu UX.
   - "Pay with Card" 💳 ve "Pay on Delivery" 🚚 seçenekleri.
-  - Payment status tracking ve error handling.
-  - Payment completed screen ile sipariş özeti ve başarı mesajı.
-- **Contact Us ekranında iletişim kartı, Box ve Alignment.Center ile sayfanın tam ortasına hizalanmıştır. Böylece tüm cihazlarda ve ekran boyutlarında kart ortalanır ve kullanıcı deneyimi iyileşir.**
 
 ---
 
-## 8. Test Edilebilirlik
+## 9. Test Edilebilirlik
 
-- **Repository arayüzleri ve ViewModel’ler kolayca test edilebilir.**
+- **Repository arayüzleri ve ViewModel'ler kolayca test edilebilir.**
 - **Mock ve fake veri ile UI testleri yapılabilir.**
 - **Kotlin Multiplatform ile ortak testler yazılabilir.**
+- **Analytics Testing:** Chart rendering ve data processing testleri.
+- **Admin Panel Testing:** Role-based access ve security rule testleri.
 
 ---
 
-## 9. Genişletilebilirlik ve Bakım
+## 10. Genişletilebilirlik ve Bakım
 
+### 10.1. Modüler Yapı
 - **Yeni bir feature eklemek için yeni bir modül açmak yeterli.**
-- **Her feature kendi ViewModel ve repository’sine sahip.**
+- **Her feature kendi ViewModel ve repository'sine sahip.**
 - **DI ile bağımlılıklar kolayca yönetilir.**
 - **Kod okunabilirliği ve sürdürülebilirliği yüksek.**
 
-- **Son Eklenen Feature'lar:**
-  - **Admin Panel (admin_panel):** Ürünleri arama, filtreleme ve yönetme.
-  - **Ürün Yönetimi (manage_product):** Ürün ekleme, güncelleme ve silme işlemleri.
-  - **Ürünler Genel Bakış (products_overview):** Ana ekranda yeni ve indirimli ürünlerin listelenmesi.
-  - **Ödeme Tamamlandı (payment_completed):** Sipariş sonrası kullanıcı bilgilendirme ve özet ekranı.
-  - **Contact Us ekranında iletişim kartı ortalandı (Box + Alignment.Center ile).**
-  - **Favoriler (favorites):** Kullanıcılar ürünleri favorilere ekleyebilir, favori ürünlerini ayrı bir ekranda görebilir ve yönetebilir.
-  - **🗺️ Locations (locations):** Kullanıcı adres yönetimi sistemi, Phase 1 & 2 tamamlandı:
-    - Location ekleme/düzenleme screens.
-    - Location kategorileri (Home, Work, Other).
-    - Custom drawer entegrasyonu.
-    - Firebase Firestore integration ve security rules.
-  - **💳 Stripe Payment Integration:** Multi-platform payment sistemi:
-    - **Android:** Real PaymentSheet implementation.
-    - **iOS:** Simulated realistic payment flow.
-    - Dynamic API key management (`shared/Consts.kt`).
-    - PaymentRepository ve Order management.
-    - Bottom sheet experience her iki platformda.
+### 10.2. Son Eklenen Feature'lar
+- **📊 Admin Analytics Dashboard (admin_panel):** 
+  - Gerçek zamanlı iş metrikleri
+  - İnteraktif revenue charts
+  - Enhanced line charts with custom Canvas
+  - Top-selling products analysis
+  - User statistics tracking
+  - Date range filtering
+  - Animated components
+  - Loading states ve error handling
+
+- **Ürün Yönetimi (manage_product):** Ürün ekleme, güncelleme ve silme işlemleri.
+- **Ürünler Genel Bakış (products_overview):** Ana ekranda yeni ve indirimli ürünlerin listelenmesi.
+- **Ödeme Tamamlandı (payment_completed):** Sipariş sonrası kullanıcı bilgilendirme ve özet ekranı.
+- **Favoriler (favorites):** Kullanıcılar ürünleri favorilere ekleyebilir, favori ürünlerini ayrı bir ekranda görebilir ve yönetebilir.
+- **🗺️ Locations (locations):** Kullanıcı adres yönetimi sistemi.
+- **💳 Stripe Payment Integration:** Multi-platform payment sistemi.
 
 ---
 
-## 10. Eklenebilecekler / İyileştirme Önerileri
+## 11. Eklenebilecekler / İyileştirme Önerileri
 
-- **Unit ve UI test coverage’ı artırılabilir.**
+### 11.1. Analytics ve Admin Panel İyileştirmeleri
+- **Advanced Chart Types:** Bar charts, pie charts, area charts
+- **Real-time Notifications:** Admin için kritik metrik bildirimleri
+- **Export Functionality:** PDF/Excel export for reports
+- **Advanced Filtering:** Multi-dimensional data filtering
+- **Predictive Analytics:** ML-based trend prediction
+- **Performance Metrics:** App performance monitoring
+
+### 11.2. Genel İyileştirmeler
+- **Unit ve UI test coverage'ı artırılabilir.**
 - **CI/CD pipeline (GitHub Actions, Bitrise vs.) ile otomatik build ve test.**
 - **Crashlytics ve Analytics ile hata ve kullanıcı davranışı takibi.**
 - **Daha gelişmiş rol ve izin yönetimi.**
 - **Offline-first desteği (local cache, sync).**
 - **Daha detaylı logging ve monitoring.**
-- **Kullanıcıya özel bildirimler (push notification).**
 - **Daha fazla platform (web, desktop) için Compose Multiplatform genişletmesi.**
-- **Push notification desteği eklendi.**
 
 ---
 
-## 11. Kaynaklar
+## 12. Kaynaklar
 
 - [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
 - [Jetpack Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
@@ -223,124 +315,65 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 - [Firebase](https://firebase.google.com/)
 - [Ktor](https://ktor.io/)
 - [Coil](https://coil-kt.github.io/coil/)
+- [Canvas Drawing in Compose](https://developer.android.com/jetpack/compose/graphics/draw/overview)
+- [Firebase Security Rules](https://firebase.google.com/docs/firestore/security/get-started)
 
 ---
 
-Bu doküman, projeyi geliştirirken ve yeni modüller/özellikler eklerken temel referans olarak kullanılabilir. Daha fazla detay veya özel bir başlık istersen ekleyebilirim!
+## 13. Admin Panel Feature Development Guide
 
----
-
-## 12. Yeni Feature Ekleme Rehberi
-
-Örnek modül olarak `favorites` modülüne bakılabilir. Repository, ViewModel, ekran ve DI entegrasyonu ile tam bir Clean Architecture örneği sunar.
-
-### 12.1. Adım Adım Feature Ekleme
-1. **Yeni modül/folder oluştur:**
-   - `feature/your_feature_name/` altında `commonMain/kotlin/com/kaaneneskpc/supplr/your_feature_name/` dizinini oluştur.
-2. **Katmanları oluştur:**
-   - `YourFeatureScreen.kt` (Presentation)
-   - `YourFeatureViewModel.kt` (Presentation)
-   - Gerekirse `domain/` ve `data/` alt klasörleri
-3. **Repository interface ve implementasyonu ekle:**
-   - `data/domain/YourFeatureRepository.kt` (interface)
-   - `data/YourFeatureRepositoryImpl.kt` (implementasyon)
-4. **DI (Koin) modülüne ekle:**
-   - `di/src/commonMain/kotlin/com/kaaneneskpc/supplr/di/KoinModule.kt` dosyasına yeni ViewModel ve repository’yi ekle.
-5. **Navigation’a yeni ekranı ekle:**
-   - `navigation/src/commonMain/kotlin/com/kaaneneskpc/supplr/navigation/NavGraph.kt` dosyasına yeni ekranı ekle.
-6. **Gerekirse shared/domain’e yeni model/interface ekle.**
-7. **Test ve dökümantasyon ekle.**
-
-### 12.2. Kod Standartları ve Naming Convention
-- Dosya ve class isimleri PascalCase, fonksiyon ve değişkenler camelCase.
-- ViewModel’ler `YourFeatureViewModel`, ekranlar `YourFeatureScreen` olarak adlandırılır.
-- Katmanlar arası bağımlılık: ViewModel → repository interface, UI’da business logic olmamalı.
-- Stateless Compose component’ler tercih edilmeli.
-
-### 12.3. Test ve Dökümantasyon Standartları
-- Her yeni feature için en az birim testi (ViewModel, repository)
-- Mock/fake veri ile UI testi
-- Public fonksiyonlara ve önemli class’lara KDoc açıklaması
-- Her feature için kısa bir README veya açıklama
-
-### 12.4. Feature Checklist
-- [ ] Modül/folder açıldı mı?
-- [ ] Domain, Data, Presentation ayrımı yapıldı mı?
-- [ ] DI’ya eklendi mi?
-- [ ] Navigation’a eklendi mi?
-- [ ] Test yazıldı mı?
-- [ ] Dökümantasyon eklendi mi?
-- [ ] Kod review yapıldı mı?
-
-### 12.5. Kod Şablonları ve Örnekler
-
-#### ViewModel Şablonu
+### 13.1. Analytics Component Geliştirme
 ```kotlin
-class YourFeatureViewModel(
-    private val yourFeatureRepository: YourFeatureRepository
-) : ViewModel() {
-    // State ve iş mantığı burada
-}
-```
-
-#### Repository Interface ve Implementasyonu
-```kotlin
-// data/domain/YourFeatureRepository.kt
-interface YourFeatureRepository {
-    suspend fun doSomething(): ResultType
-}
-
-// data/YourFeatureRepositoryImpl.kt
-class YourFeatureRepositoryImpl : YourFeatureRepository {
-    override suspend fun doSomething(): ResultType {
-        // Firebase, Ktor veya local işlemler
+// Custom Chart Component Şablonu
+@Composable
+fun CustomChart(
+    data: List<DataPoint>,
+    modifier: Modifier = Modifier
+) {
+    Canvas(modifier = modifier) {
+        // Custom drawing logic
+        drawEnhancedChart(data, size)
     }
 }
 ```
 
-#### Koin Module’a Ekleme
+### 13.2. Analytics Repository Pattern
 ```kotlin
-val sharedModule = module {
-    single<YourFeatureRepository> { YourFeatureRepositoryImpl() }
-    viewModelOf(::YourFeatureViewModel)
-    // ... diğer bağımlılıklar
+interface AdminRepository {
+    suspend fun getDashboardAnalytics(dateRange: DateRange): RequestState<DashboardAnalytics>
+    suspend fun getUserStatistics(): RequestState<UserStats>
+    suspend fun getTopSellingProducts(): RequestState<List<TopSellingProduct>>
 }
 ```
 
-#### Navigation’a Ekleme
-```kotlin
-composable<Screen.YourFeature> {
-    YourFeatureScreen()
+### 13.3. Security Rules Template
+```javascript
+// Admin Collections Security Template
+match /analytics/{document} {
+  allow read, write: if request.auth != null && isAdmin();
 }
 ```
 
-#### Basit Compose Screen Şablonu
+### 13.4. Chart Animation Pattern
 ```kotlin
 @Composable
-fun YourFeatureScreen(navigateToBack: () -> Unit) {
-    val viewModel = koinViewModel<YourFeatureViewModel>()
-    // UI bileşenleri ve state yönetimi
+fun AnimatedChart() {
+    var isVisible by remember { mutableStateOf(false) }
+    
+    LaunchedEffect(Unit) {
+        delay(300) // Stagger effect
+        isVisible = true
+    }
+    
+    val animatedValue by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0f,
+        animationSpec = tween(800)
+    )
+    
+    // Use animatedValue in drawing
 }
 ```
-
-### 12.6. Sık Yapılan Hatalar ve Dikkat Edilmesi Gerekenler
-- Katmanlar arası bağımlılık ihlali (UI’dan doğrudan data erişimi)
-- UI’da business logic barındırmak
-- DI’a eklemeyi unutmak
-- Navigation’da route çakışmaları
-
-### 12.7. Kod Review ve PR Standartları
-- Açıklamalı ve küçük PR’lar açılmalı
-- Kod review checklist kullanılmalı
-- Test ve dökümantasyon kontrol edilmeli
-
-### 12.8. Feature Flags ve Sürümleme
-- Geliştirme aşamasındaki feature’lar için flag kullanımı
-- Sürüm notu ekleme
-
-### 12.9. Design/UX Dökümantasyonu
-- Her yeni feature için Figma/UX dokümanı linki veya ekran akışı eklenmeli
 
 ---
 
-Bu rehber ve şablonlar, yeni bir feature eklerken mimari tutarlılığı ve kod kalitesini korumanı sağlar. Her adımda bu başlıkları ve örnekleri takip edebilirsin.
+Bu doküman, admin analytics dashboard özelliklerini ve modern chart geliştirme pratiklerini içererek projeyi geliştirirken ve yeni analitik özellikler eklerken temel referans olarak kullanılabilir.

@@ -87,20 +87,18 @@ fun AdminDashboardScreen(
                     }
                 },
                 actions = {
-                    // Date Range Selector
                     DateRangeSelectorButton(
                         selectedDateRange = state.selectedDateRange,
                         onDateRangeChanged = { dateRange ->
                             viewModel.onEvent(AdminDashboardEvent.DateRangeChanged(dateRange))
                         }
                     )
-                    
-                    // Refresh Button
+
                     IconButton(
                         onClick = { viewModel.onEvent(AdminDashboardEvent.RefreshData) }
                     ) {
                         Icon(
-                            painter = painterResource(Resources.Icon.Book), // Geçici icon, refresh icon eklenebilir
+                            painter = painterResource(Resources.Icon.Book),
                             contentDescription = "Refresh",
                             tint = IconPrimary
                         )
@@ -253,7 +251,6 @@ private fun DashboardContent(
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        // Loading indicator for refresh
         if (isRefreshing) {
             Box(
                 modifier = Modifier.fillMaxWidth(),

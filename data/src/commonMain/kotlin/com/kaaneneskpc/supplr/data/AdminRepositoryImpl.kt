@@ -294,7 +294,6 @@ class AdminRepositoryImpl : AdminRepository {
             }
         }
     
-    // Analytics Functions Implementation
     override suspend fun getOrdersByDateRange(
         startDate: Long,
         endDate: Long
@@ -323,7 +322,7 @@ class AdminRepositoryImpl : AdminRepository {
                             shippingAddress = document.get("shippingAddress") ?: ""
                         )
                     } catch (e: Exception) {
-                        null // Skip malformed documents
+                        null
                     }
                 }
                 
@@ -359,7 +358,7 @@ class AdminRepositoryImpl : AdminRepository {
                             isAdmin = document.get("isAdmin") ?: false
                         )
                     } catch (e: Exception) {
-                        null // Skip malformed documents
+                        null
                     }
                 }
                 

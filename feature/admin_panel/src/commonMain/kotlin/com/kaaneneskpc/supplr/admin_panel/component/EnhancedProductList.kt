@@ -102,9 +102,9 @@ private fun EnhancedProductItem(
     modifier: Modifier = Modifier
 ) {
     val rankColor = when (rank) {
-        1 -> CategoryYellow // Gold
-        2 -> CategoryBlue   // Silver  
-        3 -> CategoryRed    // Bronze
+        1 -> CategoryYellow
+        2 -> CategoryBlue
+        3 -> CategoryRed
         else -> CategoryGreen
     }
     
@@ -114,7 +114,6 @@ private fun EnhancedProductItem(
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Rank Badge
         Box(
             modifier = Modifier
                 .size(32.dp)
@@ -131,8 +130,7 @@ private fun EnhancedProductItem(
         }
         
         Spacer(modifier = Modifier.width(12.dp))
-        
-        // Product Icon/Placeholder
+
         Box(
             modifier = Modifier
                 .size(40.dp)
@@ -149,8 +147,7 @@ private fun EnhancedProductItem(
         }
         
         Spacer(modifier = Modifier.width(12.dp))
-        
-        // Product Details
+
         Column(
             modifier = Modifier.weight(1f)
         ) {

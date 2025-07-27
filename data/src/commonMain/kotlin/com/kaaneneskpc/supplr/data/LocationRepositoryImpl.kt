@@ -48,7 +48,6 @@ class LocationRepositoryImpl : LocationRepository {
                             longitude = document.get("longitude")
                         )
                     }
-                    // Sort by creation date (newest first) and default address first
                     val sortedLocations = locations
                         .sortedWith(compareByDescending<Location> { it.isDefault }
                             .thenByDescending { it.createdAt })
@@ -83,8 +82,7 @@ class LocationRepositoryImpl : LocationRepository {
 
             val database = Firebase.firestore
             val locationId = Uuid.random().toString()
-            
-            // If setting as default, first unset all other default locations
+
             if (isDefault) {
                 try {
                     val userLocations = database.collection("locations")
@@ -99,7 +97,6 @@ class LocationRepositoryImpl : LocationRepository {
                         }
                     }
                 } catch (e: Exception) {
-                    // Log error but don't fail the operation
                     println("Warning: Could not unset previous default location: ${e.message}")
                 }
             }
@@ -137,7 +134,6 @@ class LocationRepositoryImpl : LocationRepository {
         try {
             val database = Firebase.firestore
             
-            // If setting as default, first unset all other default locations
             if (location.isDefault) {
                 try {
                     val userLocations = database.collection("locations")
@@ -210,8 +206,7 @@ class LocationRepositoryImpl : LocationRepository {
             }
 
             val database = Firebase.firestore
-            
-            // First, unset all default locations for this user
+
             val userLocations = database.collection("locations")
                 .where { "userId" equalTo currentUserId }
                 .get()
@@ -221,8 +216,7 @@ class LocationRepositoryImpl : LocationRepository {
                     mapOf("isDefault" to false)
                 )
             }
-            
-            // Then set the specified location as default
+
             database.collection("locations")
                 .document(locationId)
                 .update(mapOf("isDefault" to true))

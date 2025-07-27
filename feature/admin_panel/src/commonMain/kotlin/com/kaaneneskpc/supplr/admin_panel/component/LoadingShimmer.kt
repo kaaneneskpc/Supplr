@@ -65,28 +65,24 @@ fun MetricCardShimmer(
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Icon shimmer
             LoadingShimmer(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(androidx.compose.foundation.shape.CircleShape)
             )
-            
-            // Title shimmer
+
             LoadingShimmer(
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .height(16.dp)
             )
-            
-            // Value shimmer
+
             LoadingShimmer(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .height(24.dp)
             )
-            
-            // Subtitle shimmer
+
             LoadingShimmer(
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
@@ -109,7 +105,6 @@ fun ChartShimmer(
         Column(
             modifier = Modifier.padding(20.dp)
         ) {
-            // Chart title shimmer
             LoadingShimmer(
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
@@ -117,8 +112,7 @@ fun ChartShimmer(
             )
             
             Spacer(modifier = Modifier.height(16.dp))
-            
-            // Chart area shimmer
+
             LoadingShimmer(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -141,7 +135,6 @@ fun ProductListShimmer(
         Column(
             modifier = Modifier.padding(20.dp)
         ) {
-            // Header shimmer
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween

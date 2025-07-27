@@ -107,7 +107,6 @@ fun LocationCard(
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                // Header with title and default badge
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -181,7 +180,6 @@ fun LocationCard(
                     )
                 }
 
-                // Expanded content with full address and actions
                 AnimatedVisibility(
                     visible = isExpanded,
                     enter = expandVertically() + fadeIn(),
@@ -195,7 +193,6 @@ fun LocationCard(
                             modifier = Modifier.padding(bottom = 12.dp)
                         )
 
-                        // Full address
                         Surface(
                             color = SurfaceLighter.copy(alpha = 0.5f),
                             shape = RoundedCornerShape(12.dp),
@@ -241,7 +238,6 @@ fun LocationCard(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        // Action buttons
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                             modifier = Modifier.fillMaxWidth()
