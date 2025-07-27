@@ -9,17 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +37,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.kaaneneskpc.supplr.admin_panel.component.AnimatedChartContainer
+import com.kaaneneskpc.supplr.admin_panel.component.AnimatedMetricCardsRow
+import com.kaaneneskpc.supplr.admin_panel.component.DashboardLoadingState
 import com.kaaneneskpc.supplr.admin_panel.component.EnhancedTopSellingProducts
 import com.kaaneneskpc.supplr.admin_panel.component.MetricCardsRow
 import com.kaaneneskpc.supplr.admin_panel.component.RevenueChart
@@ -71,7 +71,7 @@ fun AdminDashboardScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Analytics Dashboard",
+                        text = "Dashboard",
                         fontFamily = BebasNeueFont(),
                         fontSize = FontSize.EXTRA_LARGE,
                         color = TextPrimary
@@ -112,15 +112,14 @@ fun AdminDashboardScreen(
             )
         }
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
         ) {
             when {
                 state.isLoading -> {
-                    LoadingContent()
+                    DashboardLoadingState()
                 }
                 state.hasError -> {
                     ErrorContent(
@@ -139,6 +138,8 @@ fun AdminDashboardScreen(
                     EmptyContent()
                 }
             }
+
+
         }
     }
 }
@@ -180,24 +181,6 @@ private fun DateRangeSelectorButton(
                     }
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun LoadingContent() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            CircularProgressIndicator(color = ButtonPrimary)
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Loading analytics...",
-                color = TextPrimary,
-                style = MaterialTheme.typography.bodyLarge
-            )
         }
     }
 }
@@ -268,6 +251,7 @@ private fun DashboardContent(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
+            .padding(16.dp)
     ) {
         // Loading indicator for refresh
         if (isRefreshing) {
@@ -283,7 +267,7 @@ private fun DashboardContent(
         }
         
         // Enhanced Key Metrics Row
-        MetricCardsRow(
+        AnimatedMetricCardsRow(
             totalRevenue = analytics.totalRevenue,
             totalOrders = analytics.totalOrders,
             averageOrderValue = analytics.averageOrderValue
@@ -292,18 +276,26 @@ private fun DashboardContent(
         Spacer(modifier = Modifier.height(24.dp))
         
         // Line Chart (Custom Canvas)
-        RevenueChart(
-            dailySummaries = analytics.dailySummaries,
-            modifier = Modifier.fillMaxWidth()
-        )
+        AnimatedChartContainer(
+            delayMillis = 300
+        ) {
+            RevenueChart(
+                dailySummaries = analytics.dailySummaries,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
         
         Spacer(modifier = Modifier.height(16.dp))
         
         // Bar Chart (Progress Bars)
-        SimpleRevenueChart(
-            dailySummaries = analytics.dailySummaries,
-            modifier = Modifier.fillMaxWidth()
-        )
+        AnimatedChartContainer(
+            delayMillis = 500
+        ) {
+            SimpleRevenueChart(
+                dailySummaries = analytics.dailySummaries,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
         
         Spacer(modifier = Modifier.height(24.dp))
         
@@ -385,66 +377,6 @@ private fun MetricCard(
                 color = TextPrimary,
                 textAlign = TextAlign.Center
             )
-        }
-    }
-}
-
-@Composable
-private fun TopSellingProductsSection(products: List<TopSellingProduct>) {
-    Text(
-        text = "Top Selling Products",
-        fontFamily = BebasNeueFont(),
-        fontSize = FontSize.LARGE,
-        color = TextPrimary,
-        modifier = Modifier.padding(bottom = 12.dp)
-    )
-    
-    if (products.isEmpty()) {
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = Surface)
-        ) {
-            Text(
-                text = "No product data available",
-                modifier = Modifier.padding(16.dp),
-                color = TextPrimary.copy(alpha = 0.7f),
-                textAlign = TextAlign.Center
-            )
-        }
-    } else {
-        products.take(5).forEach { product ->
-            ProductItem(product = product)
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-    }
-}
-
-@Composable
-private fun ProductItem(product: TopSellingProduct) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = product.productName,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = TextPrimary,
-                    fontWeight = FontWeight.Medium
-                )
-                Text(
-                    text = "Units sold: ${product.unitsSold}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = TextPrimary.copy(alpha = 0.7f)
-                )
-            }
         }
     }
 }
