@@ -40,6 +40,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.kaaneneskpc.supplr.admin_panel.component.EnhancedTopSellingProducts
+import com.kaaneneskpc.supplr.admin_panel.component.MetricCardsRow
+import com.kaaneneskpc.supplr.admin_panel.component.RevenueChart
+import com.kaaneneskpc.supplr.admin_panel.component.SimpleRevenueChart
 import com.kaaneneskpc.supplr.data.domain.DashboardAnalytics
 import com.kaaneneskpc.supplr.data.domain.TopSellingProduct
 import com.kaaneneskpc.supplr.shared.component.ErrorCard
@@ -278,13 +282,36 @@ private fun DashboardContent(
             }
         }
         
-        // Key Metrics Row
-        KeyMetricsSection(analytics = analytics)
+        // Enhanced Key Metrics Row
+        MetricCardsRow(
+            totalRevenue = analytics.totalRevenue,
+            totalOrders = analytics.totalOrders,
+            averageOrderValue = analytics.averageOrderValue
+        )
         
         Spacer(modifier = Modifier.height(24.dp))
         
-        // Top Selling Products
-        TopSellingProductsSection(products = analytics.topSellingProducts)
+        // Line Chart (Custom Canvas)
+        RevenueChart(
+            dailySummaries = analytics.dailySummaries,
+            modifier = Modifier.fillMaxWidth()
+        )
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        // Bar Chart (Progress Bars)
+        SimpleRevenueChart(
+            dailySummaries = analytics.dailySummaries,
+            modifier = Modifier.fillMaxWidth()
+        )
+        
+        Spacer(modifier = Modifier.height(24.dp))
+        
+        // Enhanced Top Selling Products
+        EnhancedTopSellingProducts(
+            products = analytics.topSellingProducts,
+            modifier = Modifier.fillMaxWidth()
+        )
         
         Spacer(modifier = Modifier.height(24.dp))
         
