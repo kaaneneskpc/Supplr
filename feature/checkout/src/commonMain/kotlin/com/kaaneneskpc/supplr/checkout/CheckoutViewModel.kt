@@ -158,7 +158,7 @@ class CheckoutViewModel(
     }
 
     fun createPaymentIntent(
-        onSuccess: (String) -> Unit, // client_secret
+        onSuccess: (String) -> Unit,
         onError: (String) -> Unit,
     ) {
         viewModelScope.launch {
@@ -168,7 +168,6 @@ class CheckoutViewModel(
             )
             
             val totalAmount = savedStateHandle.get<String>("totalAmount")?.toDoubleOrNull() ?: 0.0
-            // Convert to cents for Stripe (multiply by 100)
             val amountInCents = (totalAmount * 100).toLong()
             
             val result = paymentRepository.createPaymentIntent(
@@ -248,10 +247,9 @@ class CheckoutViewModel(
             val result = paymentRepository.saveOrder(order)
             result.fold(
                 onSuccess = { orderId ->
-                    // Clear cart after successful order
                     customerRepository.deleteAllCartItems(
                         onSuccess = { onSuccess() },
-                        onError = { onSuccess() } // Still succeed even if cart clear fails
+                        onError = { onSuccess() }
                     )
                 },
                 onFailure = { error ->

@@ -45,7 +45,6 @@ fun AddReviewScreen(
     var comment by remember { mutableStateOf("") }
     var isSubmitting by remember { mutableStateOf(false) }
 
-    // Animation for the entire screen
     val animatedVisibility by animateFloatAsState(
         targetValue = 1f,
         animationSpec = tween(durationMillis = 600, easing = EaseOutCubic)
@@ -92,7 +91,6 @@ fun AddReviewScreen(
                         .scale(animatedVisibility),
                     verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
-                    // Header Section
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -123,7 +121,6 @@ fun AddReviewScreen(
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                // Title with gradient text effect
                                 Text(
                                     text = "✨ Rate this product",
                                     fontSize = FontSize.EXTRA_LARGE,
@@ -145,7 +142,6 @@ fun AddReviewScreen(
 
                                 Spacer(modifier = Modifier.height(24.dp))
 
-                                // Enhanced Interactive Rating Stars
                                 EnhancedRatingStars(
                                     rating = rating,
                                     onRatingChange = { rating = it },
@@ -154,13 +150,11 @@ fun AddReviewScreen(
 
                                 Spacer(modifier = Modifier.height(16.dp))
 
-                                // Rating Text with Animation
                                 AnimatedRatingText(rating = rating)
                             }
                         }
                     }
 
-                    // Comment Section
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -186,8 +180,7 @@ fun AddReviewScreen(
                                     color = TextPrimary,
                                     modifier = Modifier.weight(1f)
                                 )
-                                
-                                // Character Counter
+
                                 Surface(
                                     color = if (comment.length > 300) SurfaceError.copy(alpha = 0.1f) 
                                            else SurfaceBrand.copy(alpha = 0.1f),
@@ -205,7 +198,6 @@ fun AddReviewScreen(
 
                             Spacer(modifier = Modifier.height(16.dp))
 
-                            // Enhanced Text Field
                             OutlinedTextField(
                                 value = comment,
                                 onValueChange = { if (it.length <= 500) comment = it },
@@ -235,8 +227,7 @@ fun AddReviewScreen(
 
                             if (comment.isNotBlank()) {
                                 Spacer(modifier = Modifier.height(12.dp))
-                                
-                                // Writing Tips
+
                                 Surface(
                                     color = SurfaceBrand.copy(alpha = 0.1f),
                                     shape = RoundedCornerShape(12.dp)
@@ -255,7 +246,6 @@ fun AddReviewScreen(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    // Enhanced Submit Button
                     EnhancedSubmitButton(
                         isEnabled = rating > 0 && comment.isNotBlank() && !isSubmitting,
                         isSubmitting = isSubmitting,
@@ -298,8 +288,7 @@ private fun EnhancedRatingStars(
         repeat(maxRating) { index ->
             val starIndex = index + 1
             val isSelected = starIndex <= rating
-            
-            // Animation for each star
+
             val scale by animateFloatAsState(
                 targetValue = if (isSelected) 1.15f else 1f,
                 animationSpec = spring(
@@ -381,7 +370,6 @@ private fun EnhancedSubmitButton(
         modifier = modifier.scale(animatedScale)
     ) {
         if (isSubmitting) {
-            // Custom loading button with gradient
             Button(
                 onClick = { },
                 enabled = false,

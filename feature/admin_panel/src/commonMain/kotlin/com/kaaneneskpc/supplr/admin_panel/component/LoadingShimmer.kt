@@ -153,8 +153,7 @@ fun ProductListShimmer(
             }
             
             Spacer(modifier = Modifier.height(16.dp))
-            
-            // Product items shimmer
+
             repeat(5) {
                 ProductItemShimmer()
                 if (it < 4) {
@@ -171,17 +170,14 @@ private fun ProductItemShimmer() {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Rank badge shimmer
         LoadingShimmer(
             modifier = Modifier.size(32.dp)
         )
-        
-        // Product icon shimmer
+
         LoadingShimmer(
             modifier = Modifier.size(40.dp)
         )
-        
-        // Product details shimmer
+
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -198,8 +194,7 @@ private fun ProductItemShimmer() {
                     .height(12.dp)
             )
         }
-        
-        // Performance indicator shimmer
+
         LoadingShimmer(
             modifier = Modifier
                 .width(50.dp)
@@ -218,7 +213,6 @@ fun DashboardLoadingState(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        // Metric cards shimmer
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -229,8 +223,7 @@ fun DashboardLoadingState(
                 )
             }
         }
-        
-        // Charts shimmer
+
         ChartShimmer(
             modifier = Modifier.fillMaxWidth()
         )
@@ -238,8 +231,7 @@ fun DashboardLoadingState(
         ChartShimmer(
             modifier = Modifier.fillMaxWidth()
         )
-        
-        // Products shimmer
+
         ProductListShimmer(
             modifier = Modifier.fillMaxWidth()
         )

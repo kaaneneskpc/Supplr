@@ -230,16 +230,14 @@ private fun DrawScope.drawEnhancedLineChart(
         val y = padding + chartHeight - (summary.totalRevenue.toFloat() / maxValue.toFloat()) * chartHeight
         points.add(Offset(x, y))
     }
-    
-    // Create the line path
+
     if (points.isNotEmpty()) {
         path.moveTo(points.first().x, points.first().y)
         for (i in 1 until points.size) {
             path.lineTo(points[i].x, points[i].y)
         }
     }
-    
-    // Create the fill path
+
     if (points.isNotEmpty()) {
         fillPath.moveTo(points.first().x, padding + chartHeight)
         fillPath.lineTo(points.first().x, points.first().y)
@@ -249,14 +247,12 @@ private fun DrawScope.drawEnhancedLineChart(
         fillPath.lineTo(points.last().x, padding + chartHeight)
         fillPath.close()
     }
-    
-    // Draw fill area with gradient effect
+
     drawPath(
         path = fillPath,
         color = primaryColor.copy(alpha = 0.15f)
     )
-    
-    // Draw main line with better visibility
+
     drawPath(
         path = path,
         color = primaryColor,
@@ -266,8 +262,7 @@ private fun DrawScope.drawEnhancedLineChart(
             join = androidx.compose.ui.graphics.StrokeJoin.Round
         )
     )
-    
-    // Draw points with better visibility (after the line so they appear on top)
+
     points.forEach { point ->
         drawCircle(
             color = Color.White,
@@ -290,8 +285,7 @@ private fun DrawScope.drawPlaceholderChart(
 ) {
     val chartWidth = width - (padding * 2)
     val chartHeight = height - (padding * 2)
-    
-    // Draw sample data points
+
     val sampleData = listOf(0.2f, 0.7f, 0.4f, 0.9f, 0.6f)
     val path = Path()
     
@@ -336,8 +330,7 @@ private fun DrawScope.drawGridLines(
 ) {
     val chartWidth = width - (padding * 2)
     val chartHeight = height - (padding * 2)
-    
-    // Horizontal grid lines
+
     for (i in 0..4) {
         val y = padding + (i * chartHeight / 4)
         drawLine(
@@ -357,16 +350,14 @@ private fun DrawScope.drawAxes(
 ) {
     val chartWidth = width - (padding * 2)
     val chartHeight = height - (padding * 2)
-    
-    // X axis
+
     drawLine(
         color = color,
         start = Offset(padding, padding + chartHeight),
         end = Offset(padding + chartWidth, padding + chartHeight),
         strokeWidth = 2f
     )
-    
-    // Y axis
+
     drawLine(
         color = color,
         start = Offset(padding, padding),
@@ -420,7 +411,7 @@ fun SimpleRevenueChart(
                 EmptyRevenueState()
             } else {
                 HorizontalBarChart(
-                    data = dailySummaries.take(7), // Son 7 gün
+                    data = dailySummaries.take(7),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -461,17 +452,15 @@ private fun HorizontalBarItem(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Date
         Text(
-            text = summary.date.takeLast(5), // MM-DD format
+            text = summary.date.takeLast(5),
             style = MaterialTheme.typography.bodySmall,
             color = TextPrimary.copy(alpha = 0.7f),
             modifier = Modifier.width(50.dp)
         )
         
         Spacer(modifier = Modifier.width(8.dp))
-        
-        // Progress Bar
+
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -489,8 +478,7 @@ private fun HorizontalBarItem(
         }
         
         Spacer(modifier = Modifier.width(8.dp))
-        
-        // Value
+
         Text(
             text = "$${summary.totalRevenue.toInt()}",
             style = MaterialTheme.typography.bodySmall,

@@ -10,7 +10,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         _ app: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        // Configure Firebase
         FirebaseApp.configure()
         
         // Note: Stripe will be configured dynamically from Kotlin when needed

@@ -47,8 +47,6 @@ val sharedModule = module {
     single<ReviewRepository> { ReviewRepositoryImpl() }
     single<LocationRepository> { LocationRepositoryImpl() }
     single<PaymentRepository> { PaymentRepositoryImpl() }
-    
-    // Analytics Use Cases
     single { GetDashboardAnalyticsUseCase(get()) }
     single { GetUserStatisticsUseCase(get()) }
     viewModelOf(::AuthViewModel)

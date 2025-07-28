@@ -178,8 +178,7 @@ private fun EnhancedProductItem(
                 }
             }
         }
-        
-        // Performance Indicator
+
         PerformanceIndicator(unitsSold = product.unitsSold)
     }
 }

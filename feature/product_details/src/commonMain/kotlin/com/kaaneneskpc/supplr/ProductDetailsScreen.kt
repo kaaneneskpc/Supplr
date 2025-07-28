@@ -256,7 +256,6 @@ fun ProductDetailsScreen(
                             )
                         }
 
-                        // Reviews Section
                         Column(
                             modifier = Modifier
                                 .background(Surface)

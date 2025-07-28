@@ -118,20 +118,17 @@ class ProductDetailViewModel (
     fun loadReviewStats() {
         viewModelScope.launch {
             val productId = savedStateHandle.get<String>("id") ?: return@launch
-            
-            // Load average rating
+
             when (val avgRating = reviewRepository.getProductAverageRating(productId)) {
                 is RequestState.Success -> averageRating = avgRating.data
                 else -> {}
             }
-            
-            // Load review count
+
             when (val count = reviewRepository.getProductReviewCount(productId)) {
                 is RequestState.Success -> reviewCount = count.data
                 else -> {}
             }
-            
-            // Allow multiple reviews - always show write review button
+
             hasUserReviewed = false
         }
     }
@@ -151,7 +148,7 @@ class ProductDetailViewModel (
                     comment = comment,
                     onSuccess = {
                         onSuccess()
-                        loadReviewStats() // Refresh stats after adding review
+                        loadReviewStats()
                     },
                     onError = onError
                 )

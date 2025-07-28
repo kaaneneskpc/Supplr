@@ -262,8 +262,7 @@ private fun DashboardContent(
                 )
             }
         }
-        
-        // Enhanced Key Metrics Row
+
         AnimatedMetricCardsRow(
             totalRevenue = analytics.totalRevenue,
             totalOrders = analytics.totalOrders,
@@ -271,8 +270,7 @@ private fun DashboardContent(
         )
         
         Spacer(modifier = Modifier.height(24.dp))
-        
-        // Line Chart (Custom Canvas)
+
         AnimatedChartContainer(
             delayMillis = 300
         ) {
@@ -283,8 +281,7 @@ private fun DashboardContent(
         }
         
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // Bar Chart (Progress Bars)
+
         AnimatedChartContainer(
             delayMillis = 500
         ) {
@@ -295,16 +292,14 @@ private fun DashboardContent(
         }
         
         Spacer(modifier = Modifier.height(24.dp))
-        
-        // Enhanced Top Selling Products
+
         EnhancedTopSellingProducts(
             products = analytics.topSellingProducts,
             modifier = Modifier.fillMaxWidth()
         )
         
         Spacer(modifier = Modifier.height(24.dp))
-        
-        // User Statistics
+
         UserStatisticsSection(userStats = analytics.userStats)
     }
 }

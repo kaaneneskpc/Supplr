@@ -126,12 +126,11 @@ fun AdminPanelScreen(
                         actions = {
                             IconButton(onClick = navigateToStatistics) {
                                 Icon(
-                                    painter = painterResource(Resources.Icon.Book), // Analytics icon olarak Book kullanıyoruz
+                                    painter = painterResource(Resources.Icon.Book),
                                     contentDescription = "See Statistics",
                                     tint = IconPrimary
                                 )
                             }
-                            // Search Button
                             IconButton(onClick = { searchBarVisible = true }) {
                                 Icon(
                                     painter = painterResource(Resources.Icon.Search),

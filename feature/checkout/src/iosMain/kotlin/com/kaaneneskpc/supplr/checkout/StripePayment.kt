@@ -23,10 +23,8 @@ actual fun StripePaymentScreen(
     LaunchedEffect(clientSecret) {
         if (clientSecret.isNotEmpty()) {
             try {
-                // Configure Stripe with publishable key
                 configureStripe(Consts.STRIPE_PUBLISH_KEY)
-                
-                // Process payment
+
                 processStripePayment(
                     clientSecret = clientSecret,
                     onSuccess = { onPaymentSuccess(clientSecret) },
@@ -47,7 +45,7 @@ actual fun StripePaymentScreen(
     }
 }
 
-// Native iOS bridge functions
+
 @OptIn(ExperimentalForeignApi::class)
 private fun configureStripe(publishableKey: String) {
     NSLog("Configuring Stripe with key: $publishableKey")

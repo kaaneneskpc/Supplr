@@ -30,14 +30,11 @@ kotlin {
 
     sourceSets {
         androidMain.dependencies {
-            // Stripe Android SDK
             implementation(libs.stripe.android)
-            // Activity Compose for launcher
             implementation(libs.androidx.activity.compose)
         }
         iosMain.dependencies {
-            // iOS için şimdilik mock implementation kullanacağız
-            // Gerçek iOS Stripe entegrasyonu Swift Package Manager gerektirir
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)

@@ -18,7 +18,7 @@ fun RatingStars(
     rating: Float,
     maxRating: Int = 5,
     size: Dp = 20.dp,
-    activeColor: Color = Color(0xFFFFD700), // Gold color
+    activeColor: Color = Color(0xFFFFD700),
     inactiveColor: Color = Color(0xFFE0E0E0),
     modifier: Modifier = Modifier
 ) {
@@ -31,7 +31,6 @@ fun RatingStars(
             
             when {
                 starRating >= 1f -> {
-                    // Full star
                     Icon(
                         imageVector = Icons.Filled.Star,
                         contentDescription = "Full star",
@@ -40,7 +39,6 @@ fun RatingStars(
                     )
                 }
                 starRating >= 0.5f -> {
-                    // Half star (using filled star with partial opacity for now)
                     Icon(
                         imageVector = Icons.Filled.Star,
                         contentDescription = "Half star",
@@ -49,7 +47,6 @@ fun RatingStars(
                     )
                 }
                 else -> {
-                    // Empty star
                     Icon(
                         imageVector = Icons.Filled.Star,
                         contentDescription = "Empty star",

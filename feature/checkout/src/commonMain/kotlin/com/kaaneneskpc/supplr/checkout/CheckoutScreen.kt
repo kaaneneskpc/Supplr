@@ -40,8 +40,7 @@ fun CheckoutScreen(
     val checkoutViewModel = koinViewModel<CheckoutViewModel>()
     val screenState = checkoutViewModel.screenState
     val isFormValid = checkoutViewModel.isFormValid
-    
-    // Stripe payment state
+
     var clientSecret by remember { mutableStateOf("") }
     var showStripePayment by remember { mutableStateOf(false) }
 
@@ -102,7 +101,6 @@ fun CheckoutScreen(
                     onPhoneNumberChange = checkoutViewModel::updatePhoneNumber
                 )
                 Column {
-                    // Stripe Payment Button
                     SupplrButton(
                         text = if (screenState.isCreatingPaymentIntent) "Processing..." else "Pay with Card",
                         icon = Resources.Icon.Dollar,
@@ -121,8 +119,7 @@ fun CheckoutScreen(
                     )
                     
                     Spacer(modifier = Modifier.height(12.dp))
-                    
-                    // Pay on Delivery Button
+
                     SupplrButton(
                         text = "Pay on Delivery",
                         icon = Resources.Icon.ShoppingCart,
@@ -139,8 +136,7 @@ fun CheckoutScreen(
                             )
                         }
                     )
-                    
-                    // Show error if payment intent creation fails
+
                     screenState.paymentIntentError?.let { error ->
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
@@ -154,7 +150,6 @@ fun CheckoutScreen(
         }
     }
 
-    // Stripe Payment Screen
     if (showStripePayment && clientSecret.isNotEmpty()) {
         StripePaymentScreen(
             clientSecret = clientSecret,
@@ -176,7 +171,6 @@ fun CheckoutScreen(
             },
             onPaymentCanceled = {
                 showStripePayment = false
-                // User canceled, stay on checkout screen
             }
         )
     }
