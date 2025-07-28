@@ -20,7 +20,7 @@ import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.fonts.TextSecondary
 import com.kaaneneskpc.supplr.shared.util.RequestState
 
-internal const val DRAWER_ITEM = 5
+internal const val DRAWER_ITEM = 6
 
 @Composable
 fun CustomDrawer(
@@ -31,6 +31,7 @@ fun CustomDrawer(
     onAdminPanelClick: () -> Unit,
     onFavoritesClick: () -> Unit,
     onLocationsClick: () -> Unit,
+    onBlogClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -61,6 +62,7 @@ fun CustomDrawer(
                 onCardClick = {
                     when (it) {
                         DrawerItem.Profile -> onProfileClick()
+                        DrawerItem.Blog -> onBlogClick()
                         DrawerItem.ContactUs -> onContactUsClick()
                         DrawerItem.SignOut -> onSignOutClick()
                         DrawerItem.Favorites -> onFavoritesClick()

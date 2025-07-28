@@ -54,6 +54,7 @@ kotlin {
             implementation(project(":feature:payment_completed"))
             implementation(project(":feature:favorites"))
             implementation(project(":feature:locations"))
+            implementation(project(":feature:blog"))
         }
     }
 }

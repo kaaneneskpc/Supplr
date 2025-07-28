@@ -4,10 +4,12 @@ import com.kaaneneskpc.supplr.ProductDetailViewModel
 import com.kaaneneskpc.supplr.admin_panel.AdminDashboardViewModel
 import com.kaaneneskpc.supplr.admin_panel.AdminPanelViewModel
 import com.kaaneneskpc.supplr.auth.AuthViewModel
+import com.kaaneneskpc.supplr.blog.BlogViewModel
 import com.kaaneneskpc.supplr.cart.CartViewModel
 import com.kaaneneskpc.supplr.categories.category_search.CategorySearchViewModel
 import com.kaaneneskpc.supplr.checkout.CheckoutViewModel
 import com.kaaneneskpc.supplr.data.AdminRepositoryImpl
+import com.kaaneneskpc.supplr.data.BlogRepositoryImpl
 import com.kaaneneskpc.supplr.data.CustomerRepositoryImpl
 import com.kaaneneskpc.supplr.data.FavoritesRepositoryImpl
 import com.kaaneneskpc.supplr.data.OrderRepositoryImpl
@@ -16,6 +18,7 @@ import com.kaaneneskpc.supplr.data.ReviewRepositoryImpl
 import com.kaaneneskpc.supplr.data.LocationRepositoryImpl
 import com.kaaneneskpc.supplr.data.PaymentRepositoryImpl
 import com.kaaneneskpc.supplr.data.domain.AdminRepository
+import com.kaaneneskpc.supplr.data.domain.BlogRepository
 import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import com.kaaneneskpc.supplr.data.domain.FavoritesRepository
 import com.kaaneneskpc.supplr.data.domain.LocationRepository
@@ -42,6 +45,7 @@ val sharedModule = module {
     single<CustomerRepository> { CustomerRepositoryImpl() }
     single<AdminRepository> { AdminRepositoryImpl() }
     single<ProductRepository> { ProductRepositoryImpl() }
+    single<BlogRepository> { BlogRepositoryImpl() }
     single<FavoritesRepository> { FavoritesRepositoryImpl(get()) }
     single<OrderRepository> { OrderRepositoryImpl(get()) }
     single<ReviewRepository> { ReviewRepositoryImpl() }
@@ -63,6 +67,7 @@ val sharedModule = module {
     viewModelOf(::PaymentCompletedViewModel)
     viewModelOf(::FavoritesViewModel)
     viewModelOf(::LocationsViewModel)
+    viewModelOf(::BlogViewModel)
 }
 
 expect val targetModule: Module

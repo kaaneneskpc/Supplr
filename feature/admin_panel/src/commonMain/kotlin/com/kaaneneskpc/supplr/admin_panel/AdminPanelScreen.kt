@@ -48,6 +48,7 @@ fun AdminPanelScreen(
     navigateBack: () -> Unit,
     navigateToManageProduct: (String?) -> Unit,
     navigateToStatistics: () -> Unit,
+    navigateToBlogManagement: () -> Unit,
 ) {
     val adminPanelViewModel = koinViewModel<AdminPanelViewModel>()
     val products = adminPanelViewModel.filteredProducts.collectAsState()
@@ -65,45 +66,37 @@ fun AdminPanelScreen(
                         modifier = Modifier
                             .padding(horizontal = 12.dp)
                             .fillMaxWidth(),
-                        inputField = {
-                            SearchBarDefaults.InputField(
-                                modifier = Modifier.fillMaxWidth(),
-                                query = searchQuery,
-                                onQueryChange = adminPanelViewModel::updateSearchQuery,
-                                expanded = false,
-                                onExpandedChange = {},
-                                onSearch = {},
-                                placeholder = {
-                                    Text(
-                                        text = "Search here",
-                                        fontSize = FontSize.REGULAR,
-                                        color = TextPrimary
-                                    )
-                                },
-                                trailingIcon = {
-                                    IconButton(
-                                        modifier = Modifier.size(14.dp),
-                                        onClick = {
-                                            if (searchQuery.isNotEmpty()) adminPanelViewModel.updateSearchQuery("")
-                                            else searchBarVisible = false
-                                        }
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(Resources.Icon.Close),
-                                            contentDescription = "Close icon"
-                                        )
-                                    }
-                                }
-                            )
+                        query = searchQuery,
+                        onQueryChange = adminPanelViewModel::updateSearchQuery,
+                        onSearch = { searchBarVisible = false },
+                        active = false,
+                        onActiveChange = { searchBarVisible = it },
+                        placeholder = {
+                            Text(text = "Search products")
                         },
-                        colors = SearchBarColors(
+                        leadingIcon = {
+                            IconButton(onClick = { searchBarVisible = false }) {
+                                Icon(
+                                    painter = painterResource(Resources.Icon.BackArrow),
+                                    contentDescription = "Back Arrow icon",
+                                    tint = IconPrimary
+                                )
+                            }
+                        },
+                        colors = SearchBarDefaults.colors(
                             containerColor = SurfaceLighter,
-                            dividerColor = BorderIdle
-                        ),
-                        expanded = false,
-                        onExpandedChange = {},
-                        content = {}
-                    )
+                            dividerColor = BorderIdle,
+                            inputFieldColors = SearchBarDefaults.inputFieldColors(
+                                cursorColor = IconPrimary,
+                                focusedTextColor = TextPrimary,
+                                unfocusedTextColor = TextPrimary,
+                                focusedPlaceholderColor = TextPrimary,
+                                unfocusedPlaceholderColor = TextPrimary
+                            )
+                        )
+                    ) {
+
+                    }
                 } else {
                     TopAppBar(
                         title = {
@@ -124,9 +117,16 @@ fun AdminPanelScreen(
                             }
                         },
                         actions = {
-                            IconButton(onClick = navigateToStatistics) {
+                            IconButton(onClick = navigateToBlogManagement) {
                                 Icon(
                                     painter = painterResource(Resources.Icon.Book),
+                                    contentDescription = "Manage Blog",
+                                    tint = IconPrimary
+                                )
+                            }
+                            IconButton(onClick = navigateToStatistics) {
+                                Icon(
+                                    painter = painterResource(Resources.Icon.BarChart),
                                     contentDescription = "See Statistics",
                                     tint = IconPrimary
                                 )
