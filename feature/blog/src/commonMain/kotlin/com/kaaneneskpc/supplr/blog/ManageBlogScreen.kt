@@ -62,7 +62,6 @@ import com.kaaneneskpc.supplr.shared.fonts.SurfaceLighter
 import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.fonts.White
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,8 +74,8 @@ fun ManageBlogScreen(
     val formState = blogViewModel.articleFormState
     var tagInput by remember { mutableStateOf("") }
     var showImagePicker by remember { mutableStateOf(false) }
-
-    val photoPicker = koinInject<PhotoPickerBlog>()
+    
+    val photoPicker = remember { PhotoPickerBlog() }
     val isEditing = articleId != null
 
     // Load article for editing if articleId is provided
