@@ -47,7 +47,6 @@ kotlin {
             implementation(project(":feature:products_overview"))
             implementation(project(":feature:cart"))
             implementation(project(":feature:categories"))
-            implementation(project(":feature:blog"))
         }
     }
 }

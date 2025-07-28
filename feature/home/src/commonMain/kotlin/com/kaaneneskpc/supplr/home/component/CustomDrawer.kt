@@ -20,8 +20,6 @@ import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.fonts.TextSecondary
 import com.kaaneneskpc.supplr.shared.util.RequestState
 
-internal const val DRAWER_ITEM = 6
-
 @Composable
 fun CustomDrawer(
     customer: RequestState<Customer>,
@@ -30,8 +28,7 @@ fun CustomDrawer(
     onSignOutClick: () -> Unit,
     onAdminPanelClick: () -> Unit,
     onFavoritesClick: () -> Unit,
-    onLocationsClick: () -> Unit,
-    onBlogClick: () -> Unit,
+    onLocationsClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -56,13 +53,12 @@ fun CustomDrawer(
             fontSize = FontSize.REGULAR
         )
         Spacer(modifier = Modifier.height(50.dp))
-        DrawerItem.entries.take(DRAWER_ITEM).forEach {
+        DrawerItem.entries.filter { it != DrawerItem.Admin }.forEach {
             DrawerItemCard(
                 drawerItem = it,
                 onCardClick = {
                     when (it) {
                         DrawerItem.Profile -> onProfileClick()
-                        DrawerItem.Blog -> onBlogClick()
                         DrawerItem.ContactUs -> onContactUsClick()
                         DrawerItem.SignOut -> onSignOutClick()
                         DrawerItem.Favorites -> onFavoritesClick()

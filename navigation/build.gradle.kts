@@ -54,7 +54,6 @@ kotlin {
             implementation(project(":feature:contact_us"))
             implementation(project(":feature:favorites"))
             implementation(project(":feature:locations"))
-            implementation(project(":feature:blog"))
         }
     }
 }

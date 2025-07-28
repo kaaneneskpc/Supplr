@@ -13,9 +13,6 @@ import com.kaaneneskpc.supplr.profile.ProfileScreen
 import com.kaaneneskpc.supplr.shared.navigation.Screen
 import com.kaaneneskpc.supplr.admin_panel.AdminDashboardScreen
 import com.kaaneneskpc.supplr.admin_panel.AdminPanelScreen
-import com.kaaneneskpc.supplr.blog.BlogScreen
-import com.kaaneneskpc.supplr.blog.ArticleDetailScreen
-import com.kaaneneskpc.supplr.blog.ManageBlogScreen
 import com.kaaneneskpc.supplr.categories.category_search.CategorySearchScreen
 import com.kaaneneskpc.supplr.checkout.CheckoutScreen
 import com.kaaneneskpc.supplr.contact_us.ContactUsScreen
@@ -72,9 +69,6 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 },
                 navigateToLocations = {
                     navController.navigate(Screen.Locations)
-                },
-                navigateToBlog = {
-                    navController.navigate(Screen.Blog)
                 }
             )
         }
@@ -95,9 +89,6 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 },
                 navigateToStatistics = {
                     navController.navigate(Screen.AdminDashboard)
-                },
-                navigateToBlogManagement = {
-                    navController.navigate(Screen.ManageBlog())
                 }
             )
         }
@@ -219,38 +210,6 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 }
             )
         }
-
-        composable<Screen.Blog> {
-            BlogScreen(
-                navigateBack = {
-                    navController.navigateUp()
-                },
-                navigateToArticle = { articleId ->
-                    navController.navigate(Screen.ArticleDetail(articleId))
-                }
-            )
-        }
-
-        composable<Screen.ArticleDetail> {
-            val articleId = it.toRoute<Screen.ArticleDetail>().articleId
-            ArticleDetailScreen(
-                articleId = articleId,
-                navigateBack = {
-                    navController.navigateUp()
-                }
-            )
-        }
-
-        composable<Screen.ManageBlog> {
-            val articleId = it.toRoute<Screen.ManageBlog>().articleId
-            ManageBlogScreen(
-                articleId = articleId,
-                navigateBack = {
-                    navController.navigateUp()
-                }
-            )
-        }
-
     }
 
 }
