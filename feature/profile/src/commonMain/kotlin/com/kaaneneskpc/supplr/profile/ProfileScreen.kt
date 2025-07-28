@@ -16,7 +16,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.kaaneneskpc.supplr.shared.component.ErrorCard
 import com.kaaneneskpc.supplr.shared.component.InfoCard
 import com.kaaneneskpc.supplr.shared.component.LoadingCard
 import com.kaaneneskpc.supplr.shared.component.ProfileForm
@@ -74,7 +73,6 @@ fun ProfileScreen(
                     titleContentColor = TextPrimary,
                     actionIconContentColor = IconPrimary
                 )
-
             )
         }
     ) { paddingValues ->
@@ -95,8 +93,8 @@ fun ProfileScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 24.dp)
-                    .padding(top = 12.dp, bottom = 24.dp)
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 8.dp, bottom = 16.dp)
             ) {
                 screenReady.DisplayResult(
                     onLoading = { LoadingCard(modifier = Modifier.fillMaxSize()) },
@@ -120,20 +118,20 @@ fun ProfileScreen(
                                 phoneNumber = screenState.phoneNumber?.number,
                                 onPhoneNumberChange = profileViewModel::updatePhoneNumber,
                             )
-                            Spacer(modifier = Modifier.height(12.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
                             SupplrButton(
-                                text = "Update",
+                                text = "Update Profile",
                                 icon = Resources.Icon.Checkmark,
                                 enabled = isFormValid,
                                 onClick = {
                                     profileViewModel.updateCustomer(
-                                    onSuccess = {
-                                        messageBarState.addSuccess("Successfully updated!")
-                                    },
-                                    onError = { message ->
-                                        messageBarState.addError(message)
-                                    }
-                                )
+                                        onSuccess = {
+                                            messageBarState.addSuccess("Profile updated successfully!")
+                                        },
+                                        onError = { message ->
+                                            messageBarState.addError(message)
+                                        }
+                                    )
                                 }
                             )
                         }
