@@ -7,10 +7,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
@@ -83,32 +82,32 @@ fun AddReviewScreen(
                         )
                     )
             ) {
-                Column(
+                LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 20.dp, vertical = 16.dp)
-                        .verticalScroll(rememberScrollState())
                         .scale(animatedVisibility),
                     verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .shadow(
-                                elevation = 8.dp,
-                                shape = RoundedCornerShape(20.dp),
-                                spotColor = SurfaceBrand.copy(alpha = 0.25f)
-                            ),
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Surface
-                        )
-                    ) {
-                        Box(
+                    item {
+                        Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(
-                                    brush = Brush.linearGradient(
+                                .shadow(
+                                    elevation = 8.dp,
+                                    shape = RoundedCornerShape(20.dp),
+                                    spotColor = SurfaceBrand.copy(alpha = 0.25f)
+                                ),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = Surface
+                            )
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        brush = Brush.linearGradient(
                                         colors = listOf(
                                             SurfaceBrand.copy(alpha = 0.1f),
                                             Surface,
@@ -154,13 +153,15 @@ fun AddReviewScreen(
                             }
                         }
                     }
+                    }
 
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .shadow(
-                                elevation = 6.dp,
-                                shape = RoundedCornerShape(20.dp),
+                    item {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .shadow(
+                                    elevation = 6.dp,
+                                    shape = RoundedCornerShape(20.dp),
                                 spotColor = TextSecondary.copy(alpha = 0.2f)
                             ),
                         shape = RoundedCornerShape(20.dp),
@@ -244,28 +245,30 @@ fun AddReviewScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.weight(1f))
+                    item { Spacer(modifier = Modifier.height(24.dp)) }
 
-                    EnhancedSubmitButton(
-                        isEnabled = rating > 0 && comment.isNotBlank() && !isSubmitting,
-                        isSubmitting = isSubmitting,
-                        onClick = {
-                            isSubmitting = true
-                            productDetailViewModel.addReview(
-                                rating = rating,
-                                comment = comment,
-                                onSuccess = {
-                                    isSubmitting = false
-                                    messageBarState.addSuccess("🎉 Review submitted successfully!")
-                                    navigateBack()
-                                },
-                                onError = { message ->
-                                    isSubmitting = false
-                                    messageBarState.addError(message)
-                                }
-                            )
-                        }
-                    )
+                    item {
+                        EnhancedSubmitButton(
+                            isEnabled = rating > 0 && comment.isNotBlank() && !isSubmitting,
+                            isSubmitting = isSubmitting,
+                            onClick = {
+                                isSubmitting = true
+                                productDetailViewModel.addReview(
+                                    rating = rating,
+                                    comment = comment,
+                                    onSuccess = {
+                                        isSubmitting = false
+                                        messageBarState.addSuccess("🎉 Review submitted successfully!")
+                                        navigateBack()
+                                    },
+                                    onError = { message ->
+                                        isSubmitting = false
+                                        messageBarState.addError(message)
+                                    }
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }
