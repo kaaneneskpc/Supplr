@@ -9,8 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -245,62 +244,71 @@ private fun DashboardContent(
     analytics: DashboardAnalytics,
     isRefreshing: Boolean
 ) {
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
         if (isRefreshing) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
+            item {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        color = ButtonPrimary,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+            }
+        }
+
+        item {
+            AnimatedMetricCardsRow(
+                totalRevenue = analytics.totalRevenue,
+                totalOrders = analytics.totalOrders,
+                averageOrderValue = analytics.averageOrderValue
+            )
+        }
+
+        item { Spacer(modifier = Modifier.height(24.dp)) }
+
+        item {
+            AnimatedChartContainer(
+                delayMillis = 300
             ) {
-                CircularProgressIndicator(
-                    color = ButtonPrimary,
-                    modifier = Modifier.padding(8.dp)
+                RevenueChart(
+                    dailySummaries = analytics.dailySummaries,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
 
-        AnimatedMetricCardsRow(
-            totalRevenue = analytics.totalRevenue,
-            totalOrders = analytics.totalOrders,
-            averageOrderValue = analytics.averageOrderValue
-        )
-        
-        Spacer(modifier = Modifier.height(24.dp))
+        item { Spacer(modifier = Modifier.height(16.dp)) }
 
-        AnimatedChartContainer(
-            delayMillis = 300
-        ) {
-            RevenueChart(
-                dailySummaries = analytics.dailySummaries,
+        item {
+            AnimatedChartContainer(
+                delayMillis = 500
+            ) {
+                SimpleRevenueChart(
+                    dailySummaries = analytics.dailySummaries,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+
+        item { Spacer(modifier = Modifier.height(24.dp)) }
+
+        item {
+            EnhancedTopSellingProducts(
+                products = analytics.topSellingProducts,
                 modifier = Modifier.fillMaxWidth()
             )
         }
-        
-        Spacer(modifier = Modifier.height(16.dp))
 
-        AnimatedChartContainer(
-            delayMillis = 500
-        ) {
-            SimpleRevenueChart(
-                dailySummaries = analytics.dailySummaries,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-        
-        Spacer(modifier = Modifier.height(24.dp))
+        item { Spacer(modifier = Modifier.height(24.dp)) }
 
-        EnhancedTopSellingProducts(
-            products = analytics.topSellingProducts,
-            modifier = Modifier.fillMaxWidth()
-        )
-        
-        Spacer(modifier = Modifier.height(24.dp))
-
-        UserStatisticsSection(userStats = analytics.userStats)
+        item { UserStatisticsSection(userStats = analytics.userStats) }
     }
 }
 

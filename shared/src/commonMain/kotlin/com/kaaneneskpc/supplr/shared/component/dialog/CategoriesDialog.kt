@@ -5,7 +5,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,9 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -48,7 +47,6 @@ fun CategoriesDialog(
     onConfirmClick: (ProductCategory) -> Unit,
 ) {
     var selectedCategory by remember(category) { mutableStateOf(category) }
-    val scrollState = rememberScrollState()
     AlertDialog(
         containerColor = Surface,
         title = {
@@ -64,12 +62,10 @@ fun CategoriesDialog(
                     .fillMaxWidth()
                     .height(300.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(scrollState)
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    ProductCategory.entries.forEach { currentCategory ->
+                    items(ProductCategory.entries) { currentCategory ->
                         val animatedBackground by animateColorAsState(
                             targetValue = if (currentCategory == selectedCategory) currentCategory.color.copy(
                                 alpha = Alpha.TWENTY_PERCENT

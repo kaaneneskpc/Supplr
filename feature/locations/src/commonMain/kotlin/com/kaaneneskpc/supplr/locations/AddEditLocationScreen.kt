@@ -7,9 +7,8 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -102,78 +101,87 @@ fun AddEditLocationScreen(
                         )
                     )
             ) {
-                Column(
+                LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 20.dp, vertical = 16.dp)
-                        .verticalScroll(rememberScrollState())
                         .scale(animatedVisibility),
                     verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
-                    AddEditHeader(isEditMode = isEditMode)
+                    item { AddEditHeader(isEditMode = isEditMode) }
 
-                    AddressTitleSection(
-                        title = addEditState.title,
-                        onTitleChange = locationsViewModel::updateTitle,
-                        error = locationsViewModel.getValidationError("title")
-                    )
+                    item {
+                        AddressTitleSection(
+                            title = addEditState.title,
+                            onTitleChange = locationsViewModel::updateTitle,
+                            error = locationsViewModel.getValidationError("title")
+                        )
+                    }
 
-                    CategorySelectionSection(
-                        selectedCategory = addEditState.category,
-                        onCategoryChange = locationsViewModel::updateCategory
-                    )
+                    item {
+                        CategorySelectionSection(
+                            selectedCategory = addEditState.category,
+                            onCategoryChange = locationsViewModel::updateCategory
+                        )
+                    }
 
-                    AddressDetailsSection(
-                        fullAddress = addEditState.fullAddress,
-                        city = addEditState.city,
-                        state = addEditState.state,
-                        postalCode = addEditState.postalCode,
-                        country = addEditState.country,
-                        onFullAddressChange = locationsViewModel::updateFullAddress,
-                        onCityChange = locationsViewModel::updateCity,
-                        onStateChange = locationsViewModel::updateState,
-                        onPostalCodeChange = locationsViewModel::updatePostalCode,
-                        onCountryChange = locationsViewModel::updateCountry,
-                        fullAddressError = locationsViewModel.getValidationError("fullAddress"),
-                        cityError = locationsViewModel.getValidationError("city"),
-                        postalCodeError = locationsViewModel.getValidationError("postalCode")
-                    )
+                    item {
+                        AddressDetailsSection(
+                            fullAddress = addEditState.fullAddress,
+                            city = addEditState.city,
+                            state = addEditState.state,
+                            postalCode = addEditState.postalCode,
+                            country = addEditState.country,
+                            onFullAddressChange = locationsViewModel::updateFullAddress,
+                            onCityChange = locationsViewModel::updateCity,
+                            onStateChange = locationsViewModel::updateState,
+                            onPostalCodeChange = locationsViewModel::updatePostalCode,
+                            onCountryChange = locationsViewModel::updateCountry,
+                            fullAddressError = locationsViewModel.getValidationError("fullAddress"),
+                            cityError = locationsViewModel.getValidationError("city"),
+                            postalCodeError = locationsViewModel.getValidationError("postalCode")
+                        )
+                    }
 
-                    DefaultAddressSection(
-                        isDefault = addEditState.isDefault,
-                        onIsDefaultChange = locationsViewModel::updateIsDefault
-                    )
+                    item {
+                        DefaultAddressSection(
+                            isDefault = addEditState.isDefault,
+                            onIsDefaultChange = locationsViewModel::updateIsDefault
+                        )
+                    }
 
-                    Spacer(modifier = Modifier.weight(1f))
+                    item { Spacer(modifier = Modifier.height(24.dp)) }
 
-                    SubmitButton(
-                        isEditMode = isEditMode,
-                        isEnabled = locationsViewModel.isAddEditFormValid,
-                        isSubmitting = screenState.isAddingLocation || screenState.isUpdatingLocation,
-                        onClick = {
-                            if (isEditMode) {
-                                locationsViewModel.updateLocation(
-                                    onSuccess = {
-                                        messageBarState.addSuccess("✅ Address updated successfully!")
-                                        navigateBack()
-                                    },
-                                    onError = { error ->
-                                        messageBarState.addError(error)
-                                    }
-                                )
-                            } else {
-                                locationsViewModel.addLocation(
-                                    onSuccess = {
-                                        messageBarState.addSuccess("🎉 Address added successfully!")
-                                        navigateBack()
-                                    },
-                                    onError = { error ->
-                                        messageBarState.addError(error)
-                                    }
-                                )
+                    item {
+                        SubmitButton(
+                            isEditMode = isEditMode,
+                            isEnabled = locationsViewModel.isAddEditFormValid,
+                            isSubmitting = screenState.isAddingLocation || screenState.isUpdatingLocation,
+                            onClick = {
+                                if (isEditMode) {
+                                    locationsViewModel.updateLocation(
+                                        onSuccess = {
+                                            messageBarState.addSuccess("✅ Address updated successfully!")
+                                            navigateBack()
+                                        },
+                                        onError = { error ->
+                                            messageBarState.addError(error)
+                                        }
+                                    )
+                                } else {
+                                    locationsViewModel.addLocation(
+                                        onSuccess = {
+                                            messageBarState.addSuccess("🎉 Address added successfully!")
+                                            navigateBack()
+                                        },
+                                        onError = { error ->
+                                            messageBarState.addError(error)
+                                        }
+                                    )
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }

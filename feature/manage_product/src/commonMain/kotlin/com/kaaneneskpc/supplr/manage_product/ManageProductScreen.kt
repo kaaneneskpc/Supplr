@@ -16,11 +16,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
@@ -196,12 +195,12 @@ fun ManageProductScreen(
                     )
                     .imePadding()
             ) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
+                LazyColumn(
+                    modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
+                    item {
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -430,6 +429,8 @@ fun ManageProductScreen(
                         }
                     }
                     Spacer(modifier = Modifier.height(24.dp))
+                    }
+                    }
                 }
                 SupplrButton(
                     text = if (id == null) "Add new product"
