@@ -117,21 +117,33 @@
 
 ## 📱 Screenshots
 
-<!-- Add screenshots of key app screens here. Example: -->
-<!--
-### Analytics Dashboard
-![Analytics Dashboard](docs/screenshots/analytics_dashboard.png)
-### Revenue Charts
-![Revenue Charts](docs/screenshots/revenue_charts.png)
-### Home
-![Home](docs/screenshots/home.png)
-### Cart
-![Cart](docs/screenshots/cart.png)
-### Admin Panel
-![Admin Panel](docs/screenshots/admin_panel.png)
--->
+### Android
 
----
+ <img src="https://github.com/user-attachments/assets/bc5907bb-c8f6-4cd4-b6b1-6d59c4e90c61" height = "600px"/> | <img src="https://github.com/user-attachments/assets/12f4c573-fae3-44d6-a0ad-942c38fd4d53" height = "600px"/> | <img src="https://github.com/user-attachments/assets/59242749-0f9b-4583-b650-9ffe7430363b" height = "600px"/> | <img src="https://github.com/user-attachments/assets/6c2a6225-6d65-4068-bf1c-efaf5a9fd255" height = "600px"/> |  <img src="https://github.com/user-attachments/assets/e1d09288-1683-42fb-b063-4ca9bd4c0bda" height = "600px"/>  | <img src="https://github.com/user-attachments/assets/d63efe96-662c-4ced-b264-b2d66c2b4e14" height = "600px"/> |  <img src="https://github.com/user-attachments/assets/6c12e60d-2cb3-4b64-a346-8f823b9e44b3" height = "600px"/> |  <img src="https://github.com/user-attachments/assets/2e4fc889-adfb-4bc9-9f04-da994f8a18cf" height = "600px"/> |  <img src="https://github.com/user-attachments/assets/07e3b70a-1e9b-4253-8060-10a7d55ea7db" height = "600px"/> | <img height="600px" src="https://github.com/user-attachments/assets/ca4b806f-403d-4b8d-aef1-ef8460c7d897" />
+| <img height="600px" alt="Screenshot_20250809_183018" src="https://github.com/user-attachments/assets/ddf3c57f-e77a-4351-8f44-8e08cad2ea86" />
+| <img height="600px" alt="Screenshot_20250809_183028" src="https://github.com/user-attachments/assets/a15c6d0e-ee37-4789-86af-98c79e88cac7" />
+| <img height="600px" alt="Screenshot_20250809_183035" src="https://github.com/user-attachments/assets/927e3818-6777-45ee-9e15-fc71b0376210" />
+| <img height="600px" alt="Screenshot_20250809_182947" src="https://github.com/user-attachments/assets/b91f26e1-2762-4952-b6fa-bf04cb5c0981" />
+| <img height="600px" alt="Screenshot_20250809_182955" src="https://github.com/user-attachments/assets/fd77f96b-f085-4186-af54-d86721369259" />
+| <img height="600px" alt="Screenshot_20250809_183000" src="https://github.com/user-attachments/assets/5f15bce1-c808-4aa5-8eaf-eb07824b49fb" />
+
+### IOS
+
+<img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 33 32" src="https://github.com/user-attachments/assets/6d7aba7e-77f9-4e42-8f4b-854d4067119b" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 34 57" src="https://github.com/user-attachments/assets/9e439136-1356-4b46-b639-64cf27e7607a" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 34 33" src="https://github.com/user-attachments/assets/dfd10f80-c70e-408f-bdce-cfceafc2cb3a" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 34 24" src="https://github.com/user-attachments/assets/12ac722a-092c-4b9f-b788-c8e17bbab1b9" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 34 20" src="https://github.com/user-attachments/assets/baef8140-920f-4eec-bd85-0f19d31f72cc" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 34 16" src="https://github.com/user-attachments/assets/31916a60-d66b-490f-b5e4-fe5f941e2263" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 34 10" src="https://github.com/user-attachments/assets/c1da59eb-8073-4a7d-8162-e867c58c0fa5" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 34 05" src="https://github.com/user-attachments/assets/3500a168-ca52-4820-bade-e40dfea11503" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 33 56" src="https://github.com/user-attachments/assets/b5829429-6788-4687-95f5-0a7e11727adc" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 33 50" src="https://github.com/user-attachments/assets/c3ce53a6-104a-4fe6-be05-e4e1215f7af5" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 33 48" src="https://github.com/user-attachments/assets/e760c957-3152-439a-a90e-65084a24d9a4" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 33 45" src="https://github.com/user-attachments/assets/ab6b9129-29e5-49a8-a031-d3a98de4052b" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 33 35" src="https://github.com/user-attachments/assets/7d1d90a2-98b6-4cf6-8e39-3c6355d78a80" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 33 21" src="https://github.com/user-attachments/assets/7806dc19-2105-424b-b925-bd7a94c9ebac" />
+
 
 ## 🎉 Recent Updates
 
