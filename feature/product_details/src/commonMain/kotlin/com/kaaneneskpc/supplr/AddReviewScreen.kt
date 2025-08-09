@@ -108,51 +108,51 @@ fun AddReviewScreen(
                                     .fillMaxWidth()
                                     .background(
                                         brush = Brush.linearGradient(
-                                        colors = listOf(
-                                            SurfaceBrand.copy(alpha = 0.1f),
-                                            Surface,
-                                            SurfaceBrand.copy(alpha = 0.05f)
+                                            colors = listOf(
+                                                SurfaceBrand.copy(alpha = 0.1f),
+                                                Surface,
+                                                SurfaceBrand.copy(alpha = 0.05f)
+                                            )
                                         )
                                     )
-                                )
-                                .padding(24.dp)
-                        ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
+                                    .padding(24.dp)
                             ) {
-                                Text(
-                                    text = "✨ Rate this product",
-                                    fontSize = FontSize.EXTRA_LARGE,
-                                    fontWeight = FontWeight.Bold,
-                                    fontFamily = BebasNeueFont(),
-                                    color = TextPrimary,
-                                    textAlign = TextAlign.Center
-                                )
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = "✨ Rate this product",
+                                        fontSize = FontSize.EXTRA_LARGE,
+                                        fontWeight = FontWeight.Bold,
+                                        fontFamily = BebasNeueFont(),
+                                        color = TextPrimary,
+                                        textAlign = TextAlign.Center
+                                    )
 
-                                Spacer(modifier = Modifier.height(8.dp))
+                                    Spacer(modifier = Modifier.height(8.dp))
 
-                                Text(
-                                    text = "Your opinion matters to other customers",
-                                    fontSize = FontSize.SMALL,
-                                    fontFamily = RobotoCondensedFont(),
-                                    color = TextSecondary,
-                                    textAlign = TextAlign.Center
-                                )
+                                    Text(
+                                        text = "Your opinion matters to other customers",
+                                        fontSize = FontSize.SMALL,
+                                        fontFamily = RobotoCondensedFont(),
+                                        color = TextSecondary,
+                                        textAlign = TextAlign.Center
+                                    )
 
-                                Spacer(modifier = Modifier.height(24.dp))
+                                    Spacer(modifier = Modifier.height(24.dp))
 
-                                EnhancedRatingStars(
-                                    rating = rating,
-                                    onRatingChange = { rating = it },
-                                    size = 36.dp
-                                )
+                                    EnhancedRatingStars(
+                                        rating = rating,
+                                        onRatingChange = { rating = it },
+                                        size = 36.dp
+                                    )
 
-                                Spacer(modifier = Modifier.height(16.dp))
+                                    Spacer(modifier = Modifier.height(16.dp))
 
-                                AnimatedRatingText(rating = rating)
+                                    AnimatedRatingText(rating = rating)
+                                }
                             }
                         }
-                    }
                     }
 
                     item {
@@ -162,90 +162,96 @@ fun AddReviewScreen(
                                 .shadow(
                                     elevation = 6.dp,
                                     shape = RoundedCornerShape(20.dp),
-                                spotColor = TextSecondary.copy(alpha = 0.2f)
-                            ),
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(containerColor = Surface)
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(24.dp)
+                                    spotColor = TextSecondary.copy(alpha = 0.2f)
+                                ),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(containerColor = Surface)
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
+                            Column(
+                                modifier = Modifier.padding(24.dp)
                             ) {
-                                Text(
-                                    text = "💭 Share your thoughts",
-                                    fontSize = FontSize.LARGE,
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontFamily = BebasNeueFont(),
-                                    color = TextPrimary,
-                                    modifier = Modifier.weight(1f)
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "💭 Share your thoughts",
+                                        fontSize = FontSize.LARGE,
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontFamily = BebasNeueFont(),
+                                        color = TextPrimary,
+                                        modifier = Modifier.weight(1f)
+                                    )
+
+                                    Surface(
+                                        color = if (comment.length > 300) SurfaceError.copy(alpha = 0.1f)
+                                        else SurfaceBrand.copy(alpha = 0.1f),
+                                        shape = RoundedCornerShape(12.dp)
+                                    ) {
+                                        Text(
+                                            text = "${comment.length}/500",
+                                            fontSize = FontSize.SMALL,
+                                            fontFamily = RobotoCondensedFont(),
+                                            color = if (comment.length > 300) SurfaceError else TextSecondary,
+                                            modifier = Modifier.padding(
+                                                horizontal = 8.dp,
+                                                vertical = 4.dp
+                                            )
+                                        )
+                                    }
+                                }
+
+                                Spacer(modifier = Modifier.height(16.dp))
+
+                                OutlinedTextField(
+                                    value = comment,
+                                    onValueChange = { if (it.length <= 500) comment = it },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(140.dp),
+                                    placeholder = {
+                                        Text(
+                                            text = "What did you love about this product? Share details that would help other customers make their decision...",
+                                            color = TextSecondary.copy(alpha = 0.7f),
+                                            fontFamily = RobotoCondensedFont(),
+                                            fontSize = FontSize.SMALL
+                                        )
+                                    },
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedBorderColor = SurfaceBrand,
+                                        unfocusedBorderColor = BorderIdle,
+                                        focusedTextColor = TextPrimary,
+                                        unfocusedTextColor = TextPrimary,
+                                        cursorColor = SurfaceBrand,
+                                        focusedContainerColor = SurfaceBrand.copy(alpha = 0.05f),
+                                        unfocusedContainerColor = SurfaceLighter
+                                    ),
+                                    shape = RoundedCornerShape(16.dp),
+                                    maxLines = 6
                                 )
 
-                                Surface(
-                                    color = if (comment.length > 300) SurfaceError.copy(alpha = 0.1f) 
-                                           else SurfaceBrand.copy(alpha = 0.1f),
-                                    shape = RoundedCornerShape(12.dp)
-                                ) {
-                                    Text(
-                                        text = "${comment.length}/500",
-                                        fontSize = FontSize.SMALL,
-                                        fontFamily = RobotoCondensedFont(),
-                                        color = if (comment.length > 300) SurfaceError else TextSecondary,
-                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                                    )
-                                }
-                            }
+                                if (comment.isNotBlank()) {
+                                    Spacer(modifier = Modifier.height(12.dp))
 
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            OutlinedTextField(
-                                value = comment,
-                                onValueChange = { if (it.length <= 500) comment = it },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(140.dp),
-                                placeholder = {
-                                    Text(
-                                        text = "What did you love about this product? Share details that would help other customers make their decision...",
-                                        color = TextSecondary.copy(alpha = 0.7f),
-                                        fontFamily = RobotoCondensedFont(),
-                                        fontSize = FontSize.SMALL
-                                    )
-                                },
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = SurfaceBrand,
-                                    unfocusedBorderColor = BorderIdle,
-                                    focusedTextColor = TextPrimary,
-                                    unfocusedTextColor = TextPrimary,
-                                    cursorColor = SurfaceBrand,
-                                    focusedContainerColor = SurfaceBrand.copy(alpha = 0.05f),
-                                    unfocusedContainerColor = SurfaceLighter
-                                ),
-                                shape = RoundedCornerShape(16.dp),
-                                maxLines = 6
-                            )
-
-                            if (comment.isNotBlank()) {
-                                Spacer(modifier = Modifier.height(12.dp))
-
-                                Surface(
-                                    color = SurfaceBrand.copy(alpha = 0.1f),
-                                    shape = RoundedCornerShape(12.dp)
-                                ) {
-                                    Text(
-                                        text = "💡 Tip: Mention specific features, quality, or how it met your expectations",
-                                        fontSize = FontSize.EXTRA_SMALL,
-                                        fontFamily = RobotoCondensedFont(),
-                                        color = TextSecondary,
-                                        modifier = Modifier.padding(12.dp)
-                                    )
+                                    Surface(
+                                        color = SurfaceBrand.copy(alpha = 0.1f),
+                                        shape = RoundedCornerShape(12.dp)
+                                    ) {
+                                        Text(
+                                            text = "💡 Tip: Mention specific features, quality, or how it met your expectations",
+                                            fontSize = FontSize.EXTRA_SMALL,
+                                            fontFamily = RobotoCondensedFont(),
+                                            color = TextSecondary,
+                                            modifier = Modifier.padding(12.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
 
-                    item { Spacer(modifier = Modifier.height(24.dp)) }
+                    item {
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
 
                     item {
                         EnhancedSubmitButton(
@@ -435,11 +441,10 @@ private fun EnhancedSubmitButton(
         }
     }
 }
-
 private fun getRatingText(rating: Float): String {
     return when (rating.toInt()) {
         1 -> "😞 Poor"
-        2 -> "😐 Fair" 
+        2 -> "😐 Fair"
         3 -> "😊 Good"
         4 -> "😍 Very Good"
         5 -> "🤩 Excellent"

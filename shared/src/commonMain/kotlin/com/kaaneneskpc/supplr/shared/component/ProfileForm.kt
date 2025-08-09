@@ -90,187 +90,189 @@ fun ProfileForm(
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         item {
-        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .shadow(
-                    elevation = 8.dp,
-                    shape = RoundedCornerShape(24.dp)
-                ),
-            shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = SurfaceColor
-            )
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                CategoryBlueLighter.copy(alpha = 0.3f),
-                                SurfaceColor
-                            )
-                        )
-                    )
-                    .padding(vertical = 32.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Surface(
-                        modifier = Modifier.size(80.dp),
-                        shape = CircleShape,
-                        color = CategoryBlue.copy(alpha = 0.1f)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.AccountCircle,
-                            contentDescription = "Profile Avatar",
-                            modifier = Modifier
-                                .size(80.dp)
-                                .padding(12.dp),
-                            tint = CategoryBlue
-                        )
-                    }
-                    Text(
-                        text = "My Profile",
-                        style = MaterialTheme.typography.headlineSmall.copy(
-                            fontWeight = FontWeight.Bold,
-                            color = TextPrimary
-                        )
-                    )
-                    Text(
-                        text = "Manage your personal information",
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            color = TextPrimary.copy(alpha = 0.7f)
-                        )
-                    )
-                }
-            }
-        }
-
-        ProfileSection(
-            title = "Personal Information",
-            icon = Icons.Filled.Person
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    ProfileFieldWithIcon(
-                        modifier = Modifier.weight(1f),
-                        label = "First Name",
-                        value = firstName,
-                        onValueChange = onFirstNameChange,
-                        placeholder = "First Name",
-                        error = firstName.length !in 3..50,
-                        icon = Icons.Filled.Person
-                    )
-                    ProfileFieldWithIcon(
-                        modifier = Modifier.weight(1f),
-                        label = "Last Name",
-                        value = lastName,
-                        onValueChange = onLastNameChange,
-                        placeholder = "Last Name",
-                        error = lastName.length !in 3..50,
-                        icon = Icons.Filled.Person
-                    )
-                }
-                
-                ProfileFieldWithIcon(
-                    label = "E-Mail",
-                    value = email,
-                    onValueChange = {},
-                    placeholder = "E-Mail",
-                    enabled = false,
-                    icon = Icons.Filled.Email
-                )
-            }
-        }
-
-        ProfileSection(
-            title = "Contact Information",
-            icon = Icons.Filled.Phone
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Column {
-                    Text(
-                        text = "Phone Number",
-                        style = MaterialTheme.typography.labelLarge.copy(
-                            fontWeight = FontWeight.Medium,
-                            color = TextPrimary
+            Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(
+                            elevation = 8.dp,
+                            shape = RoundedCornerShape(24.dp)
                         ),
-                        modifier = Modifier.padding(bottom = 8.dp)
+                    shape = RoundedCornerShape(24.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = SurfaceColor
                     )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                Brush.verticalGradient(
+                                    colors = listOf(
+                                        CategoryBlueLighter.copy(alpha = 0.3f),
+                                        SurfaceColor
+                                    )
+                                )
+                            )
+                            .padding(vertical = 32.dp),
+                        contentAlignment = Alignment.Center
                     ) {
-                        AlertTextField(
-                            text = "+${country.dialCode}",
-                            icon = country.flag,
-                            onClick = { showCountryDialog = true }
-                        )
-                        CustomTextField(
-                            modifier = Modifier.weight(1f),
-                            value = phoneNumber ?: "",
-                            onValueChange = onPhoneNumberChange,
-                            placeholder = "Phone Number",
-                            error = phoneNumber.toString().length !in 5..30,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Surface(
+                                modifier = Modifier.size(80.dp),
+                                shape = CircleShape,
+                                color = CategoryBlue.copy(alpha = 0.1f)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.AccountCircle,
+                                    contentDescription = "Profile Avatar",
+                                    modifier = Modifier
+                                        .size(80.dp)
+                                        .padding(12.dp),
+                                    tint = CategoryBlue
+                                )
+                            }
+                            Text(
+                                text = "My Profile",
+                                style = MaterialTheme.typography.headlineSmall.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = TextPrimary
+                                )
+                            )
+                            Text(
+                                text = "Manage your personal information",
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    color = TextPrimary.copy(alpha = 0.7f)
+                                )
+                            )
+                        }
+                    }
+                }
+
+                ProfileSection(
+                    title = "Personal Information",
+                    icon = Icons.Filled.Person
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            ProfileFieldWithIcon(
+                                modifier = Modifier.weight(1f),
+                                label = "First Name",
+                                value = firstName,
+                                onValueChange = onFirstNameChange,
+                                placeholder = "First Name",
+                                error = firstName.length !in 3..50,
+                                icon = Icons.Filled.Person
+                            )
+                            ProfileFieldWithIcon(
+                                modifier = Modifier.weight(1f),
+                                label = "Last Name",
+                                value = lastName,
+                                onValueChange = onLastNameChange,
+                                placeholder = "Last Name",
+                                error = lastName.length !in 3..50,
+                                icon = Icons.Filled.Person
+                            )
+                        }
+
+                        ProfileFieldWithIcon(
+                            label = "E-Mail",
+                            value = email,
+                            onValueChange = {},
+                            placeholder = "E-Mail",
+                            enabled = false,
+                            icon = Icons.Filled.Email
                         )
                     }
                 }
-            }
-        }
 
-        ProfileSection(
-            title = "Address Information",
-            icon = Icons.Filled.LocationOn
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                ProfileFieldWithIcon(
-                    label = "City",
-                    value = city ?: "",
-                    onValueChange = onCityChange,
-                    placeholder = "City",
-                    error = city?.length !in 3..50,
-                    icon = Icons.Filled.LocationOn
-                )
+                ProfileSection(
+                    title = "Contact Information",
+                    icon = Icons.Filled.Phone
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Column {
+                            Text(
+                                text = "Phone Number",
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    fontWeight = FontWeight.Medium,
+                                    color = TextPrimary
+                                ),
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                AlertTextField(
+                                    text = "+${country.dialCode}",
+                                    icon = country.flag,
+                                    onClick = { showCountryDialog = true }
+                                )
+                                CustomTextField(
+                                    modifier = Modifier.weight(1f),
+                                    value = phoneNumber ?: "",
+                                    onValueChange = onPhoneNumberChange,
+                                    placeholder = "Phone Number",
+                                    error = phoneNumber.toString().length !in 5..30,
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                                )
+                            }
+                        }
+                    }
+                }
 
-                ProfileFieldWithIcon(
-                    label = "Postal Code",
-                    value = "${postalCode ?: ""}",
-                    onValueChange = { onPostalCodeChange(it.toIntOrNull()) },
-                    placeholder = "Postal Code",
-                    error = postalCode == null || postalCode.toString().length !in 3..8,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                ProfileSection(
+                    title = "Address Information",
                     icon = Icons.Filled.LocationOn
-                )
-                
-                ProfileFieldWithIcon(
-                    label = "Address",
-                    value = address ?: "",
-                    onValueChange = onAddressChange,
-                    placeholder = "Address",
-                    error = address?.length !in 3..50,
-                    icon = Icons.Filled.Home
-                )
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        ProfileFieldWithIcon(
+                            label = "City",
+                            value = city ?: "",
+                            onValueChange = onCityChange,
+                            placeholder = "City",
+                            error = city?.length !in 3..50,
+                            icon = Icons.Filled.LocationOn
+                        )
+
+                        ProfileFieldWithIcon(
+                            label = "Postal Code",
+                            value = "${postalCode ?: ""}",
+                            onValueChange = { onPostalCodeChange(it.toIntOrNull()) },
+                            placeholder = "Postal Code",
+                            error = postalCode == null || postalCode.toString().length !in 3..8,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            icon = Icons.Filled.LocationOn
+                        )
+
+                        ProfileFieldWithIcon(
+                            label = "Address",
+                            value = address ?: "",
+                            onValueChange = onAddressChange,
+                            placeholder = "Address",
+                            error = address?.length !in 3..50,
+                            icon = Icons.Filled.Home
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
             }
-        }
-        
-        Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
 
+
 @Composable
-private fun ProfileSection(
+fun ProfileSection(
     title: String,
     icon: ImageVector,
     content: @Composable () -> Unit
@@ -329,7 +331,7 @@ private fun ProfileSection(
 }
 
 @Composable
-private fun ProfileFieldWithIcon(
+fun ProfileFieldWithIcon(
     modifier: Modifier = Modifier,
     label: String,
     value: String,
