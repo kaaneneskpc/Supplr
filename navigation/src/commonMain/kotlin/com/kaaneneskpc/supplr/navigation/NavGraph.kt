@@ -20,6 +20,8 @@ import com.kaaneneskpc.supplr.favorites.FavoritesScreen
 import com.kaaneneskpc.supplr.locations.LocationsScreen
 import com.kaaneneskpc.supplr.locations.AddEditLocationScreen
 import com.kaaneneskpc.supplr.manage_product.ManageProductScreen
+import com.kaaneneskpc.supplr.order_history.OrderDetailScreen
+import com.kaaneneskpc.supplr.order_history.OrderHistoryScreen
 import com.kaaneneskpc.supplr.payment_completed.PaymentCompletedScreen
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
 
@@ -69,6 +71,9 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 },
                 navigateToLocations = {
                     navController.navigate(Screen.Locations)
+                },
+                navigateToOrderHistory = {
+                    navController.navigate(Screen.OrderHistory)
                 }
             )
         }
@@ -205,6 +210,27 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
             val id = it.toRoute<Screen.Review>().id
             AddReviewScreen(
                 productId = id.orEmpty(),
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable<Screen.OrderHistory> {
+            OrderHistoryScreen(
+                navigateBack = {
+                    navController.navigateUp()
+                },
+                navigateToOrderDetail = { orderId ->
+                    navController.navigate(Screen.OrderDetail(orderId))
+                }
+            )
+        }
+
+        composable<Screen.OrderDetail> {
+            val orderId = it.toRoute<Screen.OrderDetail>().orderId
+            OrderDetailScreen(
+                orderId = orderId,
                 navigateBack = {
                     navController.navigateUp()
                 }

@@ -18,5 +18,12 @@ data class Order(
     val currency: String = "usd",
     val paymentIntentId: String? = null,
     val status: String = "PENDING",
-    val shippingAddress: String = ""
-)
+    val shippingAddress: String = "",
+    val statusHistory: List<OrderStatusUpdate> = listOf(
+        OrderStatusUpdate(status = OrderStatus.PENDING, timestamp = Clock.System.now().toEpochMilliseconds())
+    ),
+    val estimatedDeliveryDate: Long? = null,
+    val trackingNumber: String? = null
+) {
+    fun getCurrentStatus(): OrderStatus = OrderStatus.fromString(status)
+}

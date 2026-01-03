@@ -31,6 +31,7 @@ import com.kaaneneskpc.supplr.favorites.FavoritesViewModel
 import com.kaaneneskpc.supplr.home.HomeViewModel
 import com.kaaneneskpc.supplr.locations.LocationsViewModel
 import com.kaaneneskpc.supplr.manage_product.ManageProductViewModel
+import com.kaaneneskpc.supplr.order_history.OrderHistoryViewModel
 import com.kaaneneskpc.supplr.payment_completed.PaymentCompletedViewModel
 import com.kaaneneskpc.supplr.products_overview.ProductsOverviewViewModel
 import com.kaaneneskpc.supplr.profile.ProfileViewModel
@@ -66,6 +67,7 @@ val sharedModule = module {
     viewModelOf(::PaymentCompletedViewModel)
     viewModelOf(::FavoritesViewModel)
     viewModelOf(::LocationsViewModel)
+    viewModelOf(::OrderHistoryViewModel)
 }
 
 expect val targetModule: Module

@@ -19,6 +19,10 @@ enum class DrawerItem(
         title = "Locations",
         icon = Resources.Icon.MapPin
     ),
+    OrderHistory(
+        title = "My Orders",
+        icon = Resources.Icon.ShoppingCart
+    ),
     ContactUs(
         title = "Contact Us",
         icon = Resources.Icon.Edit

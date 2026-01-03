@@ -10,5 +10,8 @@ data class CartItem(
     val id: String = Uuid.random().toHexString(),
     val productId: String,
     val flavor: String? = null,
-    val quantity: Int
+    val quantity: Int,
+    val title: String = "",
+    val thumbnail: String = "",
+    val price: Double = 0.0
 )

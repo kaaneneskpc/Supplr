@@ -79,12 +79,17 @@ class ProductDetailViewModel (
     ) {
         viewModelScope.launch {
             val productId = savedStateHandle.get<String>("id")
-            if (productId != null) {
+            val currentProduct = product.value
+            if (productId != null && currentProduct.isSuccess()) {
+                val productData = currentProduct.getSuccessData()
                 customerRepository.addItemToCard(
                     cartItem = CartItem(
                         productId = productId,
                         flavor = selectedFlavor,
-                        quantity = quantity
+                        quantity = quantity,
+                        title = productData.title,
+                        thumbnail = productData.thumbnail,
+                        price = productData.price
                     ),
                     onSuccess = onSuccess,
                     onError = onError

@@ -54,4 +54,10 @@ sealed class Screen {
 
     @Serializable
     data class Review(val id: String? = null): Screen()
+
+    @Serializable
+    data object OrderHistory : Screen()
+
+    @Serializable
+    data class OrderDetail(val orderId: String) : Screen()
 }

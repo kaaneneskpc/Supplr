@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -62,10 +61,8 @@ import com.kaaneneskpc.supplr.shared.fonts.IconPrimary
 import com.kaaneneskpc.supplr.shared.fonts.Resources
 import com.kaaneneskpc.supplr.shared.fonts.Surface
 import com.kaaneneskpc.supplr.shared.fonts.SurfaceBrand
-import com.kaaneneskpc.supplr.shared.fonts.SurfaceError
 import com.kaaneneskpc.supplr.shared.fonts.SurfaceLighter
 import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
-import com.kaaneneskpc.supplr.shared.fonts.TextWhite
 import com.kaaneneskpc.supplr.shared.navigation.Screen
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import com.kaaneneskpc.supplr.shared.util.getScreenWidth
@@ -85,6 +82,7 @@ fun HomeScreen(
     navigateToContactUs: () -> Unit,
     navigateToFavorites: () -> Unit,
     navigateToLocations: () -> Unit,
+    navigateToOrderHistory: () -> Unit,
 ) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState()
@@ -154,7 +152,8 @@ fun HomeScreen(
             },
             onAdminPanelClick = navigateToAdminPanel,
             onFavoritesClick = navigateToFavorites,
-            onLocationsClick = navigateToLocations
+            onLocationsClick = navigateToLocations,
+            onOrderHistoryClick = navigateToOrderHistory
         )
         Box(
             modifier = Modifier
