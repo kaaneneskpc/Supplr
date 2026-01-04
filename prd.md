@@ -41,16 +41,17 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
     - cart/        : Sepet yönetimi.
     - home/        : Ana ekran ve navigasyon.
     - profile/     : Kullanıcı profil yönetimi.
-    - admin_panel/ : 📊 Admin analytics dashboard, interaktif grafikler, iş metrikleri.
+    - admin_panel/ : 📊 Admin analytics dashboard, interaktif grafikler, iş metrikleri, **sipariş yönetimi**.
     - manage_product/: Admin için ürün ekleme, düzenleme ve silme işlemleri.
     - product_details/: Ürün detayları.
     - products_overview/: Ana ekranda yeni ve indirimli ürünlerin öne çıkarıldığı ürün listeleme.
     - payment_completed/: Sipariş tamamlandı ekranı ve sipariş sonrası işlemler.
     - checkout/       : Ödeme işlemleri ve **Stripe entegrasyonu**.
     - categories/: Kategori yönetimi.
-    - favorites/      : Kullanıcının favori ürünlerini yönettiği ekran ve iş mantığı.
+    - favorites/      : Kullanıcının favori ürünlerini yönetdiği ekran ve iş mantığı.
     - locations/      : Kullanıcı adres yönetimi, ekleme/düzenleme, kategorizasyon (Home, Work, Other).
     - contact_us/     : İletişim sayfası.
+    - order_history/  : 📦 Kullanıcı sipariş geçmişi, sipariş detayları ve durum takibi.
 - data/            : Veri katmanı, repository ve servisler.
 - shared/          : Ortak domain modelleri, util, constantlar.
 - di/              : Dependency injection modülleri (Koin).
@@ -81,7 +82,7 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 
 - **Domain Layer (shared/domain/):**
   - Temel iş modelleri (Product, Customer, CartItem, **Favorite**, **Location**, **PaymentIntent**, **Order**, **DashboardAnalytics**, **DailySummary**, **TopSellingProduct** vs.).
-  - Repository arayüzleri (ProductRepository, **FavoritesRepository**, **LocationRepository**, **PaymentRepository**, **AdminRepository** ...)
+  - Repository arayüzleri (ProductRepository, **FavoritesRepository**, **LocationRepository**, **PaymentRepository**, **AdminRepository**, **OrderRepository** ...)
   - **Analytics Models:** Dashboard metrikleri ve analytics veri yapıları.
   - **Kullanılan Teknolojiler:**
     - Kotlin Multiplatform
@@ -276,6 +277,21 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
   - Date range filtering
   - Animated components
   - Loading states ve error handling
+
+- **🛠️ Admin Sipariş Yönetimi (admin_panel - Order Management):**
+  - Tüm siparişleri görüntüleme ve arama
+  - Sipariş durumu güncelleme (PENDING → CONFIRMED → PREPARING → SHIPPED → DELIVERED)
+  - Sipariş iptal etme (delivered ve cancelled hariç)
+  - Sipariş detayları görüntüleme
+  - Status timeline ile sipariş takibi
+  - Role-based yetkilendirme
+
+- **📦 Sipariş Geçmişi (order_history):**
+  - Kullanıcıya özel sipariş listeleme
+  - Sipariş detayları görüntüleme
+  - Sipariş durum takibi
+  - Order status timeline
+  - Modern UI ile sipariş kartları
 
 - **Ürün Yönetimi (manage_product):** Ürün ekleme, güncelleme ve silme işlemleri.
 - **Ürünler Genel Bakış (products_overview):** Ana ekranda yeni ve indirimli ürünlerin listelenmesi.

@@ -29,6 +29,7 @@
 - 🗺️ **Location Management**: Address management with categories (Home, Work, Other)
 - 💳 **Stripe Payment Integration**: Real PaymentSheet (Android) / Simulated (iOS)
 - 🔔 **Push Notification Support**: Personalized notifications
+- 📦 **Order History**: View and track all past orders with detailed status
 
 ### 📊 Admin Features
 - 🛠️ **Admin Panel**: Comprehensive product and analytics management
@@ -41,6 +42,7 @@
 - 🎨 **Interactive Charts**: Custom Canvas-based charts with animations
 - 📱 **Responsive Design**: Optimized for all screen sizes
 - 🔐 **Secure Access**: Role-based authentication and Firestore security rules
+- 🛠️ **Order Management**: View all orders, update status, cancel orders (except delivered)
 
 ### 🏗️ Technical Features
 - 🔐 **Firebase Authentication & Firestore**
@@ -71,6 +73,7 @@
     - favorites/         : Favorites screen and logic.
     - locations/         : User address management with categories.
     - checkout/          : Payment processing with Stripe integration.
+    - order_history/     : 📦 Customer order history and tracking.
 - data/            : Data layer, repositories, and services.
 - shared/          : Shared domain models, utils, constants.
 - di/              : Dependency injection modules (Koin).
@@ -147,7 +150,17 @@
 
 ## 🎉 Recent Updates
 
-### 📊 Analytics Dashboard (Latest)
+### 🛠️ Admin Order Management & Order History (Latest)
+- **Admin Order Management** - View and manage all customer orders
+- **Order Status Updates** - Progress orders through PENDING → CONFIRMED → PREPARING → SHIPPED → DELIVERED
+- **Order Cancellation** - Cancel orders (except delivered/cancelled)
+- **Order Detail View** - Comprehensive order details with status timeline
+- **Customer Order History** - Users can view their order history and track status
+- **Real-time Updates** - Live order status synchronization
+- **Status Timeline** - Visual order progress tracking
+- **Modern UI** - Consistent design with existing admin panel
+
+### 📊 Analytics Dashboard
 - **Interactive Revenue Charts** with custom Canvas drawing
 - **Real-time Business Metrics** (revenue, orders, average order value)
 - **Enhanced Line Charts** with grid lines, axes, and point connections
