@@ -48,6 +48,7 @@ fun AdminPanelScreen(
     navigateBack: () -> Unit,
     navigateToManageProduct: (String?) -> Unit,
     navigateToStatistics: () -> Unit,
+    navigateToOrders: () -> Unit,
 ) {
     val adminPanelViewModel = koinViewModel<AdminPanelViewModel>()
     val products = adminPanelViewModel.filteredProducts.collectAsState()
@@ -124,6 +125,13 @@ fun AdminPanelScreen(
                             }
                         },
                         actions = {
+                            IconButton(onClick = navigateToOrders) {
+                                Icon(
+                                    painter = painterResource(Resources.Icon.ShoppingCart),
+                                    contentDescription = "Manage Orders",
+                                    tint = IconPrimary
+                                )
+                            }
                             IconButton(onClick = navigateToStatistics) {
                                 Icon(
                                     painter = painterResource(Resources.Icon.Book),

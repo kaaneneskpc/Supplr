@@ -14,6 +14,7 @@ interface OrderRepository {
     )
     fun getOrdersByCustomerId(): Flow<RequestState<List<Order>>>
     fun getOrderById(orderId: String): Flow<RequestState<Order?>>
+    fun getAllOrders(): Flow<RequestState<List<Order>>>
     suspend fun updateOrderStatus(
         orderId: String,
         newStatus: OrderStatus,

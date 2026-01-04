@@ -1,7 +1,9 @@
-package com.kaaneneskpc.supplr.order_history
+package com.kaaneneskpc.supplr.admin_panel
 
+import ContentWithMessageBar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,12 +16,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -29,6 +35,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,36 +43,44 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.kaaneneskpc.supplr.order_history.component.OrderStatusBadge
-import com.kaaneneskpc.supplr.order_history.component.OrderStatusTimeline
 import com.kaaneneskpc.supplr.shared.component.InfoCard
 import com.kaaneneskpc.supplr.shared.component.LoadingCard
+import com.kaaneneskpc.supplr.shared.domain.Order
+import com.kaaneneskpc.supplr.shared.domain.OrderStatus
 import com.kaaneneskpc.supplr.shared.fonts.BebasNeueFont
 import com.kaaneneskpc.supplr.shared.fonts.BorderIdle
 import com.kaaneneskpc.supplr.shared.fonts.FontSize
 import com.kaaneneskpc.supplr.shared.fonts.IconPrimary
 import com.kaaneneskpc.supplr.shared.fonts.Resources
 import com.kaaneneskpc.supplr.shared.fonts.Surface
+import com.kaaneneskpc.supplr.shared.fonts.SurfaceError
 import com.kaaneneskpc.supplr.shared.fonts.SurfaceLighter
+import com.kaaneneskpc.supplr.shared.fonts.SurfaceSecondary
 import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.fonts.TextSecondary
+import com.kaaneneskpc.supplr.shared.fonts.TextWhite
 import com.kaaneneskpc.supplr.shared.util.DisplayResult
 import com.kaaneneskpc.supplr.shared.util.formatDate
 import com.kaaneneskpc.supplr.shared.util.formatPrice
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
+import rememberMessageBarState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OrderDetailScreen(
+fun AdminOrderDetailScreen(
     orderId: String,
     navigateBack: () -> Unit
 ) {
-    val viewModel = koinViewModel<OrderHistoryViewModel>()
+    val viewModel = koinViewModel<AdminOrdersViewModel>()
     val orderState = viewModel.selectedOrderState
+    val isUpdating = viewModel.isUpdating
+    val messageBarState = rememberMessageBarState()
+
     LaunchedEffect(orderId) {
         viewModel.loadOrderById(orderId)
     }
+
     Scaffold(
         containerColor = Surface,
         topBar = {
@@ -97,11 +112,14 @@ fun OrderDetailScreen(
             )
         }
     ) { paddingValues ->
-        Column(
+        ContentWithMessageBar(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
+            messageBarState = messageBarState,
+            errorMaxLines = 2,
+            contentBackgroundColor = Color.Transparent
         ) {
             orderState.DisplayResult(
                 onLoading = {
@@ -115,35 +133,15 @@ fun OrderDetailScreen(
                             subtitle = "This order does not exist."
                         )
                     } else {
+                        val canModify = viewModel.canModifyOrder(order)
+                        val nextStatus = viewModel.getNextStatus(order.getCurrentStatus())
+
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             item {
-                                OrderSummaryCard(
-                                    orderId = order.orderId,
-                                    createdAt = order.createdAt,
-                                    status = order.getCurrentStatus(),
-                                    totalAmount = order.totalAmount,
-                                    trackingNumber = order.trackingNumber
-                                )
-                            }
-                            item {
-                                SectionTitle(title = "Order Status")
-                            }
-                            item {
-                                Card(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    colors = CardDefaults.cardColors(containerColor = SurfaceLighter),
-                                    shape = RoundedCornerShape(12.dp)
-                                ) {
-                                    OrderStatusTimeline(
-                                        statusHistory = order.statusHistory,
-                                        modifier = Modifier
-                                            .padding(16.dp)
-                                            .height(350.dp)
-                                    )
-                                }
+                                OrderInfoCard(order = order)
                             }
                             item {
                                 SectionTitle(title = "Items (${order.items.sumOf { it.quantity }})")
@@ -175,6 +173,44 @@ fun OrderDetailScreen(
                                     }
                                 }
                             }
+                            if (canModify) {
+                                item {
+                                    SectionTitle(title = "Actions")
+                                }
+                                item {
+                                    ActionButtons(
+                                        nextStatus = nextStatus,
+                                        isUpdating = isUpdating,
+                                        onUpdateStatus = {
+                                            if (nextStatus != null) {
+                                                viewModel.updateOrderStatus(
+                                                    orderId = order.orderId,
+                                                    newStatus = nextStatus,
+                                                    onSuccess = {
+                                                        messageBarState.addSuccess("Status updated to ${nextStatus.displayName}")
+                                                        viewModel.loadOrderById(orderId)
+                                                    },
+                                                    onError = { error ->
+                                                        messageBarState.addError(error)
+                                                    }
+                                                )
+                                            }
+                                        },
+                                        onCancelOrder = {
+                                            viewModel.cancelOrder(
+                                                orderId = order.orderId,
+                                                onSuccess = {
+                                                    messageBarState.addSuccess("Order cancelled")
+                                                    viewModel.loadOrderById(orderId)
+                                                },
+                                                onError = { error ->
+                                                    messageBarState.addError(error)
+                                                }
+                                            )
+                                        }
+                                    )
+                                }
+                            }
                             item {
                                 Spacer(modifier = Modifier.height(24.dp))
                             }
@@ -194,13 +230,18 @@ fun OrderDetailScreen(
 }
 
 @Composable
-private fun OrderSummaryCard(
-    orderId: String,
-    createdAt: Long,
-    status: com.kaaneneskpc.supplr.shared.domain.OrderStatus,
-    totalAmount: Double,
-    trackingNumber: String?
-) {
+private fun OrderInfoCard(order: Order) {
+    val status = order.getCurrentStatus()
+    val successGreen = Color(0xFF4CAF50)
+    val statusColor = when (status) {
+        OrderStatus.PENDING -> SurfaceSecondary
+        OrderStatus.CONFIRMED -> successGreen
+        OrderStatus.PREPARING -> successGreen
+        OrderStatus.SHIPPED -> successGreen
+        OrderStatus.DELIVERED -> successGreen
+        OrderStatus.CANCELLED -> SurfaceError
+    }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = SurfaceLighter),
@@ -217,20 +258,33 @@ private fun OrderSummaryCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Order #${orderId.take(8)}",
+                    text = "Order #${order.orderId.take(8)}",
                     fontSize = FontSize.REGULAR,
                     fontWeight = FontWeight.Bold,
                     color = TextPrimary
                 )
-                OrderStatusBadge(status = status)
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(statusColor)
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "${status.icon} ${status.displayName}",
+                        fontSize = FontSize.EXTRA_SMALL,
+                        color = TextWhite,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(8.dp))
             HorizontalDivider(color = BorderIdle)
             Spacer(modifier = Modifier.height(8.dp))
-            InfoRow(label = "Date", value = formatDate(createdAt))
-            InfoRow(label = "Total", value = "$${formatPrice(totalAmount)}")
-            if (!trackingNumber.isNullOrBlank()) {
-                InfoRow(label = "Tracking Number", value = trackingNumber)
+            InfoRow(label = "Date", value = formatDate(order.createdAt))
+            InfoRow(label = "Customer ID", value = order.customerId.take(16) + "...")
+            InfoRow(label = "Total", value = "$${formatPrice(order.totalAmount)}")
+            if (!order.trackingNumber.isNullOrBlank()) {
+                InfoRow(label = "Tracking Number", value = order.trackingNumber.orEmpty())
             }
         }
     }
@@ -324,3 +378,65 @@ private fun OrderItemCard(
         }
     }
 }
+
+@Composable
+private fun ActionButtons(
+    nextStatus: OrderStatus?,
+    isUpdating: Boolean,
+    onUpdateStatus: () -> Unit,
+    onCancelOrder: () -> Unit
+) {
+    val successGreen = Color(0xFF4CAF50)
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = SurfaceLighter),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            if (nextStatus != null) {
+                Button(
+                    onClick = onUpdateStatus,
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = !isUpdating,
+                    colors = ButtonDefaults.buttonColors(containerColor = successGreen),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    if (isUpdating) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            color = TextWhite,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text(
+                            text = "Update to: ${nextStatus.displayName}",
+                            color = TextWhite,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+            }
+            OutlinedButton(
+                onClick = onCancelOrder,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isUpdating,
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = SurfaceError),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(
+                    text = "Cancel Order",
+                    color = SurfaceError,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+    }
+}
+
+

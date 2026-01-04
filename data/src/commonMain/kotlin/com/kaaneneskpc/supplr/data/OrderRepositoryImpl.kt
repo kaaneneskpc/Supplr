@@ -68,7 +68,7 @@ class OrderRepositoryImpl(private val customerRepository: CustomerRepository) : 
                                     estimatedDeliveryDate = document.get("estimatedDeliveryDate"),
                                     trackingNumber = document.get("trackingNumber")
                                 )
-                            } catch (e: Exception) {
+                            } catch (_: Exception) {
                                 null
                             }
                         }.sortedByDescending { it.createdAt }
@@ -121,6 +121,40 @@ class OrderRepositoryImpl(private val customerRepository: CustomerRepository) : 
             }
         } catch (e: Exception) {
             send(RequestState.Error("Error while fetching order: ${e.message}"))
+        }
+    }
+
+    override fun getAllOrders(): Flow<RequestState<List<Order>>> = channelFlow {
+        try {
+            val database = Firebase.firestore
+            database.collection("order")
+                .snapshots
+                .collectLatest { querySnapshot ->
+                    val orders = querySnapshot.documents.mapNotNull { document ->
+                        try {
+                            Order(
+                                orderId = document.id,
+                                customerId = document.get("customerId") ?: "",
+                                items = document.get("items") ?: emptyList(),
+                                totalAmount = document.get("totalAmount") ?: 0.0,
+                                createdAt = document.get("createdAt") ?: 0L,
+                                token = document.get("token"),
+                                currency = document.get("currency") ?: "usd",
+                                paymentIntentId = document.get("paymentIntentId"),
+                                status = document.get("status") ?: "PENDING",
+                                shippingAddress = document.get("shippingAddress") ?: "",
+                                statusHistory = document.get("statusHistory") ?: emptyList(),
+                                estimatedDeliveryDate = document.get("estimatedDeliveryDate"),
+                                trackingNumber = document.get("trackingNumber")
+                            )
+                        } catch (_: Exception) {
+                            null
+                        }
+                    }.sortedByDescending { it.createdAt }
+                    send(RequestState.Success(orders))
+                }
+        } catch (e: Exception) {
+            send(RequestState.Error("Error while fetching all orders: ${e.message}"))
         }
     }
 

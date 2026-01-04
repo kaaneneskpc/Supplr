@@ -30,10 +30,8 @@ import com.kaaneneskpc.supplr.shared.fonts.SurfaceSecondary
 import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.fonts.TextSecondary
 import com.kaaneneskpc.supplr.shared.fonts.TextWhite
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import kotlin.math.roundToInt
+import com.kaaneneskpc.supplr.shared.util.formatDate
+import com.kaaneneskpc.supplr.shared.util.formatPrice
 
 @Composable
 fun OrderCard(
@@ -125,25 +123,4 @@ fun OrderStatusBadge(
             fontWeight = FontWeight.Medium
         )
     }
-}
-
-private fun formatDate(timestamp: Long): String {
-    return try {
-        val instant = Instant.fromEpochMilliseconds(timestamp)
-        val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-        val months = listOf(
-            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-        )
-        "${months[localDateTime.monthNumber - 1]} ${localDateTime.dayOfMonth}, ${localDateTime.year}"
-    } catch (_: Exception) {
-        "Unknown date"
-    }
-}
-
-fun formatPrice(price: Double): String {
-    val rounded = (price * 100).roundToInt() / 100.0
-    val intPart = rounded.toLong()
-    val decPart = ((rounded - intPart) * 100).roundToInt()
-    return "$intPart.${decPart.toString().padStart(2, '0')}"
 }

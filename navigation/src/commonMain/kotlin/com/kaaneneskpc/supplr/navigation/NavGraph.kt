@@ -12,6 +12,8 @@ import com.kaaneneskpc.supplr.home.HomeScreen
 import com.kaaneneskpc.supplr.profile.ProfileScreen
 import com.kaaneneskpc.supplr.shared.navigation.Screen
 import com.kaaneneskpc.supplr.admin_panel.AdminDashboardScreen
+import com.kaaneneskpc.supplr.admin_panel.AdminOrderDetailScreen
+import com.kaaneneskpc.supplr.admin_panel.AdminOrdersScreen
 import com.kaaneneskpc.supplr.admin_panel.AdminPanelScreen
 import com.kaaneneskpc.supplr.categories.category_search.CategorySearchScreen
 import com.kaaneneskpc.supplr.checkout.CheckoutScreen
@@ -94,6 +96,9 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 },
                 navigateToStatistics = {
                     navController.navigate(Screen.AdminDashboard)
+                },
+                navigateToOrders = {
+                    navController.navigate(Screen.AdminOrders)
                 }
             )
         }
@@ -108,6 +113,25 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
         }
         composable<Screen.AdminDashboard> {
             AdminDashboardScreen(
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+        composable<Screen.AdminOrders> {
+            AdminOrdersScreen(
+                navigateBack = {
+                    navController.navigateUp()
+                },
+                navigateToOrderDetail = { orderId ->
+                    navController.navigate(Screen.AdminOrderDetail(orderId))
+                }
+            )
+        }
+        composable<Screen.AdminOrderDetail> {
+            val orderId = it.toRoute<Screen.AdminOrderDetail>().orderId
+            AdminOrderDetailScreen(
+                orderId = orderId,
                 navigateBack = {
                     navController.navigateUp()
                 }
