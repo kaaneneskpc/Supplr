@@ -129,6 +129,9 @@
 | <img height="600px" alt="Screenshot_20250809_182947" src="https://github.com/user-attachments/assets/b91f26e1-2762-4952-b6fa-bf04cb5c0981" />
 | <img height="600px" alt="Screenshot_20250809_182955" src="https://github.com/user-attachments/assets/fd77f96b-f085-4186-af54-d86721369259" />
 | <img height="600px" alt="Screenshot_20250809_183000" src="https://github.com/user-attachments/assets/5f15bce1-c808-4aa5-8eaf-eb07824b49fb" />
+| <img height="600px"  alt="Screenshot_20260104_030838" src="https://github.com/user-attachments/assets/1a37a03d-c769-49e9-9958-68171bf71fa2" />
+| <img height="600px"  alt="Screenshot_20260103_201954" src="https://github.com/user-attachments/assets/ff039755-10d0-4832-b121-786ead319700" />
+| <img height="600px"  alt="Screenshot_20260103_201944" src="https://github.com/user-attachments/assets/adfad7f5-0d67-4147-af53-09d9db1fb26c" />
 
 ### IOS
 
@@ -146,6 +149,9 @@
 | <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 33 45" src="https://github.com/user-attachments/assets/ab6b9129-29e5-49a8-a031-d3a98de4052b" />
 | <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 33 35" src="https://github.com/user-attachments/assets/7d1d90a2-98b6-4cf6-8e39-3c6355d78a80" />
 | <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-09 at 18 33 21" src="https://github.com/user-attachments/assets/7806dc19-2105-424b-b925-bd7a94c9ebac" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-04 at 03 13 15" src="https://github.com/user-attachments/assets/807a4c28-260a-4ed2-b294-ec31d3c82bb1" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-03 at 20 35 24" src="https://github.com/user-attachments/assets/35809347-b6c6-4aeb-adc0-9e569061ced8" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-03 at 20 35 16" src="https://github.com/user-attachments/assets/ca247923-6c5b-49a2-bf25-9a88f617bab5" />
 
 
 ## 🎉 Recent Updates
