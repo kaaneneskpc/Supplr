@@ -1,75 +1,75 @@
 # Supplr PRD (Product Requirements Document)
 
-## 1. Proje Amacı ve Genel Tanım
+## 1. Project Purpose and Overview
 
-Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) ve Jetpack Compose Multiplatform ile geliştirilen, modern, modüler ve ölçeklenebilir bir e-ticaret uygulamasıdır. Kullanıcılar ürünleri inceleyebilir, sepete ekleyebilir, sipariş verebilir, favorilere ekleyebilir ve profil yönetimi yapabilir. **Gelişmiş admin analytics dashboard** ile iş analitikleri, interaktif grafikler ve gerçek zamanlı veri takibi sağlanır.
+Supplr is a modern, modular, and scalable e-commerce application targeting Android and iOS platforms, developed with Kotlin Multiplatform (KMP) and Jetpack Compose Multiplatform. Users can browse products, add to cart, place orders, add to favorites, and manage profiles. **Advanced admin analytics dashboard** provides business analytics, interactive charts, and real-time data tracking.
 
 ---
 
-## 2. Kullanılan Teknolojiler
+## 2. Technologies Used
 
 ### Core Technologies
-- **Kotlin Multiplatform (KMP):** Ortak kodun hem Android hem iOS için kullanılmasını sağlar.
-- **Jetpack Compose Multiplatform:** UI katmanında Compose kullanımı ile modern, deklaratif arayüzler.
-- **Koin:** Dependency Injection (DI) için kullanılır.
-- **Firebase:** Authentication, Firestore (veritabanı), Storage (dosya yönetimi), Google Sign-In ve **Push Notification** (bildirim).
-- **Ktor:** Network işlemleri için multiplatform HTTP client ve **Stripe API entegrasyonu**.
+- **Kotlin Multiplatform (KMP):** Enables shared code for both Android and iOS.
+- **Jetpack Compose Multiplatform:** Modern, declarative UIs with Compose in the UI layer.
+- **Koin:** Used for Dependency Injection (DI).
+- **Firebase:** Authentication, Firestore (database), Storage (file management), Google Sign-In, and **Push Notification**.
+- **Ktor:** Multiplatform HTTP client for network operations and **Stripe API integration**.
 
 ### UI & Analytics Technologies
-- **Custom Canvas Charts:** Analytics görselleştirmeleri için özel çizim bileşenleri.
-- **Material3:** Modern UI bileşenleri ve responsive design.
-- **Animated Components:** Gelişmiş kullanıcı deneyimi için animasyonlar.
-- **Coil:** Görsel yükleme ve cache işlemleri için.
-- **Loading Shimmer Effects:** Modern loading state'leri için.
+- **Custom Canvas Charts:** Custom drawing components for analytics visualizations.
+- **Material3:** Modern UI components and responsive design.
+- **Animated Components:** Animations for enhanced user experience.
+- **Coil:** Image loading and caching operations.
+- **Loading Shimmer Effects:** Modern loading states.
 
 ### Payment & Integration
-- **Stripe SDK:** **Android** ve **iOS** için payment processing (**Android:** Real PaymentSheet, **iOS:** Simulated flow).
-- **Coroutines & Flow:** Asenkron işlemler ve reaktif veri akışı.
-- **Navigation Compose:** Ekranlar arası geçişler için.
-- **MessageBar KMP:** Kullanıcıya mesaj göstermek için.
-- **Multiplatform Settings:** Platformlar arası ayar ve local storage yönetimi.
+- **Stripe SDK:** Payment processing for **Android** and **iOS** (**Android:** Real PaymentSheet, **iOS:** Simulated flow).
+- **Coroutines & Flow:** Asynchronous operations and reactive data flow.
+- **Navigation Compose:** Screen-to-screen transitions.
+- **MessageBar KMP:** Displaying messages to users.
+- **Multiplatform Settings:** Cross-platform settings and local storage management.
 
 ---
 
-## 3. Proje ve Modül Yapısı
+## 3. Project and Module Structure
 
 ```
-- composeApp/      : Uygulamanın multiplatform ana giriş noktası ve genel UI.
-- iosApp/          : iOS uygulama giriş noktası (SwiftUI ile entegre).
+- composeApp/      : Multiplatform main entry point and general UI.
+- iosApp/          : iOS app entry point (integrated with SwiftUI).
 - feature/
-    - auth/        : Giriş, kayıt, authentication işlemleri.
-    - cart/        : Sepet yönetimi.
-    - home/        : Ana ekran ve navigasyon.
-    - profile/     : Kullanıcı profil yönetimi.
-    - admin_panel/ : 📊 Admin analytics dashboard, interaktif grafikler, iş metrikleri, **sipariş yönetimi**.
-    - manage_product/: Admin için ürün ekleme, düzenleme ve silme işlemleri.
-    - product_details/: Ürün detayları.
-    - products_overview/: Ana ekranda yeni ve indirimli ürünlerin öne çıkarıldığı ürün listeleme.
-    - payment_completed/: Sipariş tamamlandı ekranı ve sipariş sonrası işlemler.
-    - checkout/       : Ödeme işlemleri ve **Stripe entegrasyonu**.
-    - categories/: Kategori yönetimi.
-    - favorites/      : Kullanıcının favori ürünlerini yönetdiği ekran ve iş mantığı.
-    - locations/      : Kullanıcı adres yönetimi, ekleme/düzenleme, kategorizasyon (Home, Work, Other).
-    - contact_us/     : İletişim sayfası.
-    - order_history/  : 📦 Kullanıcı sipariş geçmişi, sipariş detayları ve durum takibi.
-- data/            : Veri katmanı, repository ve servisler.
-- shared/          : Ortak domain modelleri, util, constantlar.
-- di/              : Dependency injection modülleri (Koin).
-- navigation/      : Navigation graph ve ekran yönlendirme.
+    - auth/        : Login, registration, authentication operations.
+    - cart/        : Cart management.
+    - home/        : Home screen and navigation.
+    - profile/     : User profile management.
+    - admin_panel/ : 📊 Admin analytics dashboard, interactive charts, business metrics, **order management**.
+    - manage_product/: Product add, edit, and delete operations for admin.
+    - product_details/: Product details and reviews.
+    - products_overview/: Product listing featuring new and discounted products on home screen.
+    - payment_completed/: Order completed screen and post-order operations.
+    - checkout/       : Payment operations and **Stripe integration**.
+    - categories/: Category management.
+    - favorites/      : Screen and business logic for managing user's favorite products.
+    - locations/      : User address management, add/edit, categorization (Home, Work, Other).
+    - contact_us/     : Contact page.
+    - order_history/  : 📦 User order history, order details, and status tracking.
+- data/            : Data layer, repositories, and services.
+- shared/          : Shared domain models, utils, constants.
+- di/              : Dependency injection modules (Koin).
+- navigation/      : Navigation graph and screen routing.
 ```
 
 ---
 
-## 4. Mimari ve Clean Architecture
+## 4. Architecture and Clean Architecture
 
-### Katmanlar ve Kullanılan Teknolojiler
+### Layers and Technologies Used
 
 - **Presentation Layer (feature/):**
-  - Her ekran (Screen) ve ViewModel ayrı modüllerde.
-  - UI, business logic'ten ayrılmıştır.
-  - Compose ile deklaratif UI.
-  - **Admin Analytics Dashboard:** Gerçek zamanlı veri görselleştirme, custom Canvas charts.
-  - **Kullanılan Teknolojiler:**
+  - Each screen and ViewModel in separate modules.
+  - UI is separated from business logic.
+  - Declarative UI with Compose.
+  - **Admin Analytics Dashboard:** Real-time data visualization, custom Canvas charts.
+  - **Technologies Used:**
     - Jetpack Compose Multiplatform
     - Material3
     - Navigation Compose
@@ -81,21 +81,21 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
     - Custom Canvas Drawing (Analytics charts)
 
 - **Domain Layer (shared/domain/):**
-  - Temel iş modelleri (Product, Customer, CartItem, **Favorite**, **Location**, **PaymentIntent**, **Order**, **DashboardAnalytics**, **DailySummary**, **TopSellingProduct** vs.).
-  - Repository arayüzleri (ProductRepository, **FavoritesRepository**, **LocationRepository**, **PaymentRepository**, **AdminRepository**, **OrderRepository** ...)
-  - **Analytics Models:** Dashboard metrikleri ve analytics veri yapıları.
-  - **Kullanılan Teknolojiler:**
+  - Core business models (Product, Customer, CartItem, **Favorite**, **Location**, **PaymentIntent**, **Order**, **DashboardAnalytics**, **DailySummary**, **TopSellingProduct**, **Review**, **ReviewVote**, etc.).
+  - Repository interfaces (ProductRepository, **FavoritesRepository**, **LocationRepository**, **PaymentRepository**, **AdminRepository**, **OrderRepository**, **ReviewRepository**, etc.)
+  - **Analytics Models:** Dashboard metrics and analytics data structures.
+  - **Technologies Used:**
     - Kotlin Multiplatform
     - Kotlinx Serialization
-    - Kendi interface'ler (Repository arayüzleri)
+    - Custom interfaces (Repository interfaces)
 
 - **Data Layer (data/):**
-  - Repository implementasyonları (ör. CustomerRepositoryImpl, **FavoritesRepositoryImpl**, **LocationRepositoryImpl**, **PaymentRepositoryImpl**, **AdminRepositoryImpl**).
-  - Firebase Firestore'da her kullanıcıya özel favorites ve **locations** koleksiyonu.
-  - **Analytics Data Processing:** Firestore'dan analytics verilerinin işlenmesi ve hesaplanması.
-  - **Stripe API entegrasyonu** PaymentIntent oluşturma ve order yönetimi için.
-  - DTO ve veri dönüşümleri.
-  - **Kullanılan Teknolojiler:**
+  - Repository implementations (e.g., CustomerRepositoryImpl, **FavoritesRepositoryImpl**, **LocationRepositoryImpl**, **PaymentRepositoryImpl**, **AdminRepositoryImpl**).
+  - User-specific favorites and **locations** collections in Firebase Firestore.
+  - **Analytics Data Processing:** Processing and calculating analytics data from Firestore.
+  - **Stripe API integration** for PaymentIntent creation and order management.
+  - DTO and data transformations.
+  - **Technologies Used:**
     - Firebase (Firestore, Storage, Auth)
     - Ktor
     - Kotlin Coroutines & Flow
@@ -104,226 +104,235 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
     - Coil (coil3-network-ktor)
 
 - **DI Layer (di/):**
-  - Koin ile bağımlılıkların yönetimi.
-  - Tüm ViewModel ve repository'ler burada inject edilir.
-  - **Kullanılan Teknolojiler:**
+  - Dependency management with Koin.
+  - All ViewModels and repositories are injected here.
+  - **Technologies Used:**
     - Koin (koin-core, koin-compose)
     - Kotlin Multiplatform
 
-### Clean Architecture Uygulaması
+### Clean Architecture Implementation
 
-- **Bağımlılık Yönü:** Data → Domain → Presentation (UI, ViewModel).
-- **Test Edilebilirlik:** Repository arayüzleri sayesinde kolayca mocklanabilir.
-- **Modülerlik:** Her feature kendi modülünde, bağımsız geliştirilebilir.
-- **Navigation:** Ekranlar arası geçişler merkezi bir NavGraph ile yönetilir.
-- **Analytics Architecture:** Ayrı analytics katmanı ile gerçek zamanlı veri işleme.
+- **Dependency Direction:** Data → Domain → Presentation (UI, ViewModel).
+- **Testability:** Easy mocking with repository interfaces.
+- **Modularity:** Each feature in its own module, independently developable.
+- **Navigation:** Screen transitions managed with a central NavGraph.
+- **Analytics Architecture:** Real-time data processing with separate analytics layer.
 
-### Yeni Feature Modülleri
-  - **admin_panel:** 📊 **Gelişmiş Analytics Dashboard** - Gerçek zamanlı iş metrikleri, interaktif grafikler, revenue analizi, top-selling products, user statistics.
-  - **manage_product:** Adminlerin ürün ekleme, düzenleme ve silme işlemlerini gerçekleştirdiği ekran ve iş mantığı.
-  - **products_overview:** Ana ekranda yeni ve indirimli ürünlerin öne çıkarıldığı, kullanıcıya hızlı erişim sağlayan ürün listeleme modülü.
-  - **payment_completed:** Sipariş tamamlandıktan sonra kullanıcıya sipariş özeti ve başarı mesajı gösteren ekran.
-  - **favorites:** Kullanıcıların ürünleri favorilere ekleyebilir, favori ürünlerini ayrı bir ekranda görebilir ve yönetebilir.
+### New Feature Modules
+  - **admin_panel:** 📊 **Advanced Analytics Dashboard** - Real-time business metrics, interactive charts, revenue analysis, top-selling products, user statistics.
+  - **manage_product:** Screen and business logic for admin product add, edit, and delete operations.
+  - **products_overview:** Product listing module featuring new and discounted products with quick access on home screen.
+  - **payment_completed:** Screen showing order summary and success message after order completion.
+  - **favorites:** Users can add products to favorites, view and manage their favorite products on a separate screen.
 
 ---
 
-## 5. Admin Analytics Dashboard Özellikleri
+## 5. Admin Analytics Dashboard Features
 
-### 📊 Dashboard Bileşenleri
+### 📊 Dashboard Components
 
 #### 5.1. Revenue Analytics
-- **Enhanced Line Charts:** Custom Canvas çizimi ile gelişmiş grafik görselleştirme
-- **Grid Lines ve Axes:** Profesyonel grafik görünümü
-- **Data Points:** Siyah noktalar ve beyaz kenarlar ile net görünürlük
-- **Fill Area:** Gradient efekti ile alan dolgusu
-- **Interactive Elements:** Tıklanabilir noktalar ve hover efektleri
+- **Enhanced Line Charts:** Advanced chart visualization with custom Canvas drawing
+- **Grid Lines and Axes:** Professional chart appearance
+- **Data Points:** Clear visibility with black dots and white borders
+- **Fill Area:** Area fill with gradient effect
+- **Interactive Elements:** Clickable points and hover effects
 
 #### 5.2. Metrics Cards
-- **Animated Entry:** Staggered loading efektleri
-- **Real-time Updates:** Otomatik veri yenileme
+- **Animated Entry:** Staggered loading effects
+- **Real-time Updates:** Automatic data refresh
 - **Key Performance Indicators:**
-  - Total Revenue (Toplam Gelir)
-  - Total Orders (Toplam Sipariş)
-  - Average Order Value (Ortalama Sipariş Değeri)
+  - Total Revenue
+  - Total Orders
+  - Average Order Value
 
 #### 5.3. Top Selling Products
-- **Visual Indicators:** Ürün performans göstergeleri
-- **Sales Metrics:** Satış adetleri ve trend analizi
-- **Product Cards:** Modern UI ile ürün bilgileri
+- **Visual Indicators:** Product performance indicators
+- **Sales Metrics:** Sales counts and trend analysis
+- **Product Cards:** Product information with modern UI
 
 #### 5.4. User Statistics
-- **User Growth Tracking:** Kullanıcı büyüme metrikleri
-- **Engagement Metrics:** Kullanıcı etkileşim verileri
-- **Demographic Analysis:** Demografik veri analizi
+- **User Growth Tracking:** User growth metrics
+- **Engagement Metrics:** User engagement data
+- **Demographic Analysis:** Demographic data analysis
 
 ### 📅 Date Range Filtering
 - **Flexible Time Periods:**
-  - Today (Bugün)
-  - Last 7 Days (Son 7 Gün)
-  - Last 30 Days (Son 30 Gün)
-- **Dynamic Data Loading:** Seçilen tarihe göre otomatik veri yükleme
+  - Today
+  - Last 7 Days
+  - Last 30 Days
+- **Dynamic Data Loading:** Automatic data loading based on selected date
 
 ### 🔄 Real-time Features
-- **Auto-refresh:** Otomatik veri yenileme
-- **Pull-to-refresh:** Manuel yenileme desteği
-- **Loading States:** Shimmer efektleri ile modern loading
-- **Error Handling:** Hata durumları için retry mekanizması
+- **Auto-refresh:** Automatic data refresh
+- **Pull-to-refresh:** Manual refresh support
+- **Loading States:** Modern loading with shimmer effects
+- **Error Handling:** Retry mechanism for error states
 
 ---
 
-## 6. Güvenlik ve Firebase Rules
+## 6. Security and Firebase Rules
 
-### 6.1. Admin Panel Güvenliği
-- **Role-based Authentication:** Email bazlı admin kontrolü (`isAdmin()` fonksiyonu)
-- **Firestore Security Rules:** Kapsamlı güvenlik kuralları
-- **Data Isolation:** Kullanıcıya özel veri erişim kontrolü
-- **Audit Trail:** Admin işlemlerinin loglanması
+### 6.1. Admin Panel Security
+- **Role-based Authentication:** Email-based admin control (`isAdmin()` function)
+- **Firestore Security Rules:** Comprehensive security rules
+- **Data Isolation:** User-specific data access control
+- **Audit Trail:** Logging of admin operations
 
-### 6.2. Firestore Collections ve Güvenlik Kuralları
+### 6.2. Firestore Collections and Security Rules
 
 #### Analytics Collections
-- **`analytics/`** - Analytics verileri (sadece admin erişimi)
-- **`admin_dashboard/`** - Dashboard konfigürasyonu (sadece admin)
-- **`user_stats/`** - Kullanıcı istatistikleri (sadece admin okuma)
-- **`sales_analytics/`** - Satış verileri (sadece admin)
-- **`product_analytics/`** - Ürün performansı (sadece admin)
-- **`admin_logs/`** - Admin işlem logları (sadece admin okuma, sadece oluşturma)
+- **`analytics/`** - Analytics data (admin-only access)
+- **`admin_dashboard/`** - Dashboard configuration (admin-only)
+- **`user_stats/`** - User statistics (admin read-only)
+- **`sales_analytics/`** - Sales data (admin-only)
+- **`product_analytics/`** - Product performance (admin-only)
+- **`admin_logs/`** - Admin operation logs (admin read-only, create-only)
 
-#### Security Rules Özellikleri
-- **Veri Validasyonu:** Gerekli alanların kontrolü
-- **Timestamp Kontrolü:** İşlem zamanlarının doğrulanması
-- **Audit Trail Koruması:** Log kayıtlarının değiştirilemez olması
-- **Admin ID Doğrulama:** İşlemi yapan admin'in kimlik kontrolü
+#### Security Rules Features
+- **Data Validation:** Required field checks
+- **Timestamp Control:** Operation time verification
+- **Audit Trail Protection:** Immutable log records
+- **Admin ID Verification:** Identity verification of the performing admin
 
-### 6.3. Genel Güvenlik
-- **Authentication:** Firebase Auth ve Google Sign-In ile kullanıcı doğrulama.
-- **Authorization:** Admin işlemleri için kullanıcıya özel rol kontrolü (isAdmin).
-- **Veri Güvenliği:** Firestore ve Storage erişimleri sadece authenticated kullanıcıya açık.
-- **Güvenli Depolama:** Multiplatform Settings ile hassas veriler local olarak güvenli şekilde saklanır.
-- **Network Güvenliği:** Ktor ile HTTPS kullanımı, Firebase ile güvenli veri transferi.
-- **Payment Security:** **Stripe API keys** güvenli yönetimi (`shared/Consts.kt`), PCI-DSS compliant payment processing.
-- **Location Data Security:** Kullanıcıya özel location verisi, sadece kendi lokasyonlarına erişim hakkı.
-
----
-
-## 7. DevOps ve Build
-
-- **Gradle ile çoklu modül yönetimi.**
-- **Android ve iOS için ayrı build konfigürasyonları.**
-- **GoogleService-Info.plist ve google-services.json ile platforma özel Firebase entegrasyonu.**
-- **KMP ile tek kod tabanından iki platforma derleme.**
-- **Analytics Build Optimization:** Chart rendering optimizasyonları ve performance tuning.
+### 6.3. General Security
+- **Authentication:** User authentication with Firebase Auth and Google Sign-In.
+- **Authorization:** Role-based access control for admin operations (isAdmin).
+- **Data Security:** Firestore and Storage access only for authenticated users.
+- **Secure Storage:** Sensitive data stored securely locally with Multiplatform Settings.
+- **Network Security:** HTTPS usage with Ktor, secure data transfer with Firebase.
+- **Payment Security:** **Stripe API keys** secure management (`shared/Consts.kt`), PCI-DSS compliant payment processing.
+- **Location Data Security:** User-specific location data, access rights only to own locations.
 
 ---
 
-## 8. UI/UX ve Modern Design
+## 7. DevOps and Build
 
-### 8.1. Material3 ve Responsive Design
-- **Material3 ve Compose ile modern, responsive arayüz.**
-- **Animasyonlar ve geçiş efektleri.**
-- **Karanlık ve aydınlık tema desteği.**
-- **Kullanıcıya anlık mesaj ve hata gösterimi (MessageBar).**
+- **Multi-module management with Gradle.**
+- **Separate build configurations for Android and iOS.**
+- **Platform-specific Firebase integration with GoogleService-Info.plist and google-services.json.**
+- **Compilation to two platforms from a single codebase with KMP.**
+- **Analytics Build Optimization:** Chart rendering optimizations and performance tuning.
+
+---
+
+## 8. UI/UX and Modern Design
+
+### 8.1. Material3 and Responsive Design
+- **Modern, responsive interface with Material3 and Compose.**
+- **Animations and transition effects.**
+- **Dark and light theme support.**
+- **Instant messages and error display to users (MessageBar).**
 
 ### 8.2. Admin Dashboard UX
-- **Interactive Charts:** Kullanıcı dostu grafik etkileşimleri
-- **Loading Experience:** Shimmer efektleri ve smooth transitions
-- **Responsive Layout:** Tüm ekran boyutlarında optimize edilmiş tasarım
-- **Error States:** Kullanıcı dostu hata mesajları ve retry options
-- **Data Visualization:** Profesyonel iş analitiği görselleştirme
+- **Interactive Charts:** User-friendly chart interactions
+- **Loading Experience:** Shimmer effects and smooth transitions
+- **Responsive Layout:** Design optimized for all screen sizes
+- **Error States:** User-friendly error messages and retry options
+- **Data Visualization:** Professional business analytics visualization
 
-### 8.3. Kullanıcı Deneyimi Özellikleri
-- **BottomBar ve TopBar ile kolay navigasyon.**
-- **Kullanıcıya özel bildirimler (push notification) desteği.**
-- **Favoriler:**
-  - Ürün detay ekranında sağ üstte kalp ikonu ile favoriye ekleme.
-  - Favoriler ekranında favori ürünlerin listelenmesi, her kartın sağ üstünde favoriden çıkarma butonu.
-  - Favori ürünler anlık olarak güncellenir, ekleme/çıkarma işlemlerinde mesaj bar ile kullanıcı bilgilendirilir.
+### 8.3. User Experience Features
+- **Easy navigation with BottomBar and TopBar.**
+- **User-specific notifications (push notification) support.**
+- **Favorites:**
+  - Add to favorites with heart icon on top-right in product detail screen.
+  - Favorite products listed in favorites screen, remove button on top-right of each card.
+  - Favorite products update instantly, user informed with message bar on add/remove operations.
 - **Locations:**
-  - Kullanıcı adres yönetimi ile kolay adres ekleme/düzenleme.
-  - Location kategorileri (Home 🏠, Work 🏢, Other 📍) ile organize edilmiş adres yapısı.
-  - Custom drawer'dan kolayca erişilebilir lokasyon yönetimi.
+  - Easy address add/edit with user address management.
+  - Organized address structure with location categories (Home 🏠, Work 🏢, Other 📍).
+  - Easily accessible location management from custom drawer.
 - **Payment Experience:**
-  - **Android:** Real Stripe PaymentSheet ile native payment deneyimi.
-  - **iOS:** Simulated ama realistic payment flow, Android ile uyumlu UX.
-  - "Pay with Card" 💳 ve "Pay on Delivery" 🚚 seçenekleri.
+  - **Android:** Native payment experience with real Stripe PaymentSheet.
+  - **iOS:** Simulated but realistic payment flow, UX compatible with Android.
+  - "Pay with Card" 💳 and "Pay on Delivery" 🚚 options.
 
 ---
 
-## 9. Test Edilebilirlik
+## 9. Testability
 
-- **Repository arayüzleri ve ViewModel'ler kolayca test edilebilir.**
-- **Mock ve fake veri ile UI testleri yapılabilir.**
-- **Kotlin Multiplatform ile ortak testler yazılabilir.**
-- **Analytics Testing:** Chart rendering ve data processing testleri.
-- **Admin Panel Testing:** Role-based access ve security rule testleri.
+- **Repository interfaces and ViewModels easily testable.**
+- **UI tests with mock and fake data.**
+- **Common tests with Kotlin Multiplatform.**
+- **Analytics Testing:** Chart rendering and data processing tests.
+- **Admin Panel Testing:** Role-based access and security rule tests.
 
 ---
 
-## 10. Genişletilebilirlik ve Bakım
+## 10. Extensibility and Maintenance
 
-### 10.1. Modüler Yapı
-- **Yeni bir feature eklemek için yeni bir modül açmak yeterli.**
-- **Her feature kendi ViewModel ve repository'sine sahip.**
-- **DI ile bağımlılıklar kolayca yönetilir.**
-- **Kod okunabilirliği ve sürdürülebilirliği yüksek.**
+### 10.1. Modular Structure
+- **Simply open a new module to add a new feature.**
+- **Each feature has its own ViewModel and repository.**
+- **Easy dependency management with DI.**
+- **High code readability and maintainability.**
 
-### 10.2. Son Eklenen Feature'lar
+### 10.2. Recently Added Features
 - **📊 Admin Analytics Dashboard (admin_panel):** 
-  - Gerçek zamanlı iş metrikleri
-  - İnteraktif revenue charts
+  - Real-time business metrics
+  - Interactive revenue charts
   - Enhanced line charts with custom Canvas
   - Top-selling products analysis
   - User statistics tracking
   - Date range filtering
   - Animated components
-  - Loading states ve error handling
+  - Loading states and error handling
 
-- **🛠️ Admin Sipariş Yönetimi (admin_panel - Order Management):**
-  - Tüm siparişleri görüntüleme ve arama
-  - Sipariş durumu güncelleme (PENDING → CONFIRMED → PREPARING → SHIPPED → DELIVERED)
-  - Sipariş iptal etme (delivered ve cancelled hariç)
-  - Sipariş detayları görüntüleme
-  - Status timeline ile sipariş takibi
-  - Role-based yetkilendirme
+- **🛠️ Admin Order Management (admin_panel - Order Management):**
+  - View and search all orders
+  - Order status update (PENDING → CONFIRMED → PREPARING → SHIPPED → DELIVERED)
+  - Order cancellation (except delivered and cancelled)
+  - Order detail view
+  - Order tracking with status timeline
+  - Role-based authorization
 
-- **📦 Sipariş Geçmişi (order_history):**
-  - Kullanıcıya özel sipariş listeleme
-  - Sipariş detayları görüntüleme
-  - Sipariş durum takibi
+- **📦 Order History (order_history):**
+  - User-specific order listing
+  - Order detail view
+  - Order status tracking
   - Order status timeline
-  - Modern UI ile sipariş kartları
+  - Order cards with modern UI
 
-- **Ürün Yönetimi (manage_product):** Ürün ekleme, güncelleme ve silme işlemleri.
-- **Ürünler Genel Bakış (products_overview):** Ana ekranda yeni ve indirimli ürünlerin listelenmesi.
-- **Ödeme Tamamlandı (payment_completed):** Sipariş sonrası kullanıcı bilgilendirme ve özet ekranı.
-- **Favoriler (favorites):** Kullanıcılar ürünleri favorilere ekleyebilir, favori ürünlerini ayrı bir ekranda görebilir ve yönetebilir.
-- **🗺️ Locations (locations):** Kullanıcı adres yönetimi sistemi.
-- **💳 Stripe Payment Integration:** Multi-platform payment sistemi.
+- **⭐ Product Review System (product_details):**
+  - User reviews and star ratings
+  - Average rating calculation with real-time updates
+  - 📷 Review photo upload (Firebase Storage)
+  - 👍👎 Helpful/Unhelpful voting system
+  - Separate review writing page
+  - ReviewPhotosGallery and HelpfulVotingSection components
+  - Vote tracking with Firestore `review_votes` collection
+
+- **Product Management (manage_product):** Product add, update, and delete operations.
+- **Products Overview (products_overview):** Listing of new and discounted products on home screen.
+- **Payment Completed (payment_completed):** User information and summary screen after order.
+- **Favorites (favorites):** Users can add products to favorites, view and manage favorite products on a separate screen.
+- **🗺️ Locations (locations):** User address management system.
+- **💳 Stripe Payment Integration:** Multi-platform payment system.
 
 ---
 
-## 11. Eklenebilecekler / İyileştirme Önerileri
+## 11. Potential Additions / Improvement Suggestions
 
-### 11.1. Analytics ve Admin Panel İyileştirmeleri
+### 11.1. Analytics and Admin Panel Improvements
 - **Advanced Chart Types:** Bar charts, pie charts, area charts
-- **Real-time Notifications:** Admin için kritik metrik bildirimleri
+- **Real-time Notifications:** Critical metric notifications for admin
 - **Export Functionality:** PDF/Excel export for reports
 - **Advanced Filtering:** Multi-dimensional data filtering
 - **Predictive Analytics:** ML-based trend prediction
 - **Performance Metrics:** App performance monitoring
 
-### 11.2. Genel İyileştirmeler
-- **Unit ve UI test coverage'ı artırılabilir.**
-- **CI/CD pipeline (GitHub Actions, Bitrise vs.) ile otomatik build ve test.**
-- **Crashlytics ve Analytics ile hata ve kullanıcı davranışı takibi.**
-- **Daha gelişmiş rol ve izin yönetimi.**
-- **Offline-first desteği (local cache, sync).**
-- **Daha detaylı logging ve monitoring.**
-- **Daha fazla platform (web, desktop) için Compose Multiplatform genişletmesi.**
+### 11.2. General Improvements
+- **Increase unit and UI test coverage.**
+- **CI/CD pipeline (GitHub Actions, Bitrise, etc.) for automated build and test.**
+- **Error and user behavior tracking with Crashlytics and Analytics.**
+- **More advanced role and permission management.**
+- **Offline-first support (local cache, sync).**
+- **More detailed logging and monitoring.**
+- **Compose Multiplatform expansion for more platforms (web, desktop).**
 
 ---
 
-## 12. Kaynaklar
+## 12. Resources
 
 - [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
 - [Jetpack Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
@@ -338,9 +347,9 @@ Supplr, Android ve iOS platformlarını hedefleyen, Kotlin Multiplatform (KMP) v
 
 ## 13. Admin Panel Feature Development Guide
 
-### 13.1. Analytics Component Geliştirme
+### 13.1. Analytics Component Development
 ```kotlin
-// Custom Chart Component Şablonu
+// Custom Chart Component Template
 @Composable
 fun CustomChart(
     data: List<DataPoint>,
@@ -392,4 +401,4 @@ fun AnimatedChart() {
 
 ---
 
-Bu doküman, admin analytics dashboard özelliklerini ve modern chart geliştirme pratiklerini içererek projeyi geliştirirken ve yeni analitik özellikler eklerken temel referans olarak kullanılabilir.
+This document includes admin analytics dashboard features and modern chart development practices and can be used as a base reference when developing the project and adding new analytics features.

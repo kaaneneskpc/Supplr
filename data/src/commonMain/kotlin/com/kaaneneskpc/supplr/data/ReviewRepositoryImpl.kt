@@ -2,11 +2,13 @@ package com.kaaneneskpc.supplr.data
 
 import com.kaaneneskpc.supplr.data.domain.ReviewRepository
 import com.kaaneneskpc.supplr.shared.domain.Review
+import com.kaaneneskpc.supplr.shared.domain.ReviewVote
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
-import dev.gitlive.firebase.firestore.Direction
+import dev.gitlive.firebase.firestore.FieldValue
 import dev.gitlive.firebase.firestore.firestore
+import dev.gitlive.firebase.storage.storage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -33,6 +35,9 @@ class ReviewRepositoryImpl : ReviewRepository {
                             username = document.get("username"),
                             rating = document.get("rating"),
                             comment = document.get("comment"),
+                            photoUrls = document.get("photoUrls") ?: emptyList(),
+                            helpfulCount = document.get("helpfulCount") ?: 0,
+                            unhelpfulCount = document.get("unhelpfulCount") ?: 0,
                             createdAt = document.get("createdAt"),
                             isVerifiedPurchase = document.get("isVerifiedPurchase") ?: false,
                             isApproved = document.get("isApproved") ?: true
@@ -53,6 +58,7 @@ class ReviewRepositoryImpl : ReviewRepository {
         productId: String,
         rating: Float,
         comment: String,
+        photoUrls: List<String>,
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
@@ -61,8 +67,6 @@ class ReviewRepositoryImpl : ReviewRepository {
             if (currentUserId != null) {
                 val currentUser = Firebase.auth.currentUser
                 val username = currentUser?.displayName ?: "Anonymous User"
-
-                
                 val reviewId = Uuid.random().toString()
                 val review = Review(
                     id = reviewId,
@@ -71,15 +75,16 @@ class ReviewRepositoryImpl : ReviewRepository {
                     username = username,
                     rating = rating,
                     comment = comment,
+                    photoUrls = photoUrls,
+                    helpfulCount = 0,
+                    unhelpfulCount = 0,
                     isVerifiedPurchase = false,
                     isApproved = true
                 )
-                
                 val database = Firebase.firestore
                 database.collection("reviews")
                     .document(reviewId)
                     .set(review)
-                
                 onSuccess()
             } else {
                 onError("User is not authenticated.")
@@ -121,7 +126,6 @@ class ReviewRepositoryImpl : ReviewRepository {
                 val database = Firebase.firestore
                 val reviewDoc = database.collection("reviews").document(reviewId)
                 val review = reviewDoc.get()
-                
                 val reviewUserId: String = review.get("userId")
                 if (currentUserId == reviewUserId) {
                     reviewDoc.delete()
@@ -144,11 +148,9 @@ class ReviewRepositoryImpl : ReviewRepository {
                 .where { "productId" equalTo productId }
                 .where { "isApproved" equalTo true }
                 .get()
-            
             val reviews = query.documents.map { document ->
                 document.get<Float>("rating")
             }
-            
             if (reviews.isNotEmpty()) {
                 val averageRating = reviews.average().toFloat()
                 RequestState.Success(averageRating)
@@ -167,7 +169,6 @@ class ReviewRepositoryImpl : ReviewRepository {
                 .where { "productId" equalTo productId }
                 .where { "isApproved" equalTo true }
                 .get()
-            
             RequestState.Success(query.documents.size)
         } catch (e: Exception) {
             RequestState.Error("Error while counting reviews: ${e.message}")
@@ -183,7 +184,6 @@ class ReviewRepositoryImpl : ReviewRepository {
                     .where { "productId" equalTo productId }
                     .where { "userId" equalTo currentUserId }
                     .get()
-                
                 RequestState.Success(query.documents.isNotEmpty())
             } else {
                 RequestState.Error("User is not authenticated.")
@@ -192,4 +192,144 @@ class ReviewRepositoryImpl : ReviewRepository {
             RequestState.Error("Error while checking user review: ${e.message}")
         }
     }
-} 
+
+    @OptIn(ExperimentalUuidApi::class)
+    override suspend fun uploadReviewPhoto(
+        file: dev.gitlive.firebase.storage.File,
+        reviewId: String,
+        onSuccess: (String) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            val currentUserId = getCurrentUserId()
+            if (currentUserId != null) {
+                val storage = Firebase.storage
+                val photoId = Uuid.random().toString()
+                val photoRef = storage.reference.child("review_photos/$reviewId/$photoId.jpg")
+                photoRef.putFile(file)
+                val downloadUrl = photoRef.getDownloadUrl()
+                onSuccess(downloadUrl)
+            } else {
+                onError("User is not authenticated.")
+            }
+        } catch (e: Exception) {
+            onError("Error while uploading photo: ${e.message}")
+        }
+    }
+
+    @OptIn(ExperimentalUuidApi::class)
+    override suspend fun voteReview(
+        reviewId: String,
+        isHelpful: Boolean,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            val currentUserId = getCurrentUserId()
+            if (currentUserId == null) {
+                onError("User is not authenticated.")
+                return
+            }
+            val database = Firebase.firestore
+            val reviewDoc = database.collection("reviews").document(reviewId)
+            val review = reviewDoc.get()
+            val reviewUserId: String = review.get("userId")
+            if (currentUserId == reviewUserId) {
+                onError("You cannot vote on your own review.")
+                return
+            }
+            val existingVoteQuery = database.collection("review_votes")
+                .where { "reviewId" equalTo reviewId }
+                .where { "userId" equalTo currentUserId }
+                .get()
+            if (existingVoteQuery.documents.isNotEmpty()) {
+                val existingVote = existingVoteQuery.documents.first()
+                val existingIsHelpful: Boolean = existingVote.get("isHelpful")
+                if (existingIsHelpful == isHelpful) {
+                    onError("You have already voted on this review.")
+                    return
+                }
+                database.collection("review_votes").document(existingVote.id).delete()
+                if (existingIsHelpful) {
+                    reviewDoc.update("helpfulCount" to FieldValue.increment(-1))
+                } else {
+                    reviewDoc.update("unhelpfulCount" to FieldValue.increment(-1))
+                }
+            }
+            val voteId = Uuid.random().toString()
+            val vote = ReviewVote(
+                id = voteId,
+                reviewId = reviewId,
+                userId = currentUserId,
+                isHelpful = isHelpful
+            )
+            database.collection("review_votes").document(voteId).set(vote)
+            if (isHelpful) {
+                reviewDoc.update("helpfulCount" to FieldValue.increment(1))
+            } else {
+                reviewDoc.update("unhelpfulCount" to FieldValue.increment(1))
+            }
+            onSuccess()
+        } catch (e: Exception) {
+            onError("Error while voting: ${e.message}")
+        }
+    }
+
+    override suspend fun getUserVoteForReview(reviewId: String): RequestState<Boolean?> {
+        return try {
+            val currentUserId = getCurrentUserId()
+            if (currentUserId != null) {
+                val database = Firebase.firestore
+                val query = database.collection("review_votes")
+                    .where { "reviewId" equalTo reviewId }
+                    .where { "userId" equalTo currentUserId }
+                    .get()
+                if (query.documents.isNotEmpty()) {
+                    val isHelpful: Boolean = query.documents.first().get("isHelpful")
+                    RequestState.Success(isHelpful)
+                } else {
+                    RequestState.Success(null)
+                }
+            } else {
+                RequestState.Error("User is not authenticated.")
+            }
+        } catch (e: Exception) {
+            RequestState.Error("Error while checking vote: ${e.message}")
+        }
+    }
+
+    override suspend fun removeVote(
+        reviewId: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            val currentUserId = getCurrentUserId()
+            if (currentUserId == null) {
+                onError("User is not authenticated.")
+                return
+            }
+            val database = Firebase.firestore
+            val existingVoteQuery = database.collection("review_votes")
+                .where { "reviewId" equalTo reviewId }
+                .where { "userId" equalTo currentUserId }
+                .get()
+            if (existingVoteQuery.documents.isEmpty()) {
+                onError("No vote found to remove.")
+                return
+            }
+            val existingVote = existingVoteQuery.documents.first()
+            val existingIsHelpful: Boolean = existingVote.get("isHelpful")
+            database.collection("review_votes").document(existingVote.id).delete()
+            val reviewDoc = database.collection("reviews").document(reviewId)
+            if (existingIsHelpful) {
+                reviewDoc.update("helpfulCount" to FieldValue.increment(-1))
+            } else {
+                reviewDoc.update("unhelpfulCount" to FieldValue.increment(-1))
+            }
+            onSuccess()
+        } catch (e: Exception) {
+            onError("Error while removing vote: ${e.message}")
+        }
+    }
+}

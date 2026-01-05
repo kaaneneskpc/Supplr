@@ -8,11 +8,14 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,14 +26,20 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.kaaneneskpc.supplr.shared.component.CommonScaffold
-import com.kaaneneskpc.supplr.shared.component.SupplrButton
 import com.kaaneneskpc.supplr.shared.fonts.*
 import org.koin.compose.viewmodel.koinViewModel
 import rememberMessageBarState
+
+private const val MAX_PHOTOS = 5
 
 @Composable
 fun AddReviewScreen(
@@ -39,16 +48,15 @@ fun AddReviewScreen(
 ) {
     val messageBarState = rememberMessageBarState()
     val productDetailViewModel = koinViewModel<ProductDetailViewModel>()
-
     var rating by remember { mutableFloatStateOf(0f) }
     var comment by remember { mutableStateOf("") }
     var isSubmitting by remember { mutableStateOf(false) }
-
+    val isUploadingPhotos = productDetailViewModel.isUploadingPhotos
+    val uploadedPhotoUrls = productDetailViewModel.uploadedPhotoUrls
     val animatedVisibility by animateFloatAsState(
         targetValue = 1f,
         animationSpec = tween(durationMillis = 600, easing = EaseOutCubic)
     )
-
     CommonScaffold(
         title = "Write Review",
         navigateBack = navigateBack
@@ -90,178 +98,42 @@ fun AddReviewScreen(
                     verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
                     item {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .shadow(
-                                    elevation = 8.dp,
-                                    shape = RoundedCornerShape(20.dp),
-                                    spotColor = SurfaceBrand.copy(alpha = 0.25f)
-                                ),
-                            shape = RoundedCornerShape(20.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = Surface
-                            )
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(
-                                        brush = Brush.linearGradient(
-                                            colors = listOf(
-                                                SurfaceBrand.copy(alpha = 0.1f),
-                                                Surface,
-                                                SurfaceBrand.copy(alpha = 0.05f)
-                                            )
-                                        )
-                                    )
-                                    .padding(24.dp)
-                            ) {
-                                Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Text(
-                                        text = "✨ Rate this product",
-                                        fontSize = FontSize.EXTRA_LARGE,
-                                        fontWeight = FontWeight.Bold,
-                                        fontFamily = BebasNeueFont(),
-                                        color = TextPrimary,
-                                        textAlign = TextAlign.Center
-                                    )
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    Text(
-                                        text = "Your opinion matters to other customers",
-                                        fontSize = FontSize.SMALL,
-                                        fontFamily = RobotoCondensedFont(),
-                                        color = TextSecondary,
-                                        textAlign = TextAlign.Center
-                                    )
-
-                                    Spacer(modifier = Modifier.height(24.dp))
-
-                                    EnhancedRatingStars(
-                                        rating = rating,
-                                        onRatingChange = { rating = it },
-                                        size = 36.dp
-                                    )
-
-                                    Spacer(modifier = Modifier.height(16.dp))
-
-                                    AnimatedRatingText(rating = rating)
-                                }
-                            }
-                        }
+                        RatingCard(
+                            rating = rating,
+                            onRatingChange = { rating = it }
+                        )
                     }
-
                     item {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .shadow(
-                                    elevation = 6.dp,
-                                    shape = RoundedCornerShape(20.dp),
-                                    spotColor = TextSecondary.copy(alpha = 0.2f)
-                                ),
-                            shape = RoundedCornerShape(20.dp),
-                            colors = CardDefaults.cardColors(containerColor = Surface)
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(24.dp)
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = "💭 Share your thoughts",
-                                        fontSize = FontSize.LARGE,
-                                        fontWeight = FontWeight.SemiBold,
-                                        fontFamily = BebasNeueFont(),
-                                        color = TextPrimary,
-                                        modifier = Modifier.weight(1f)
-                                    )
-
-                                    Surface(
-                                        color = if (comment.length > 300) SurfaceError.copy(alpha = 0.1f)
-                                        else SurfaceBrand.copy(alpha = 0.1f),
-                                        shape = RoundedCornerShape(12.dp)
-                                    ) {
-                                        Text(
-                                            text = "${comment.length}/500",
-                                            fontSize = FontSize.SMALL,
-                                            fontFamily = RobotoCondensedFont(),
-                                            color = if (comment.length > 300) SurfaceError else TextSecondary,
-                                            modifier = Modifier.padding(
-                                                horizontal = 8.dp,
-                                                vertical = 4.dp
-                                            )
-                                        )
-                                    }
-                                }
-
-                                Spacer(modifier = Modifier.height(16.dp))
-
-                                OutlinedTextField(
-                                    value = comment,
-                                    onValueChange = { if (it.length <= 500) comment = it },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(140.dp),
-                                    placeholder = {
-                                        Text(
-                                            text = "What did you love about this product? Share details that would help other customers make their decision...",
-                                            color = TextSecondary.copy(alpha = 0.7f),
-                                            fontFamily = RobotoCondensedFont(),
-                                            fontSize = FontSize.SMALL
-                                        )
-                                    },
-                                    colors = OutlinedTextFieldDefaults.colors(
-                                        focusedBorderColor = SurfaceBrand,
-                                        unfocusedBorderColor = BorderIdle,
-                                        focusedTextColor = TextPrimary,
-                                        unfocusedTextColor = TextPrimary,
-                                        cursorColor = SurfaceBrand,
-                                        focusedContainerColor = SurfaceBrand.copy(alpha = 0.05f),
-                                        unfocusedContainerColor = SurfaceLighter
-                                    ),
-                                    shape = RoundedCornerShape(16.dp),
-                                    maxLines = 6
-                                )
-
-                                if (comment.isNotBlank()) {
-                                    Spacer(modifier = Modifier.height(12.dp))
-
-                                    Surface(
-                                        color = SurfaceBrand.copy(alpha = 0.1f),
-                                        shape = RoundedCornerShape(12.dp)
-                                    ) {
-                                        Text(
-                                            text = "💡 Tip: Mention specific features, quality, or how it met your expectations",
-                                            fontSize = FontSize.EXTRA_SMALL,
-                                            fontFamily = RobotoCondensedFont(),
-                                            color = TextSecondary,
-                                            modifier = Modifier.padding(12.dp)
-                                        )
-                                    }
-                                }
-                            }
-                        }
+                        CommentCard(
+                            comment = comment,
+                            onCommentChange = { if (it.length <= 500) comment = it }
+                        )
                     }
-
+                    item {
+                        PhotosCard(
+                            uploadedPhotoUrls = uploadedPhotoUrls,
+                            isUploading = isUploadingPhotos,
+                            onRemovePhoto = { _ ->
+                                messageBarState.addError("Photo removal not yet supported")
+                            },
+                            onAddPhoto = {
+                                messageBarState.addSuccess("📷 Photo picker coming soon! Photos will be uploaded from device gallery.")
+                            }
+                        )
+                    }
                     item {
                         Spacer(modifier = Modifier.height(24.dp))
                     }
-
                     item {
                         EnhancedSubmitButton(
-                            isEnabled = rating > 0 && comment.isNotBlank() && !isSubmitting,
+                            isEnabled = rating > 0 && comment.isNotBlank() && !isSubmitting && !isUploadingPhotos,
                             isSubmitting = isSubmitting,
                             onClick = {
                                 isSubmitting = true
                                 productDetailViewModel.addReview(
                                     rating = rating,
                                     comment = comment,
+                                    photoUrls = uploadedPhotoUrls,
                                     onSuccess = {
                                         isSubmitting = false
                                         messageBarState.addSuccess("🎉 Review submitted successfully!")
@@ -282,6 +154,323 @@ fun AddReviewScreen(
 }
 
 @Composable
+private fun RatingCard(
+    rating: Float,
+    onRatingChange: (Float) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 8.dp,
+                shape = RoundedCornerShape(20.dp),
+                spotColor = SurfaceBrand.copy(alpha = 0.25f)
+            ),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Surface)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    brush = Brush.linearGradient(
+                        colors = listOf(
+                            SurfaceBrand.copy(alpha = 0.1f),
+                            Surface,
+                            SurfaceBrand.copy(alpha = 0.05f)
+                        )
+                    )
+                )
+                .padding(24.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "✨ Rate this product",
+                    fontSize = FontSize.EXTRA_LARGE,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = BebasNeueFont(),
+                    color = TextPrimary,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Your opinion matters to other customers",
+                    fontSize = FontSize.SMALL,
+                    fontFamily = RobotoCondensedFont(),
+                    color = TextSecondary,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                EnhancedRatingStars(
+                    rating = rating,
+                    onRatingChange = onRatingChange,
+                    size = 36.dp
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                AnimatedRatingText(rating = rating)
+            }
+        }
+    }
+}
+
+@Composable
+private fun CommentCard(
+    comment: String,
+    onCommentChange: (String) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 6.dp,
+                shape = RoundedCornerShape(20.dp),
+                spotColor = TextSecondary.copy(alpha = 0.2f)
+            ),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Surface)
+    ) {
+        Column(
+            modifier = Modifier.padding(24.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "💭 Share your thoughts",
+                    fontSize = FontSize.LARGE,
+                    fontWeight = FontWeight.SemiBold,
+                    fontFamily = BebasNeueFont(),
+                    color = TextPrimary,
+                    modifier = Modifier.weight(1f)
+                )
+                Surface(
+                    color = if (comment.length > 300) SurfaceError.copy(alpha = 0.1f)
+                    else SurfaceBrand.copy(alpha = 0.1f),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(
+                        text = "${comment.length}/500",
+                        fontSize = FontSize.SMALL,
+                        fontFamily = RobotoCondensedFont(),
+                        color = if (comment.length > 300) SurfaceError else TextSecondary,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = comment,
+                onValueChange = onCommentChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp),
+                placeholder = {
+                    Text(
+                        text = "What did you love about this product? Share details that would help other customers make their decision...",
+                        color = TextSecondary.copy(alpha = 0.7f),
+                        fontFamily = RobotoCondensedFont(),
+                        fontSize = FontSize.SMALL
+                    )
+                },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = SurfaceBrand,
+                    unfocusedBorderColor = BorderIdle,
+                    focusedTextColor = TextPrimary,
+                    unfocusedTextColor = TextPrimary,
+                    cursorColor = SurfaceBrand,
+                    focusedContainerColor = SurfaceBrand.copy(alpha = 0.05f),
+                    unfocusedContainerColor = SurfaceLighter
+                ),
+                shape = RoundedCornerShape(16.dp),
+                maxLines = 6
+            )
+            if (comment.isNotBlank()) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Surface(
+                    color = SurfaceBrand.copy(alpha = 0.1f),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(
+                        text = "💡 Tip: Mention specific features, quality, or how it met your expectations",
+                        fontSize = FontSize.EXTRA_SMALL,
+                        fontFamily = RobotoCondensedFont(),
+                        color = TextSecondary,
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PhotosCard(
+    uploadedPhotoUrls: List<String>,
+    isUploading: Boolean,
+    onRemovePhoto: (Int) -> Unit,
+    onAddPhoto: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 6.dp,
+                shape = RoundedCornerShape(20.dp),
+                spotColor = TextSecondary.copy(alpha = 0.2f)
+            ),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Surface)
+    ) {
+        Column(
+            modifier = Modifier.padding(24.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "📷 Add Photos",
+                    fontSize = FontSize.LARGE,
+                    fontWeight = FontWeight.SemiBold,
+                    fontFamily = BebasNeueFont(),
+                    color = TextPrimary,
+                    modifier = Modifier.weight(1f)
+                )
+                Surface(
+                    color = SurfaceBrand.copy(alpha = 0.1f),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(
+                        text = "${uploadedPhotoUrls.size}/$MAX_PHOTOS",
+                        fontSize = FontSize.SMALL,
+                        fontFamily = RobotoCondensedFont(),
+                        color = if (uploadedPhotoUrls.size >= MAX_PHOTOS) SurfaceError else TextSecondary,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Photos help other customers see the product in real life",
+                fontSize = FontSize.SMALL,
+                fontFamily = RobotoCondensedFont(),
+                color = TextSecondary
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(uploadedPhotoUrls.size) { index ->
+                    PhotoPreviewItem(
+                        photoUrl = uploadedPhotoUrls[index],
+                        onRemove = { onRemovePhoto(index) }
+                    )
+                }
+                if (uploadedPhotoUrls.size < MAX_PHOTOS && !isUploading) {
+                    item {
+                        AddPhotoButton(onClick = onAddPhoto)
+                    }
+                }
+                if (isUploading) {
+                    item {
+                        UploadingPhotoPlaceholder()
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PhotoPreviewItem(
+    photoUrl: String,
+    onRemove: () -> Unit
+) {
+    Box(
+        modifier = Modifier.size(80.dp)
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalPlatformContext.current)
+                .data(photoUrl)
+                .crossfade(true)
+                .build(),
+            contentDescription = "Uploaded photo",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(12.dp))
+                .border(1.dp, BorderIdle, RoundedCornerShape(12.dp))
+        )
+        IconButton(
+            onClick = onRemove,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .size(24.dp)
+                .background(SurfaceError, CircleShape)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Close,
+                contentDescription = "Remove photo",
+                tint = TextWhite,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun AddPhotoButton(onClick: () -> Unit) {
+    Surface(
+        modifier = Modifier
+            .size(80.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(12.dp),
+        color = SurfaceLighter,
+        border = androidx.compose.foundation.BorderStroke(2.dp, BorderIdle)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                imageVector = Icons.Filled.AddCircle,
+                contentDescription = "Add photo",
+                tint = SurfaceBrand,
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Add",
+                fontSize = FontSize.EXTRA_SMALL,
+                fontFamily = RobotoCondensedFont(),
+                color = TextSecondary
+            )
+        }
+    }
+}
+
+@Composable
+private fun UploadingPhotoPlaceholder() {
+    Surface(
+        modifier = Modifier.size(80.dp),
+        shape = RoundedCornerShape(12.dp),
+        color = SurfaceLighter
+    ) {
+        Box(
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(24.dp),
+                strokeWidth = 2.dp,
+                color = SurfaceBrand
+            )
+        }
+    }
+}
+
+@Composable
 private fun EnhancedRatingStars(
     rating: Float,
     onRatingChange: (Float) -> Unit,
@@ -297,7 +486,6 @@ private fun EnhancedRatingStars(
         repeat(maxRating) { index ->
             val starIndex = index + 1
             val isSelected = starIndex <= rating
-
             val scale by animateFloatAsState(
                 targetValue = if (isSelected) 1.15f else 1f,
                 animationSpec = spring(
@@ -305,7 +493,6 @@ private fun EnhancedRatingStars(
                     stiffness = Spring.StiffnessLow
                 )
             )
-
             Box(
                 modifier = Modifier
                     .scale(scale)
@@ -341,7 +528,6 @@ private fun AnimatedRatingText(rating: Float) {
         },
         animationSpec = tween(durationMillis = 300)
     )
-
     Surface(
         color = textColor.copy(alpha = 0.1f),
         shape = RoundedCornerShape(20.dp)
@@ -369,12 +555,10 @@ private fun EnhancedSubmitButton(
         isEnabled -> "🚀 Submit Review"
         else -> "📝 Complete Your Review"
     }
-
     val animatedScale by animateFloatAsState(
         targetValue = if (isEnabled) 1f else 0.95f,
         animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
     )
-
     Box(
         modifier = modifier.scale(animatedScale)
     ) {
@@ -441,6 +625,7 @@ private fun EnhancedSubmitButton(
         }
     }
 }
+
 private fun getRatingText(rating: Float): String {
     return when (rating.toInt()) {
         1 -> "😞 Poor"
@@ -450,4 +635,4 @@ private fun getRatingText(rating: Float): String {
         5 -> "🤩 Excellent"
         else -> "👆 Tap a star to rate"
     }
-} 
+}

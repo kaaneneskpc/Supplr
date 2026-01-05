@@ -1,8 +1,6 @@
 package com.kaaneneskpc.supplr.component
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,7 +20,12 @@ fun ReviewsSection(
     averageRating: Float,
     reviewCount: Int,
     hasUserReviewed: Boolean,
+    userVotes: Map<String, Boolean?> = emptyMap(),
     onWriteReviewClick: () -> Unit,
+    onHelpfulClick: (String) -> Unit = {},
+    onUnhelpfulClick: (String) -> Unit = {},
+    onPhotoClick: (String) -> Unit = {},
+    onLoadUserVote: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -34,9 +37,7 @@ fun ReviewsSection(
             hasUserReviewed = hasUserReviewed,
             onWriteReviewClick = onWriteReviewClick
         )
-        
         Spacer(modifier = Modifier.height(24.dp))
-
         when (reviewsState) {
             is RequestState.Loading -> {
                 Box(
@@ -73,9 +74,17 @@ fun ReviewsSection(
                             color = TextPrimary,
                             modifier = Modifier.padding(horizontal = 4.dp)
                         )
-
                         reviewsState.data.forEach { review ->
-                            ReviewItem(review = review)
+                            LaunchedEffect(review.id) {
+                                onLoadUserVote(review.id)
+                            }
+                            ReviewItem(
+                                review = review,
+                                userVote = userVotes[review.id],
+                                onHelpfulClick = { onHelpfulClick(review.id) },
+                                onUnhelpfulClick = { onUnhelpfulClick(review.id) },
+                                onPhotoClick = onPhotoClick
+                            )
                         }
                     }
                 }
@@ -143,7 +152,6 @@ private fun ReviewsSummaryHeader(
                 color = TextSecondary
             )
         }
-        
         FilledTonalButton(
             onClick = onWriteReviewClick,
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp)
@@ -188,4 +196,4 @@ private fun EmptyReviewsMessage() {
         )
         }
     }
-} 
+}

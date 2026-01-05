@@ -50,6 +50,7 @@ kotlin {
             implementation(libs.coil3.network.ktor)
             implementation(libs.messagebar.kmp)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.firebase.storage)
             implementation(project(":shared"))
             implementation(project(":data"))
         }

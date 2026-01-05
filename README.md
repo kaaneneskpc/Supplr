@@ -30,6 +30,7 @@
 - 💳 **Stripe Payment Integration**: Real PaymentSheet (Android) / Simulated (iOS)
 - 🔔 **Push Notification Support**: Personalized notifications
 - 📦 **Order History**: View and track all past orders with detailed status
+- ⭐ **Product Reviews**: Rate products, write reviews with photos, helpful/unhelpful voting
 
 ### 📊 Admin Features
 - 🛠️ **Admin Panel**: Comprehensive product and analytics management
@@ -156,7 +157,18 @@
 
 ## 🎉 Recent Updates
 
-### 🛠️ Admin Order Management & Order History (Latest)
+### ⭐ Product Review System (Latest)
+- **Star Ratings** - Users can rate products with 1-5 stars
+- **Written Reviews** - Detailed review comments with 500 character limit
+- **📷 Photo Upload** - Attach photos to reviews (Firebase Storage)
+- **👍👎 Helpful Voting** - Vote on review helpfulness with atomic counters
+- **Real-time Updates** - Average rating and count update instantly
+- **Separate Review Page** - Dedicated `AddReviewScreen` for writing reviews
+- **Photo Gallery** - `ReviewPhotosGallery` component for displaying review images
+- **Vote Tracking** - `review_votes` Firestore collection for vote management
+- **User Restrictions** - Cannot vote on own reviews, one vote per review
+
+### 🛠️ Admin Order Management & Order History
 - **Admin Order Management** - View and manage all customer orders
 - **Order Status Updates** - Progress orders through PENDING → CONFIRMED → PREPARING → SHIPPED → DELIVERED
 - **Order Cancellation** - Cancel orders (except delivered/cancelled)
@@ -193,7 +205,7 @@
 - **"Pay with Card" 💳 and "Pay on Delivery" 🚚** options
 
 ### ❤️ Enhanced User Experience
-- **Modern review system** with improved UI/UX
+- **Advanced review system** - Star ratings, photos, and helpful voting
 - **Favorites management** with instant updates
 - **Responsive design** for all screen sizes
 - **Bottom sheet experiences** consistent across platforms

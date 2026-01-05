@@ -57,7 +57,6 @@ import com.kaaneneskpc.supplr.shared.fonts.SurfaceLighter
 import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
 import com.kaaneneskpc.supplr.shared.fonts.TextSecondary
 import com.kaaneneskpc.supplr.shared.fonts.TextWhite
-import com.kaaneneskpc.supplr.shared.navigation.Screen
 import com.kaaneneskpc.supplr.shared.util.DisplayResult
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -77,9 +76,10 @@ fun ProductDetailsScreen(
     val selectedFlavor = productDetailViewModel.selectedFlavor
     val favoriteProductIdsState by productDetailViewModel.favoriteProductIds.collectAsState()
     val reviewsState by productDetailViewModel.reviews.collectAsState()
-    val averageRating = productDetailViewModel.averageRating
-    val reviewCount = productDetailViewModel.reviewCount
+    val averageRating by productDetailViewModel.averageRating.collectAsState()
+    val reviewCount by productDetailViewModel.reviewCount.collectAsState()
     val hasUserReviewed = productDetailViewModel.hasUserReviewed
+    val userVotes by productDetailViewModel.userVotes.collectAsState()
 
 
     CommonScaffold(
@@ -277,8 +277,28 @@ fun ProductDetailsScreen(
                                 averageRating = averageRating,
                                 reviewCount = reviewCount,
                                 hasUserReviewed = hasUserReviewed,
+                                userVotes = userVotes,
                                 onWriteReviewClick = {
                                     navigateToReviewScreen(id)
+                                },
+                                onHelpfulClick = { reviewId ->
+                                    productDetailViewModel.voteReview(
+                                        reviewId = reviewId,
+                                        isHelpful = true,
+                                        onSuccess = { messageBarState.addSuccess("Vote recorded!") },
+                                        onError = { message -> messageBarState.addError(message) }
+                                    )
+                                },
+                                onUnhelpfulClick = { reviewId ->
+                                    productDetailViewModel.voteReview(
+                                        reviewId = reviewId,
+                                        isHelpful = false,
+                                        onSuccess = { messageBarState.addSuccess("Vote recorded!") },
+                                        onError = { message -> messageBarState.addError(message) }
+                                    )
+                                },
+                                onLoadUserVote = { reviewId ->
+                                    productDetailViewModel.loadUserVoteForReview(reviewId)
                                 }
                             )
                         }

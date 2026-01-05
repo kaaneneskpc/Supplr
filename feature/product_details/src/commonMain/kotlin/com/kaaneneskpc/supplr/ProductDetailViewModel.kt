@@ -13,9 +13,13 @@ import com.kaaneneskpc.supplr.data.domain.ReviewRepository
 import com.kaaneneskpc.supplr.shared.domain.CartItem
 import com.kaaneneskpc.supplr.shared.domain.Review
 import com.kaaneneskpc.supplr.shared.util.RequestState
+import dev.gitlive.firebase.storage.File
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class ProductDetailViewModel (
@@ -50,19 +54,50 @@ class ProductDetailViewModel (
             initialValue = RequestState.Loading
         )
 
+    private val _userVotes = MutableStateFlow<Map<String, Boolean?>>(emptyMap())
+    val userVotes: StateFlow<Map<String, Boolean?>> = _userVotes.asStateFlow()
+
+    val averageRating: StateFlow<Float> = reviews.map { state ->
+        when (state) {
+            is RequestState.Success -> {
+                if (state.data.isNotEmpty()) {
+                    state.data.map { it.rating }.average().toFloat()
+                } else {
+                    0f
+                }
+            }
+            else -> 0f
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = 0f
+    )
+
+    val reviewCount: StateFlow<Int> = reviews.map { state ->
+        when (state) {
+            is RequestState.Success -> state.data.size
+            else -> 0
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = 0
+    )
+
     var quantity by mutableStateOf(1)
         private set
 
     var selectedFlavor: String? by mutableStateOf(null)
         private set
 
-    var averageRating by mutableStateOf(0f)
-        private set
-
-    var reviewCount by mutableStateOf(0)
-        private set
-
     var hasUserReviewed by mutableStateOf(false)
+        private set
+
+    var isUploadingPhotos by mutableStateOf(false)
+        private set
+
+    var uploadedPhotoUrls by mutableStateOf<List<String>>(emptyList())
         private set
 
     fun updateQuantity(value: Int) {
@@ -123,24 +158,48 @@ class ProductDetailViewModel (
     fun loadReviewStats() {
         viewModelScope.launch {
             val productId = savedStateHandle.get<String>("id") ?: return@launch
-
-            when (val avgRating = reviewRepository.getProductAverageRating(productId)) {
-                is RequestState.Success -> averageRating = avgRating.data
-                else -> {}
+            when (val result = reviewRepository.hasUserReviewedProduct(productId)) {
+                is RequestState.Success -> hasUserReviewed = result.data
+                else -> hasUserReviewed = false
             }
+        }
+    }
 
-            when (val count = reviewRepository.getProductReviewCount(productId)) {
-                is RequestState.Success -> reviewCount = count.data
-                else -> {}
+    fun uploadPhotos(
+        files: List<File>,
+        onComplete: (List<String>) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            isUploadingPhotos = true
+            val urls = mutableListOf<String>()
+            val productId = savedStateHandle.get<String>("id") ?: run {
+                isUploadingPhotos = false
+                onError("Product id is not found.")
+                return@launch
             }
-
-            hasUserReviewed = false
+            for (file in files) {
+                reviewRepository.uploadReviewPhoto(
+                    file = file,
+                    reviewId = productId,
+                    onSuccess = { url -> urls.add(url) },
+                    onError = { error ->
+                        isUploadingPhotos = false
+                        onError(error)
+                        return@uploadReviewPhoto
+                    }
+                )
+            }
+            uploadedPhotoUrls = urls
+            isUploadingPhotos = false
+            onComplete(urls)
         }
     }
 
     fun addReview(
         rating: Float,
         comment: String,
+        photoUrls: List<String> = emptyList(),
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
@@ -151,7 +210,9 @@ class ProductDetailViewModel (
                     productId = productId,
                     rating = rating,
                     comment = comment,
+                    photoUrls = photoUrls,
                     onSuccess = {
+                        uploadedPhotoUrls = emptyList()
                         onSuccess()
                         loadReviewStats()
                     },
@@ -161,6 +222,63 @@ class ProductDetailViewModel (
                 onError("Product id is not found.")
             }
         }
+    }
+
+    fun voteReview(
+        reviewId: String,
+        isHelpful: Boolean,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            reviewRepository.voteReview(
+                reviewId = reviewId,
+                isHelpful = isHelpful,
+                onSuccess = {
+                    val currentVotes = _userVotes.value.toMutableMap()
+                    currentVotes[reviewId] = isHelpful
+                    _userVotes.value = currentVotes
+                    onSuccess()
+                },
+                onError = onError
+            )
+        }
+    }
+
+    fun loadUserVoteForReview(reviewId: String) {
+        viewModelScope.launch {
+            when (val result = reviewRepository.getUserVoteForReview(reviewId)) {
+                is RequestState.Success -> {
+                    val currentVotes = _userVotes.value.toMutableMap()
+                    currentVotes[reviewId] = result.data
+                    _userVotes.value = currentVotes
+                }
+                else -> {}
+            }
+        }
+    }
+
+    fun removeVote(
+        reviewId: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            reviewRepository.removeVote(
+                reviewId = reviewId,
+                onSuccess = {
+                    val currentVotes = _userVotes.value.toMutableMap()
+                    currentVotes[reviewId] = null
+                    _userVotes.value = currentVotes
+                    onSuccess()
+                },
+                onError = onError
+            )
+        }
+    }
+
+    fun clearUploadedPhotos() {
+        uploadedPhotoUrls = emptyList()
     }
 
     init {

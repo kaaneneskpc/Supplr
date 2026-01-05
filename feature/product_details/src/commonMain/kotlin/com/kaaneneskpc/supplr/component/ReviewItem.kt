@@ -25,14 +25,16 @@ import kotlinx.datetime.toLocalDateTime
 @Composable
 fun ReviewItem(
     review: Review,
+    userVote: Boolean? = null,
+    onHelpfulClick: () -> Unit = {},
+    onUnhelpfulClick: () -> Unit = {},
+    onPhotoClick: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var isVisible by remember { mutableStateOf(false) }
-    
     LaunchedEffect(Unit) {
         isVisible = true
     }
-    
     val animatedScale by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0.95f,
         animationSpec = spring(
@@ -40,7 +42,6 @@ fun ReviewItem(
             stiffness = Spring.StiffnessLow
         )
     )
-    
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -100,9 +101,7 @@ fun ReviewItem(
                                     )
                                 }
                             }
-                            
                             Spacer(modifier = Modifier.width(12.dp))
-                            
                             Column {
                                 Text(
                                     text = "👤 ${review.username}",
@@ -120,12 +119,9 @@ fun ReviewItem(
                             }
                         }
                     }
-
                     EnhancedRatingBadge(rating = review.rating)
                 }
-                
                 Spacer(modifier = Modifier.height(16.dp))
-
                 if (review.comment.isNotBlank()) {
                     Surface(
                         color = Surface,
@@ -143,7 +139,6 @@ fun ReviewItem(
                                 color = TextSecondary,
                                 modifier = Modifier.padding(bottom = 8.dp)
                             )
-                            
                             Text(
                                 text = "\"${review.comment}\"",
                                 fontFamily = RobotoCondensedFont(),
@@ -154,10 +149,22 @@ fun ReviewItem(
                         }
                     }
                 }
-
+                if (review.photoUrls.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "📷 Photos (${review.photoUrls.size})",
+                        fontFamily = RobotoCondensedFont(),
+                        fontSize = FontSize.SMALL,
+                        fontWeight = FontWeight.Medium,
+                        color = TextSecondary
+                    )
+                    ReviewPhotosGallery(
+                        photoUrls = review.photoUrls,
+                        onPhotoClick = onPhotoClick
+                    )
+                }
                 if (review.isVerifiedPurchase || review.rating >= 4.0f) {
                     Spacer(modifier = Modifier.height(16.dp))
-                    
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -169,7 +176,6 @@ fun ReviewItem(
                                 textColor = Color(0xFF2E7D32)
                             )
                         }
-
                         if (review.rating >= 4.0f) {
                             EnhancedBadge(
                                 text = "⭐ Recommended",
@@ -179,6 +185,19 @@ fun ReviewItem(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(16.dp))
+                HorizontalDivider(
+                    color = BorderIdle.copy(alpha = 0.3f),
+                    thickness = 1.dp
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                HelpfulVotingSection(
+                    helpfulCount = review.helpfulCount,
+                    unhelpfulCount = review.unhelpfulCount,
+                    userVote = userVote,
+                    onHelpfulClick = onHelpfulClick,
+                    onUnhelpfulClick = onUnhelpfulClick
+                )
             }
         }
     }
@@ -195,14 +214,12 @@ private fun EnhancedRatingBadge(
         rating >= 2.5f -> Color(0xFFFF5722)
         else -> Color(0xFFF44336)
     }
-    
     val ratingEmoji = when {
         rating >= 4.5f -> "🤩"
         rating >= 3.5f -> "😊"
         rating >= 2.5f -> "😐"
         else -> "😞"
     }
-    
     Surface(
         color = ratingColor.copy(alpha = 0.15f),
         shape = RoundedCornerShape(16.dp),
@@ -221,9 +238,7 @@ private fun EnhancedRatingBadge(
                     size = 16.dp
                 )
             }
-            
             Spacer(modifier = Modifier.height(4.dp))
-            
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -276,4 +291,4 @@ private fun formatReviewDate(timestamp: Long): String {
     } catch (e: Exception) {
         "Unknown date"
     }
-} 
+}
