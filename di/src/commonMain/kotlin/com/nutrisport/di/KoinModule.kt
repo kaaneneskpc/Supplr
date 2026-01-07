@@ -1,6 +1,7 @@
 package com.kaaneneskpc.supplr.di
 
 import com.kaaneneskpc.supplr.ProductDetailViewModel
+import com.kaaneneskpc.supplr.admin_panel.AdminCouponsViewModel
 import com.kaaneneskpc.supplr.admin_panel.AdminDashboardViewModel
 import com.kaaneneskpc.supplr.admin_panel.AdminOrdersViewModel
 import com.kaaneneskpc.supplr.admin_panel.AdminPanelViewModel
@@ -10,6 +11,7 @@ import com.kaaneneskpc.supplr.categories.category_search.CategorySearchViewModel
 import com.kaaneneskpc.supplr.checkout.CheckoutViewModel
 import com.kaaneneskpc.supplr.data.AdminRepositoryImpl
 import com.kaaneneskpc.supplr.data.BlogRepositoryImpl
+import com.kaaneneskpc.supplr.data.CouponRepositoryImpl
 import com.kaaneneskpc.supplr.data.CustomerRepositoryImpl
 import com.kaaneneskpc.supplr.data.FavoritesRepositoryImpl
 import com.kaaneneskpc.supplr.data.OrderRepositoryImpl
@@ -19,6 +21,7 @@ import com.kaaneneskpc.supplr.data.LocationRepositoryImpl
 import com.kaaneneskpc.supplr.data.PaymentRepositoryImpl
 import com.kaaneneskpc.supplr.data.domain.AdminRepository
 import com.kaaneneskpc.supplr.data.domain.BlogRepository
+import com.kaaneneskpc.supplr.data.domain.CouponRepository
 import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import com.kaaneneskpc.supplr.data.domain.FavoritesRepository
 import com.kaaneneskpc.supplr.data.domain.LocationRepository
@@ -52,6 +55,7 @@ val sharedModule = module {
     single<ReviewRepository> { ReviewRepositoryImpl() }
     single<LocationRepository> { LocationRepositoryImpl() }
     single<PaymentRepository> { PaymentRepositoryImpl() }
+    single<CouponRepository> { CouponRepositoryImpl() }
     single { GetDashboardAnalyticsUseCase(get()) }
     single { GetUserStatisticsUseCase(get()) }
     viewModelOf(::AuthViewModel)
@@ -61,6 +65,7 @@ val sharedModule = module {
     viewModelOf(::AdminPanelViewModel)
     viewModelOf(::AdminDashboardViewModel)
     viewModelOf(::AdminOrdersViewModel)
+    viewModelOf(::AdminCouponsViewModel)
     viewModelOf(::ProductsOverviewViewModel)
     viewModelOf(::ProductDetailViewModel)
     viewModelOf(::CartViewModel)

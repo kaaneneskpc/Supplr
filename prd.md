@@ -302,6 +302,15 @@ Supplr is a modern, modular, and scalable e-commerce application targeting Andro
   - ReviewPhotosGallery and HelpfulVotingSection components
   - Vote tracking with Firestore `review_votes` collection
 
+- **🎁 Coupon and Discount Code System (checkout):**
+  - Coupon code input at checkout
+  - Coupon types: Percentage, Fixed Amount, Free Shipping
+  - Validation: expiration date, usage limit, minimum order amount
+  - Real-time discount calculation
+  - Coupon tracking in orders (`couponCode`, `couponDiscount`, `originalAmount`)
+  - Usage count increment on order completion
+  - Firestore `coupons` collection for coupon management
+
 - **Product Management (manage_product):** Product add, update, and delete operations.
 - **Products Overview (products_overview):** Listing of new and discounted products on home screen.
 - **Payment Completed (payment_completed):** User information and summary screen after order.

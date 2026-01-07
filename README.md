@@ -31,6 +31,7 @@
 - 🔔 **Push Notification Support**: Personalized notifications
 - 📦 **Order History**: View and track all past orders with detailed status
 - ⭐ **Product Reviews**: Rate products, write reviews with photos, helpful/unhelpful voting
+- 🎁 **Coupon & Discounts**: Apply coupon codes at checkout (percentage, fixed, free shipping)
 
 ### 📊 Admin Features
 - 🛠️ **Admin Panel**: Comprehensive product and analytics management
@@ -157,7 +158,16 @@
 
 ## 🎉 Recent Updates
 
-### ⭐ Product Review System (Latest)
+### 🎁 Coupon and Discount Code System (Latest)
+- **Coupon Code Input** - Apply coupons at checkout
+- **Multiple Coupon Types** - Percentage, Fixed Amount, Free Shipping
+- **Real-time Validation** - Expiration, usage limit, minimum order checks
+- **Discount Display** - Strikethrough original price, show savings
+- **Order Integration** - Coupon tracked in order with discount details
+- **Usage Tracking** - Automatic usage count increment on order
+- **Firestore Collection** - `coupons` collection for coupon management
+
+### ⭐ Product Review System
 - **Star Ratings** - Users can rate products with 1-5 stars
 - **Written Reviews** - Detailed review comments with 500 character limit
 - **📷 Photo Upload** - Attach photos to reviews (Firebase Storage)

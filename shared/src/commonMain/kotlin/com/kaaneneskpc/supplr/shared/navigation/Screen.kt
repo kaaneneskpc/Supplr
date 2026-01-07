@@ -66,4 +66,7 @@ sealed class Screen {
 
     @Serializable
     data class AdminOrderDetail(val orderId: String) : Screen()
+
+    @Serializable
+    data object AdminCoupons : Screen()
 }

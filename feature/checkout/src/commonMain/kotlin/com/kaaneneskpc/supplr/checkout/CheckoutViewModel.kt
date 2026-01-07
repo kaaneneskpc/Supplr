@@ -6,11 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kaaneneskpc.supplr.data.domain.CouponRepository
 import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import com.kaaneneskpc.supplr.data.domain.OrderRepository
 import com.kaaneneskpc.supplr.data.domain.PaymentRepository
 import com.kaaneneskpc.supplr.shared.domain.CartItem
 import com.kaaneneskpc.supplr.shared.domain.Country
+import com.kaaneneskpc.supplr.shared.domain.Coupon
+import com.kaaneneskpc.supplr.shared.domain.CouponValidationResult
 import com.kaaneneskpc.supplr.shared.domain.Customer
 import com.kaaneneskpc.supplr.shared.domain.Order
 import com.kaaneneskpc.supplr.shared.domain.PaymentIntentResponse
@@ -18,7 +21,6 @@ import com.kaaneneskpc.supplr.shared.domain.PhoneNumber
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.ranges.contains
 
 data class CheckoutScreenState(
     val id: String = "",
@@ -33,28 +35,24 @@ data class CheckoutScreenState(
     val cart: List<CartItem> = emptyList(),
     val paymentIntent: PaymentIntentResponse? = null,
     val isCreatingPaymentIntent: Boolean = false,
-    val paymentIntentError: String? = null
+    val paymentIntentError: String? = null,
+    val couponCode: String = "",
+    val appliedCoupon: Coupon? = null,
+    val couponDiscount: Double = 0.0,
+    val isValidatingCoupon: Boolean = false,
+    val couponError: String? = null
 )
 
 class CheckoutViewModel(
     private val customerRepository: CustomerRepository,
     private val orderRepository: OrderRepository,
     private val paymentRepository: PaymentRepository,
+    private val couponRepository: CouponRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     var screenReady: RequestState<Unit> by mutableStateOf(RequestState.Loading)
     var screenState: CheckoutScreenState by mutableStateOf(CheckoutScreenState())
         private set
-
-    val isFormValid: Boolean
-        get() = with(screenState) {
-            firstName.length in 3..50 &&
-                    lastName.length in 3..50 &&
-                    city?.length in 3..50 &&
-                    postalCode != null || postalCode?.toString()?.length in 3..8 &&
-                    address?.length in 3..50 &&
-                    phoneNumber?.number?.length in 5..30
-        }
 
     init {
         viewModelScope.launch {
@@ -71,7 +69,7 @@ class CheckoutViewModel(
                         address = fetchedCustomer.address,
                         phoneNumber = fetchedCustomer.phoneNumber,
                         country = Country.entries.firstOrNull { it.dialCode == fetchedCustomer.phoneNumber?.dialCode }
-                            ?: Country.Serbia,
+                            ?: Country.Turkey,
                         cart = fetchedCustomer.cart
                     )
                     screenReady = RequestState.Success(Unit)
@@ -119,6 +117,59 @@ class CheckoutViewModel(
             )
         )
     }
+
+    fun updateCouponCode(value: String) {
+        screenState = screenState.copy(
+            couponCode = value,
+            couponError = null
+        )
+    }
+
+    fun applyCoupon(orderAmount: Double) {
+        if (screenState.couponCode.isBlank()) {
+            screenState = screenState.copy(couponError = "Please enter a coupon code.")
+            return
+        }
+        viewModelScope.launch {
+            screenState = screenState.copy(isValidatingCoupon = true, couponError = null)
+            val result = couponRepository.validateCoupon(
+                code = screenState.couponCode.trim(),
+                orderAmount = orderAmount
+            )
+            when (result) {
+                is CouponValidationResult.Valid -> {
+                    screenState = screenState.copy(
+                        appliedCoupon = result.coupon,
+                        couponDiscount = result.discountAmount,
+                        isValidatingCoupon = false,
+                        couponError = null
+                    )
+                }
+                is CouponValidationResult.Invalid -> {
+                    screenState = screenState.copy(
+                        appliedCoupon = null,
+                        couponDiscount = 0.0,
+                        isValidatingCoupon = false,
+                        couponError = result.message
+                    )
+                }
+            }
+        }
+    }
+
+    fun removeCoupon() {
+        screenState = screenState.copy(
+            couponCode = "",
+            appliedCoupon = null,
+            couponDiscount = 0.0,
+            couponError = null
+        )
+    }
+
+    fun calculateFinalAmount(totalAmount: Double): Double {
+        return (totalAmount - screenState.couponDiscount).coerceAtLeast(0.0)
+    }
+
 
     private fun updateCustomer(
         onSuccess: () -> Unit,
@@ -216,13 +267,21 @@ class CheckoutViewModel(
         onError: (String) -> Unit,
     ) {
         viewModelScope.launch {
+            val originalAmount = savedStateHandle.get<String>("totalAmount")?.toDoubleOrNull() ?: 0.0
+            val finalAmount = calculateFinalAmount(originalAmount)
             orderRepository.createTheOrder(
                 order = Order(
                     customerId = screenState.id,
                     items = screenState.cart,
-                    totalAmount = savedStateHandle.get<String>("totalAmount")?.toDoubleOrNull() ?: 0.0,
+                    totalAmount = finalAmount,
+                    originalAmount = originalAmount,
+                    couponCode = screenState.appliedCoupon?.code,
+                    couponDiscount = screenState.couponDiscount
                 ),
-                onSuccess = onSuccess,
+                onSuccess = {
+                    incrementCouponUsageIfApplied()
+                    onSuccess()
+                },
                 onError = onError
             )
         }
@@ -234,19 +293,24 @@ class CheckoutViewModel(
         onError: (String) -> Unit,
     ) {
         viewModelScope.launch {
+            val originalAmount = savedStateHandle.get<String>("totalAmount")?.toDoubleOrNull() ?: 0.0
+            val finalAmount = calculateFinalAmount(originalAmount)
             val order = Order(
                 customerId = screenState.id,
                 items = screenState.cart,
-                totalAmount = savedStateHandle.get<String>("totalAmount")?.toDoubleOrNull() ?: 0.0,
+                totalAmount = finalAmount,
+                originalAmount = originalAmount,
                 currency = "usd",
                 paymentIntentId = paymentIntentId,
                 status = "CONFIRMED",
-                shippingAddress = "${screenState.address}, ${screenState.city}, ${screenState.country.name}"
+                shippingAddress = "${screenState.address}, ${screenState.city}, ${screenState.country.name}",
+                couponCode = screenState.appliedCoupon?.code,
+                couponDiscount = screenState.couponDiscount
             )
-            
             val result = paymentRepository.saveOrder(order)
             result.fold(
                 onSuccess = { orderId ->
+                    incrementCouponUsageIfApplied()
                     customerRepository.deleteAllCartItems(
                         onSuccess = { onSuccess() },
                         onError = { onSuccess() }
@@ -256,6 +320,13 @@ class CheckoutViewModel(
                     onError(error.message ?: "Failed to save order")
                 }
             )
+        }
+    }
+
+    private fun incrementCouponUsageIfApplied() {
+        val coupon = screenState.appliedCoupon ?: return
+        viewModelScope.launch {
+            couponRepository.incrementCouponUsage(coupon.id)
         }
     }
 }

@@ -11,6 +11,7 @@ import com.kaaneneskpc.supplr.auth.AuthScreen
 import com.kaaneneskpc.supplr.home.HomeScreen
 import com.kaaneneskpc.supplr.profile.ProfileScreen
 import com.kaaneneskpc.supplr.shared.navigation.Screen
+import com.kaaneneskpc.supplr.admin_panel.AdminCouponsScreen
 import com.kaaneneskpc.supplr.admin_panel.AdminDashboardScreen
 import com.kaaneneskpc.supplr.admin_panel.AdminOrderDetailScreen
 import com.kaaneneskpc.supplr.admin_panel.AdminOrdersScreen
@@ -99,6 +100,9 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 },
                 navigateToOrders = {
                     navController.navigate(Screen.AdminOrders)
+                },
+                navigateToCoupons = {
+                    navController.navigate(Screen.AdminCoupons)
                 }
             )
         }
@@ -132,6 +136,13 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
             val orderId = it.toRoute<Screen.AdminOrderDetail>().orderId
             AdminOrderDetailScreen(
                 orderId = orderId,
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+        composable<Screen.AdminCoupons> {
+            AdminCouponsScreen(
                 navigateBack = {
                     navController.navigateUp()
                 }

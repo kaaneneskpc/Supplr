@@ -23,7 +23,10 @@ data class Order(
         OrderStatusUpdate(status = OrderStatus.PENDING, timestamp = Clock.System.now().toEpochMilliseconds())
     ),
     val estimatedDeliveryDate: Long? = null,
-    val trackingNumber: String? = null
+    val trackingNumber: String? = null,
+    val couponCode: String? = null,
+    val couponDiscount: Double = 0.0,
+    val originalAmount: Double = 0.0
 ) {
     fun getCurrentStatus(): OrderStatus = OrderStatus.fromString(status)
 }
