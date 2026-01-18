@@ -2,9 +2,11 @@ package com.kaaneneskpc.supplr.data
 
 import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import com.kaaneneskpc.supplr.shared.domain.CartItem
+import com.kaaneneskpc.supplr.shared.domain.CommunicationPreferences
 import com.kaaneneskpc.supplr.shared.domain.Customer
 import com.kaaneneskpc.supplr.shared.util.RequestState
 import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.auth.EmailAuthProvider
 import dev.gitlive.firebase.auth.FirebaseUser
 import dev.gitlive.firebase.auth.auth
 import dev.gitlive.firebase.firestore.firestore
@@ -31,9 +33,7 @@ class CustomerRepositoryImpl : CustomerRepository {
                     lastName = user.displayName?.split(" ")?.lastOrNull() ?: "Unknown",
                     email = user.email ?: "Unknown",
                 )
-
                 val customerExists = customerCollection.document(user.uid).get().exists
-
                 if (customerExists) {
                     onSuccess()
                 } else {
@@ -85,7 +85,11 @@ class CustomerRepositoryImpl : CustomerRepository {
                             address = document.get("address"),
                             phoneNumber = document.get("phoneNumber"),
                             cart = document.get("cart"),
-                            isAdmin = privateDataDocument.get("isAdmin")
+                            isAdmin = privateDataDocument.get("isAdmin"),
+                            profilePhotoUrl = document.get("profilePhotoUrl"),
+                            birthDate = document.get("birthDate"),
+                            communicationPreferences = document.get("communicationPreferences"),
+                            isTwoFactorEnabled = document.get("isTwoFactorEnabled") ?: false
                         )
                         send(RequestState.Success(data = customer))
                     } else {
@@ -110,7 +114,6 @@ class CustomerRepositoryImpl : CustomerRepository {
             if (userId != null) {
                 val firestore = Firebase.firestore
                 val customerCollection = firestore.collection(collectionPath = "customer")
-
                 val existingCustomer = customerCollection
                     .document(userId)
                     .get()
@@ -147,7 +150,6 @@ class CustomerRepositoryImpl : CustomerRepository {
             if (currentUserId != null) {
                 val database = Firebase.firestore
                 val customerCollection = database.collection(collectionPath = "customer")
-
                 val existingCustomer = customerCollection
                     .document(currentUserId)
                     .get()
@@ -182,7 +184,6 @@ class CustomerRepositoryImpl : CustomerRepository {
             if (currentUserId != null) {
                 val database = Firebase.firestore
                 val customerCollection = database.collection(collectionPath = "customer")
-
                 val existingCustomer = customerCollection
                     .document(currentUserId)
                     .get()
@@ -217,7 +218,6 @@ class CustomerRepositoryImpl : CustomerRepository {
             if (currentUserId != null) {
                 val database = Firebase.firestore
                 val customerCollection = database.collection(collectionPath = "customer")
-
                 val existingCustomer = customerCollection
                     .document(currentUserId)
                     .get()
@@ -247,7 +247,6 @@ class CustomerRepositoryImpl : CustomerRepository {
             if (currentUserId != null) {
                 val database = Firebase.firestore
                 val customerCollection = database.collection(collectionPath = "customer")
-
                 val existingCustomer = customerCollection
                     .document(currentUserId)
                     .get()
@@ -263,6 +262,178 @@ class CustomerRepositoryImpl : CustomerRepository {
             }
         } catch (e: Exception) {
             onError("Error while deleting all products from cart: ${e.message}")
+        }
+    }
+
+    override suspend fun uploadProfilePhoto(
+        imageBytes: ByteArray,
+        onSuccess: (String) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        onError("Profile photo upload requires platform-specific implementation. Please update your profile photo URL directly.")
+    }
+
+    override suspend fun updateProfilePhoto(
+        photoUrl: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            val userId = getCurrentUserId()
+            if (userId != null) {
+                val firestore = Firebase.firestore
+                firestore.collection("customer")
+                    .document(userId)
+                    .update("profilePhotoUrl" to photoUrl)
+                onSuccess()
+            } else {
+                onError("User is not available.")
+            }
+        } catch (e: Exception) {
+            onError("Error updating profile photo: ${e.message}")
+        }
+    }
+
+    override suspend fun updateBirthDate(
+        birthDate: Long,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            val userId = getCurrentUserId()
+            if (userId != null) {
+                val firestore = Firebase.firestore
+                firestore.collection("customer")
+                    .document(userId)
+                    .update("birthDate" to birthDate)
+                onSuccess()
+            } else {
+                onError("User is not available.")
+            }
+        } catch (e: Exception) {
+            onError("Error updating birth date: ${e.message}")
+        }
+    }
+
+    override suspend fun updateCommunicationPreferences(
+        preferences: CommunicationPreferences,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            val userId = getCurrentUserId()
+            if (userId != null) {
+                val firestore = Firebase.firestore
+                firestore.collection("customer")
+                    .document(userId)
+                    .update("communicationPreferences" to preferences)
+                onSuccess()
+            } else {
+                onError("User is not available.")
+            }
+        } catch (e: Exception) {
+            onError("Error updating communication preferences: ${e.message}")
+        }
+    }
+
+    override suspend fun changePassword(
+        currentPassword: String,
+        newPassword: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            val user = Firebase.auth.currentUser
+            if (user != null && user.email != null) {
+                val credential = EmailAuthProvider.credential(user.email!!, currentPassword)
+                user.reauthenticate(credential)
+                user.updatePassword(newPassword)
+                onSuccess()
+            } else {
+                onError("User is not authenticated.")
+            }
+        } catch (e: Exception) {
+            onError("Error changing password: ${e.message}")
+        }
+    }
+
+    override suspend fun deleteAccount(
+        password: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            val user = Firebase.auth.currentUser
+            if (user != null && user.email != null) {
+                val credential = EmailAuthProvider.credential(user.email!!, password)
+                user.reauthenticate(credential)
+                val userId = user.uid
+                val firestore = Firebase.firestore
+                firestore.collection("customer").document(userId).delete()
+                user.delete()
+                onSuccess()
+            } else {
+                onError("User is not authenticated.")
+            }
+        } catch (e: Exception) {
+            onError("Error deleting account: ${e.message}")
+        }
+    }
+
+    override suspend fun enableTwoFactorAuth(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            val userId = getCurrentUserId()
+            if (userId != null) {
+                val firestore = Firebase.firestore
+                firestore.collection("customer")
+                    .document(userId)
+                    .update("isTwoFactorEnabled" to true)
+                onSuccess()
+            } else {
+                onError("User is not available.")
+            }
+        } catch (e: Exception) {
+            onError("Error enabling two-factor authentication: ${e.message}")
+        }
+    }
+
+    override suspend fun disableTwoFactorAuth(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            val userId = getCurrentUserId()
+            if (userId != null) {
+                val firestore = Firebase.firestore
+                firestore.collection("customer")
+                    .document(userId)
+                    .update("isTwoFactorEnabled" to false)
+                onSuccess()
+            } else {
+                onError("User is not available.")
+            }
+        } catch (e: Exception) {
+            onError("Error disabling two-factor authentication: ${e.message}")
+        }
+    }
+
+    override suspend fun sendTwoFactorVerificationEmail(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            val user = Firebase.auth.currentUser
+            if (user != null) {
+                user.sendEmailVerification()
+                onSuccess()
+            } else {
+                onError("User is not authenticated.")
+            }
+        } catch (e: Exception) {
+            onError("Error sending verification email: ${e.message}")
         }
     }
 }

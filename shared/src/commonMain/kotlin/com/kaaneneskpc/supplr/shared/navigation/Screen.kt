@@ -29,12 +29,10 @@ sealed class Screen {
     data class CategorySearch(
         val category: String
     ) : Screen()
-
     @Serializable
     data class Checkout(
         val totalAmount: String
     ) : Screen()
-
     @Serializable
     data class PaymentCompleted(
         val isSuccess: Boolean? = null,
@@ -45,28 +43,28 @@ sealed class Screen {
     data object ContactUs : Screen()
     @Serializable
     data object Favorites : Screen()
-
     @Serializable
     data object Locations : Screen()
-
     @Serializable
     data class AddEditLocation(val locationId: String? = null) : Screen()
-
     @Serializable
     data class Review(val id: String? = null): Screen()
-
     @Serializable
     data object OrderHistory : Screen()
-
     @Serializable
     data class OrderDetail(val orderId: String) : Screen()
-
     @Serializable
     data object AdminOrders : Screen()
-
     @Serializable
     data class AdminOrderDetail(val orderId: String) : Screen()
-
     @Serializable
     data object AdminCoupons : Screen()
+    @Serializable
+    data object Settings : Screen()
+    @Serializable
+    data object ChangePassword : Screen()
+    @Serializable
+    data object TwoFactorAuth : Screen()
+    @Serializable
+    data object DeleteAccount : Screen()
 }

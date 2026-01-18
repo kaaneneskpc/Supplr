@@ -39,6 +39,10 @@ import com.kaaneneskpc.supplr.order_history.OrderHistoryViewModel
 import com.kaaneneskpc.supplr.payment_completed.PaymentCompletedViewModel
 import com.kaaneneskpc.supplr.products_overview.ProductsOverviewViewModel
 import com.kaaneneskpc.supplr.profile.ProfileViewModel
+import com.kaaneneskpc.supplr.profile.settings.SettingsViewModel
+import com.kaaneneskpc.supplr.profile.settings.ChangePasswordViewModel
+import com.kaaneneskpc.supplr.profile.settings.TwoFactorAuthViewModel
+import com.kaaneneskpc.supplr.profile.settings.DeleteAccountViewModel
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -75,6 +79,10 @@ val sharedModule = module {
     viewModelOf(::FavoritesViewModel)
     viewModelOf(::LocationsViewModel)
     viewModelOf(::OrderHistoryViewModel)
+    viewModelOf(::SettingsViewModel)
+    viewModelOf(::ChangePasswordViewModel)
+    viewModelOf(::TwoFactorAuthViewModel)
+    viewModelOf(::DeleteAccountViewModel)
 }
 
 expect val targetModule: Module

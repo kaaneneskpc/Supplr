@@ -29,7 +29,8 @@ fun CustomDrawer(
     onAdminPanelClick: () -> Unit,
     onFavoritesClick: () -> Unit,
     onLocationsClick: () -> Unit,
-    onOrderHistoryClick: () -> Unit
+    onOrderHistoryClick: () -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -65,6 +66,7 @@ fun CustomDrawer(
                         DrawerItem.Favorites -> onFavoritesClick()
                         DrawerItem.Locations -> onLocationsClick()
                         DrawerItem.OrderHistory -> onOrderHistoryClick()
+                        DrawerItem.Settings -> onSettingsClick()
                         else -> {}
                     }
                 }

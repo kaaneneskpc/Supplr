@@ -26,6 +26,10 @@ import com.kaaneneskpc.supplr.manage_product.ManageProductScreen
 import com.kaaneneskpc.supplr.order_history.OrderDetailScreen
 import com.kaaneneskpc.supplr.order_history.OrderHistoryScreen
 import com.kaaneneskpc.supplr.payment_completed.PaymentCompletedScreen
+import com.kaaneneskpc.supplr.profile.settings.SettingsScreen
+import com.kaaneneskpc.supplr.profile.settings.ChangePasswordScreen
+import com.kaaneneskpc.supplr.profile.settings.TwoFactorAuthScreen
+import com.kaaneneskpc.supplr.profile.settings.DeleteAccountScreen
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
 
 @Composable
@@ -77,6 +81,9 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 },
                 navigateToOrderHistory = {
                     navController.navigate(Screen.OrderHistory)
+                },
+                navigateToSettings = {
+                    navController.navigate(Screen.Settings)
                 }
             )
         }
@@ -84,6 +91,48 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
             ProfileScreen(
                 navigateBack = {
                     navController.navigateUp()
+                }
+            )
+        }
+        composable<Screen.Settings> {
+            SettingsScreen(
+                navigateBack = {
+                    navController.navigateUp()
+                },
+                navigateToChangePassword = {
+                    navController.navigate(Screen.ChangePassword)
+                },
+                navigateToTwoFactorAuth = {
+                    navController.navigate(Screen.TwoFactorAuth)
+                },
+                navigateToDeleteAccount = {
+                    navController.navigate(Screen.DeleteAccount)
+                }
+            )
+        }
+        composable<Screen.ChangePassword> {
+            ChangePasswordScreen(
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+        composable<Screen.TwoFactorAuth> {
+            TwoFactorAuthScreen(
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+        composable<Screen.DeleteAccount> {
+            DeleteAccountScreen(
+                navigateBack = {
+                    navController.navigateUp()
+                },
+                navigateToAuth = {
+                    navController.navigate(Screen.Auth) {
+                        popUpTo(0) { inclusive = true }
+                    }
                 }
             )
         }
@@ -160,7 +209,6 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 }
             )
         }
-
         composable<Screen.CategorySearch> {
             val category = ProductCategory.valueOf(it.toRoute<Screen.CategorySearch>().category)
             CategorySearchScreen(
@@ -173,7 +221,6 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 }
             )
         }
-
         composable<Screen.Checkout> {
             val totalAmount = it.toRoute<Screen.Checkout>().totalAmount
             CheckoutScreen(
@@ -186,7 +233,6 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 }
             )
         }
-
         composable<Screen.PaymentCompleted> {
             PaymentCompletedScreen(
                 navigateBack = {
@@ -197,7 +243,6 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 }
             )
         }
-
         composable<Screen.ContactUs> {
             ContactUsScreen(
                 navigateBack = {
@@ -205,7 +250,6 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 }
             )
         }
-
         composable<Screen.Favorites> {
             FavoritesScreen(
                 navigateBack = {
@@ -216,7 +260,6 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 }
             )
         }
-
         composable<Screen.Locations> {
             LocationsScreen(
                 navigateBack = {
@@ -230,7 +273,6 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 }
             )
         }
-
         composable<Screen.AddEditLocation> {
             val locationId = it.toRoute<Screen.AddEditLocation>().locationId
             AddEditLocationScreen(
@@ -240,7 +282,6 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 }
             )
         }
-
         composable<Screen.Review> {
             val id = it.toRoute<Screen.Review>().id
             AddReviewScreen(
@@ -250,7 +291,6 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 }
             )
         }
-
         composable<Screen.OrderHistory> {
             OrderHistoryScreen(
                 navigateBack = {
@@ -261,7 +301,6 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 }
             )
         }
-
         composable<Screen.OrderDetail> {
             val orderId = it.toRoute<Screen.OrderDetail>().orderId
             OrderDetailScreen(
@@ -272,5 +311,4 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
             )
         }
     }
-
 }

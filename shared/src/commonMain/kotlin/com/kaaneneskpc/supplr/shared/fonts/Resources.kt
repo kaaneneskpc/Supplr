@@ -4,6 +4,8 @@ import supplr.shared.generated.resources.Res
 import supplr.shared.generated.resources.australia
 import supplr.shared.generated.resources.back_arrow
 import supplr.shared.generated.resources.book
+import supplr.shared.generated.resources.calendar
+import supplr.shared.generated.resources.camera
 import supplr.shared.generated.resources.canada
 import supplr.shared.generated.resources.cat
 import supplr.shared.generated.resources.check
@@ -12,6 +14,7 @@ import supplr.shared.generated.resources.close
 import supplr.shared.generated.resources.delete
 import supplr.shared.generated.resources.dollar
 import supplr.shared.generated.resources.edit
+import supplr.shared.generated.resources.email
 import supplr.shared.generated.resources.favorites
 import supplr.shared.generated.resources.france
 import supplr.shared.generated.resources.germany
@@ -19,17 +22,22 @@ import supplr.shared.generated.resources.google_logo
 import supplr.shared.generated.resources.grid
 import supplr.shared.generated.resources.home
 import supplr.shared.generated.resources.india
+import supplr.shared.generated.resources.lock
 import supplr.shared.generated.resources.log_in
 import supplr.shared.generated.resources.log_out
 import supplr.shared.generated.resources.map_pin
 import supplr.shared.generated.resources.menu
 import supplr.shared.generated.resources.minus
+import supplr.shared.generated.resources.notification
 import supplr.shared.generated.resources.plus
 import supplr.shared.generated.resources.right_arrow
 import supplr.shared.generated.resources.search
 import supplr.shared.generated.resources.serbia
+import supplr.shared.generated.resources.settings
+import supplr.shared.generated.resources.shield
 import supplr.shared.generated.resources.shopping_cart
 import supplr.shared.generated.resources.shopping_cart_image
+import supplr.shared.generated.resources.trash
 import supplr.shared.generated.resources.turkey
 import supplr.shared.generated.resources.uk
 import supplr.shared.generated.resources.unlock
@@ -65,6 +73,14 @@ object Resources {
         val Warning = Res.drawable.warning
         val Weight = Res.drawable.weight
         val Favorites = Res.drawable.favorites
+        val Camera = Res.drawable.camera
+        val Calendar = Res.drawable.calendar
+        val Lock = Res.drawable.lock
+        val Shield = Res.drawable.shield
+        val Trash = Res.drawable.trash
+        val Settings = Res.drawable.settings
+        val Email = Res.drawable.email
+        val Notification = Res.drawable.notification
     }
     object Image {
         val ShoppingCart = Res.drawable.shopping_cart_image

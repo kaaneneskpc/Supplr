@@ -23,6 +23,10 @@ enum class DrawerItem(
         title = "My Orders",
         icon = Resources.Icon.ShoppingCart
     ),
+    Settings(
+        title = "Settings",
+        icon = Resources.Icon.Settings
+    ),
     ContactUs(
         title = "Contact Us",
         icon = Resources.Icon.Edit

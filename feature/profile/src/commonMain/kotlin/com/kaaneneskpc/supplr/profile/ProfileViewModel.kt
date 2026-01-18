@@ -23,12 +23,14 @@ data class ProfileScreenState(
     val address: String? = null,
     var country: Country = Country.Turkey,
     val phoneNumber: PhoneNumber? = null,
+    val profilePhotoUrl: String? = null,
+    val birthDate: Long? = null,
+    val isUploadingPhoto: Boolean = false
 )
 
 class ProfileViewModel(
     private val customerRepository: CustomerRepository
 ) : ViewModel() {
-
     var screenReady: RequestState<Unit> by mutableStateOf(RequestState.Loading)
     var screenState: ProfileScreenState by mutableStateOf(ProfileScreenState())
         private set
@@ -49,6 +51,7 @@ class ProfileViewModel(
                 if (it.isSuccess()) {
                     val fetchedCustomer = it.getSuccessData()
                     screenState = ProfileScreenState(
+                            id = fetchedCustomer.id,
                             firstName = fetchedCustomer.firstName,
                             lastName = fetchedCustomer.lastName,
                             email = fetchedCustomer.email,
@@ -57,7 +60,9 @@ class ProfileViewModel(
                             address = fetchedCustomer.address,
                             country = Country.entries.firstOrNull {country -> country.dialCode == fetchedCustomer.phoneNumber?.dialCode }
                                 ?: Country.Turkey,
-                            phoneNumber = fetchedCustomer.phoneNumber
+                            phoneNumber = fetchedCustomer.phoneNumber,
+                            profilePhotoUrl = fetchedCustomer.profilePhotoUrl,
+                            birthDate = fetchedCustomer.birthDate
                         )
                     screenReady = RequestState.Success(Unit)
                 } else if(it.isError()) {
@@ -103,6 +108,52 @@ class ProfileViewModel(
                 number = value
             )
         )
+    }
+
+    fun updateBirthDate(birthDate: Long) {
+        screenState = screenState.copy(birthDate = birthDate)
+        viewModelScope.launch {
+            customerRepository.updateBirthDate(
+                birthDate = birthDate,
+                onSuccess = {},
+                onError = {}
+            )
+        }
+    }
+
+    fun uploadProfilePhoto(
+        imageBytes: ByteArray,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        screenState = screenState.copy(isUploadingPhoto = true)
+        viewModelScope.launch {
+            customerRepository.uploadProfilePhoto(
+                imageBytes = imageBytes,
+                onSuccess = { photoUrl ->
+                    viewModelScope.launch {
+                        customerRepository.updateProfilePhoto(
+                            photoUrl = photoUrl,
+                            onSuccess = {
+                                screenState = screenState.copy(
+                                    profilePhotoUrl = photoUrl,
+                                    isUploadingPhoto = false
+                                )
+                                onSuccess()
+                            },
+                            onError = { message ->
+                                screenState = screenState.copy(isUploadingPhoto = false)
+                                onError(message)
+                            }
+                        )
+                    }
+                },
+                onError = { message ->
+                    screenState = screenState.copy(isUploadingPhoto = false)
+                    onError(message)
+                }
+            )
+        }
     }
 
     fun updateCustomer(
