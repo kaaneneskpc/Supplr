@@ -136,6 +136,11 @@
 | <img height="600px"  alt="Screenshot_20260104_030838" src="https://github.com/user-attachments/assets/1a37a03d-c769-49e9-9958-68171bf71fa2" />
 | <img height="600px"  alt="Screenshot_20260103_201954" src="https://github.com/user-attachments/assets/ff039755-10d0-4832-b121-786ead319700" />
 | <img height="600px"  alt="Screenshot_20260103_201944" src="https://github.com/user-attachments/assets/adfad7f5-0d67-4147-af53-09d9db1fb26c" />
+| <img height="600px" alt="Screenshot_20260118_172443" src="https://github.com/user-attachments/assets/a9157909-0974-4138-b386-bdeaa5c88aed" />
+| <img height="600px" alt="Screenshot_20260117_183037" src="https://github.com/user-attachments/assets/6b7a6f79-df63-4dde-9b4c-f1d860b9cec9" />
+| <img height="600px" alt="Screenshot_20260107_195052" src="https://github.com/user-attachments/assets/315251fc-aee9-4a64-b631-1cfa197cdcae" />
+| <img height="600px" alt="Screenshot_20260107_194446" src="https://github.com/user-attachments/assets/08e6a71e-8ec7-4882-b483-66e83d4cd181" />
+
 
 ### IOS
 
@@ -156,7 +161,10 @@
 | <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-04 at 03 13 15" src="https://github.com/user-attachments/assets/807a4c28-260a-4ed2-b294-ec31d3c82bb1" />
 | <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-03 at 20 35 24" src="https://github.com/user-attachments/assets/35809347-b6c6-4aeb-adc0-9e569061ced8" />
 | <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-03 at 20 35 16" src="https://github.com/user-attachments/assets/ca247923-6c5b-49a2-bf25-9a88f617bab5" />
-
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-18 at 17 27 58" src="https://github.com/user-attachments/assets/ef40afd6-696e-4f29-beec-fef8794c6231" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-07 at 19 54 29" src="https://github.com/user-attachments/assets/6fa0c634-f93e-4bdb-8b89-406d4c10c7c2" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-07 at 19 53 51" src="https://github.com/user-attachments/assets/c134f54a-591d-449a-8b7b-b8f7e77a2678" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-07 at 19 53 46" src="https://github.com/user-attachments/assets/3a4c0760-f4ad-4eea-8804-c8350da1c0d1" />
 
 ## 🎉 Recent Updates
 
