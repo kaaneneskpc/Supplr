@@ -32,6 +32,8 @@
 - 📦 **Order History**: View and track all past orders with detailed status
 - ⭐ **Product Reviews**: Rate products, write reviews with photos, helpful/unhelpful voting
 - 🎁 **Coupon & Discounts**: Apply coupon codes at checkout (percentage, fixed, free shipping)
+- 👤 **Profile Settings**: Communication preferences, security settings, account management
+- 🔐 **Security Features**: Two-factor authentication, password change, account deletion
 
 ### 📊 Admin Features
 - 🛠️ **Admin Panel**: Comprehensive product and analytics management
@@ -64,7 +66,7 @@
     - auth/              : Authentication (login, register).
     - cart/              : Cart management.
     - home/              : Home screen and navigation.
-    - profile/           : User profile management.
+    - profile/           : User profile management, settings, security features.
     - admin_panel/       : 📊 Admin analytics dashboard with charts and insights.
     - manage_product/    : Admin add, edit, delete products.
     - product_details/   : Product details.
@@ -166,6 +168,16 @@
 - **Order Integration** - Coupon tracked in order with discount details
 - **Usage Tracking** - Automatic usage count increment on order
 - **Firestore Collection** - `coupons` collection for coupon management
+
+### 👤 Profile Enhancements (Latest)
+- **Settings Screen** - Centralized settings with communication preferences
+- **Communication Preferences** - Email, push notification, SMS notification toggles
+- **Password Change** - Secure password update with current password verification
+- **Two-Factor Authentication** - Enable/disable 2FA for enhanced security
+- **Account Deletion** - Permanent account deletion with password confirmation
+- **Birth Date** - User birth date for personalized discounts
+- **Profile Photo** - Profile photo URL management
+- **Drawer Navigation** - Settings accessible from navigation drawer
 
 ### ⭐ Product Review System
 - **Star Ratings** - Users can rate products with 1-5 stars

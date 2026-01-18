@@ -40,7 +40,7 @@ Supplr is a modern, modular, and scalable e-commerce application targeting Andro
     - auth/        : Login, registration, authentication operations.
     - cart/        : Cart management.
     - home/        : Home screen and navigation.
-    - profile/     : User profile management.
+    - profile/     : User profile management, **settings**, **security features (2FA, password change)**, **account deletion**.
     - admin_panel/ : 📊 Admin analytics dashboard, interactive charts, business metrics, **order management**.
     - manage_product/: Product add, edit, and delete operations for admin.
     - product_details/: Product details and reviews.
@@ -317,6 +317,15 @@ Supplr is a modern, modular, and scalable e-commerce application targeting Andro
 - **Favorites (favorites):** Users can add products to favorites, view and manage favorite products on a separate screen.
 - **🗺️ Locations (locations):** User address management system.
 - **💳 Stripe Payment Integration:** Multi-platform payment system.
+
+- **👤 Profile Enhancements (profile):**
+  - Settings screen with communication preferences (email/push/SMS notifications)
+  - Password change functionality with Firebase Auth re-authentication
+  - Two-Factor Authentication (2FA) enable/disable
+  - Account deletion with password confirmation
+  - Birth date for personalized discounts
+  - Profile photo URL management
+  - Navigation drawer integration
 
 ---
 
