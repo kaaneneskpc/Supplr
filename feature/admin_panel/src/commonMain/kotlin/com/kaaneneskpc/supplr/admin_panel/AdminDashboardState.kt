@@ -3,9 +3,7 @@ package com.kaaneneskpc.supplr.admin_panel
 import com.kaaneneskpc.supplr.data.domain.DashboardAnalytics
 import com.kaaneneskpc.supplr.data.domain.DateRange
 
-/**
- * Admin Dashboard ekranının UI state'ini temsil eden data class
- */
+
 data class AdminDashboardState(
     val isLoading: Boolean = false,
     val dashboardAnalytics: DashboardAnalytics? = null,
@@ -17,9 +15,7 @@ data class AdminDashboardState(
     val hasError: Boolean get() = errorMessage != null
 }
 
-/**
- * Admin Dashboard için mevcut date range seçenekleri
- */
+
 enum class DateRangeOption(
     val displayName: String,
     val dateRange: DateRange
@@ -35,9 +31,7 @@ enum class DateRangeOption(
     }
 }
 
-/**
- * Admin Dashboard için UI events
- */
+
 sealed class AdminDashboardEvent {
     data class DateRangeChanged(val dateRange: DateRange) : AdminDashboardEvent()
     object RefreshData : AdminDashboardEvent()

@@ -3,9 +3,6 @@ package com.kaaneneskpc.supplr.data.domain
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 
-/**
- * Günlük özet verileri için model
- */
 @Serializable
 data class DailySummary(
     val date: String,
@@ -14,9 +11,7 @@ data class DailySummary(
     val averageOrderValue: Double = if (orderCount > 0) totalRevenue / orderCount else 0.0
 )
 
-/**
- * En çok satan ürünler için model
- */
+
 @Serializable
 data class TopSellingProduct(
     val productId: String,
@@ -26,9 +21,7 @@ data class TopSellingProduct(
     val thumbnail: String? = null
 )
 
-/**
- * Kullanıcı istatistikleri için model
- */
+
 @Serializable
 data class UserStats(
     val totalUsers: Int,
@@ -37,9 +30,7 @@ data class UserStats(
     val newUsersThisMonth: Int
 )
 
-/**
- * Dashboard analitikleri için ana model
- */
+
 @Serializable
 data class DashboardAnalytics(
     val totalRevenue: Double,
@@ -50,9 +41,7 @@ data class DashboardAnalytics(
     val userStats: UserStats
 )
 
-/**
- * Tarih aralığı seçimi için model
- */
+
 @Serializable
 data class DateRange(
     val startDate: Long,
