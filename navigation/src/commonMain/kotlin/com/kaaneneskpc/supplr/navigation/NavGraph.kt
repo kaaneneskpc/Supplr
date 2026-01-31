@@ -31,6 +31,7 @@ import com.kaaneneskpc.supplr.profile.settings.ChangePasswordScreen
 import com.kaaneneskpc.supplr.profile.settings.TwoFactorAuthScreen
 import com.kaaneneskpc.supplr.profile.settings.DeleteAccountScreen
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
+import com.kaaneneskpc.supplr.di.ModuleLoader
 
 @Composable
 fun NavGraph(startDestination: Screen = Screen.Auth) {
@@ -51,6 +52,7 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
         composable<Screen.Home> {
             HomeScreen(
                 navigateToAuth = {
+                    ModuleLoader.resetLoadedModules()
                     navController.navigate(Screen.Auth) {
                         popUpTo<Screen.Auth> { inclusive = true }
                     }
@@ -59,30 +61,38 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                     navController.navigate(Screen.Profile)
                 },
                 navigateToAdminPanel = {
+                    ModuleLoader.loadModuleIfNeeded(ModuleLoader.ModuleType.ADMIN)
                     navController.navigate(Screen.AdminPanel)
                 },
                 navigateToDetails = { productId ->
+                    ModuleLoader.loadModuleIfNeeded(ModuleLoader.ModuleType.SECONDARY)
                     navController.navigate(Screen.ProductDetails(id = productId))
                 },
                 navigateToCategorySearch = { categoryName ->
+                    ModuleLoader.loadModuleIfNeeded(ModuleLoader.ModuleType.SECONDARY)
                     navController.navigate(Screen.CategorySearch(categoryName))
                 },
                 navigateToCheckout = { totalAmount ->
+                    ModuleLoader.loadModuleIfNeeded(ModuleLoader.ModuleType.SECONDARY)
                     navController.navigate(Screen.Checkout(totalAmount))
                 },
                 navigateToContactUs = {
                     navController.navigate(Screen.ContactUs)
                 },
                 navigateToFavorites = {
+                    ModuleLoader.loadModuleIfNeeded(ModuleLoader.ModuleType.SECONDARY)
                     navController.navigate(Screen.Favorites)
                 },
                 navigateToLocations = {
+                    ModuleLoader.loadModuleIfNeeded(ModuleLoader.ModuleType.SECONDARY)
                     navController.navigate(Screen.Locations)
                 },
                 navigateToOrderHistory = {
+                    ModuleLoader.loadModuleIfNeeded(ModuleLoader.ModuleType.SECONDARY)
                     navController.navigate(Screen.OrderHistory)
                 },
                 navigateToSettings = {
+                    ModuleLoader.loadModuleIfNeeded(ModuleLoader.ModuleType.SECONDARY)
                     navController.navigate(Screen.Settings)
                 }
             )
@@ -130,6 +140,7 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                     navController.navigateUp()
                 },
                 navigateToAuth = {
+                    ModuleLoader.resetLoadedModules()
                     navController.navigate(Screen.Auth) {
                         popUpTo(0) { inclusive = true }
                     }
