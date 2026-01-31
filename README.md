@@ -88,6 +88,9 @@
 
 ## 🧩 Architecture
 
+<img width="722" height="323" alt="Ekran Resmi 2026-01-31 14 26 24" src="https://github.com/user-attachments/assets/8d97e959-f630-47b6-a174-ecd25c2c6a07" />
+
+
 - **Clean Architecture**: Data → Domain → Presentation layers
 - **Feature-based modules**: Independent development and testing
 - **Centralized DI with Koin**: All ViewModels and repositories managed centrally
