@@ -1,6 +1,7 @@
 package com.kaaneneskpc.supplr.data
 
 import com.kaaneneskpc.supplr.data.domain.ProductRepository
+import com.kaaneneskpc.supplr.shared.domain.PaginatedResult
 import com.kaaneneskpc.supplr.shared.domain.Product
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
 import com.kaaneneskpc.supplr.shared.util.RequestState
@@ -203,4 +204,62 @@ class ProductRepositoryImpl : ProductRepository {
                 send(RequestState.Error("Error while reading a selected product: ${e.message}"))
             }
         }
+
+    override suspend fun readProductsByCategoryPaginated(
+        category: ProductCategory,
+        pageSize: Int,
+        lastDocumentId: String?
+    ): RequestState<PaginatedResult<Product>> {
+        return try {
+            val userId = getCurrentUserId()
+            if (userId != null) {
+                val database = Firebase.firestore
+                val productCollection = database.collection(collectionPath = "product")
+                var query = productCollection
+                    .where { "category" equalTo category.name }
+                    .orderBy("createdAt", Direction.DESCENDING)
+                    .limit(pageSize + 1)
+                if (lastDocumentId != null) {
+                    val lastDocument = productCollection.document(lastDocumentId).get()
+                    query = productCollection
+                        .where { "category" equalTo category.name }
+                        .orderBy("createdAt", Direction.DESCENDING)
+                        .startAfter(lastDocument)
+                        .limit(pageSize + 1)
+                }
+                val querySnapshot = query.get()
+                val documents = querySnapshot.documents
+                val hasNextPage = documents.size > pageSize
+                val resultDocuments = if (hasNextPage) documents.dropLast(1) else documents
+                val products = resultDocuments.map { document ->
+                    Product(
+                        id = document.id,
+                        title = document.get<String>(field = "title").uppercase(),
+                        createdAt = document.get(field = "createdAt"),
+                        description = document.get(field = "description"),
+                        thumbnail = document.get(field = "thumbnail"),
+                        category = document.get(field = "category"),
+                        flavors = document.get(field = "flavors"),
+                        weight = document.get(field = "weight"),
+                        price = document.get(field = "price"),
+                        isPopular = document.get(field = "isPopular"),
+                        isDiscounted = document.get(field = "isDiscounted"),
+                        isNew = document.get(field = "isNew")
+                    )
+                }
+                val newLastDocumentId = resultDocuments.lastOrNull()?.id
+                RequestState.Success(
+                    PaginatedResult(
+                        items = products,
+                        lastDocumentId = newLastDocumentId,
+                        hasNextPage = hasNextPage
+                    )
+                )
+            } else {
+                RequestState.Error("User is not available.")
+            }
+        } catch (e: Exception) {
+            RequestState.Error("Error while reading paginated products: ${e.message}")
+        }
+    }
 }

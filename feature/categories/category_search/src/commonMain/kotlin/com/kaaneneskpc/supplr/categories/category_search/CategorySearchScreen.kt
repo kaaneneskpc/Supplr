@@ -5,12 +5,15 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,16 +25,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import org.koin.compose.viewmodel.koinViewModel
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kaaneneskpc.supplr.shared.component.InfoCard
 import com.kaaneneskpc.supplr.shared.component.LoadingCard
 import com.kaaneneskpc.supplr.shared.component.ProductCard
+import com.kaaneneskpc.supplr.shared.domain.PaginationState
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
 import com.kaaneneskpc.supplr.shared.fonts.BebasNeueFont
 import com.kaaneneskpc.supplr.shared.fonts.BorderIdle
@@ -39,10 +48,14 @@ import com.kaaneneskpc.supplr.shared.fonts.FontSize
 import com.kaaneneskpc.supplr.shared.fonts.IconPrimary
 import com.kaaneneskpc.supplr.shared.fonts.Resources
 import com.kaaneneskpc.supplr.shared.fonts.Surface
+import com.kaaneneskpc.supplr.shared.fonts.SurfaceBrand
 import com.kaaneneskpc.supplr.shared.fonts.SurfaceLighter
 import com.kaaneneskpc.supplr.shared.fonts.TextPrimary
+import com.kaaneneskpc.supplr.shared.fonts.TextSecondary
 import com.kaaneneskpc.supplr.shared.util.DisplayResult
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,8 +67,26 @@ fun CategorySearchScreen(
     val viewModel = koinViewModel<CategorySearchViewModel>()
     val filteredProducts by viewModel.filteredProducts.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
-    var searchBarVisible by mutableStateOf(false)
-
+    val paginationState by viewModel.paginationState.collectAsState()
+    var searchBarVisible by remember { mutableStateOf(false) }
+    val listState = rememberLazyListState()
+    val shouldLoadMore by remember {
+        derivedStateOf {
+            val layoutInfo = listState.layoutInfo
+            val totalItems = layoutInfo.totalItemsCount
+            val lastVisibleIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            lastVisibleIndex >= totalItems - 3 && totalItems > 0
+        }
+    }
+    LaunchedEffect(listState) {
+        snapshotFlow { shouldLoadMore }
+            .distinctUntilChanged()
+            .collect { shouldLoad ->
+                if (shouldLoad && paginationState == PaginationState.Idle) {
+                    viewModel.loadNextPage()
+                }
+            }
+    }
     Scaffold(
         containerColor = Surface,
         topBar = {
@@ -159,6 +190,7 @@ fun CategorySearchScreen(
                 ) { products ->
                     if (products.isNotEmpty()) {
                         LazyColumn(
+                            state = listState,
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(all = 12.dp),
@@ -173,12 +205,15 @@ fun CategorySearchScreen(
                                     onClick = navigateToDetails
                                 )
                             }
+                            item {
+                                PaginationFooter(paginationState = paginationState)
+                            }
                         }
                     } else {
                         InfoCard(
                             image = Resources.Image.Cat,
                             title = "Nothing here",
-                            subtitle = "We couldn’t find any product."
+                            subtitle = "We couldn't find any product."
                         )
                     }
                 }
@@ -192,5 +227,44 @@ fun CategorySearchScreen(
             },
             transitionSpec = fadeIn() togetherWith fadeOut()
         )
+    }
+}
+
+@Composable
+private fun PaginationFooter(
+    paginationState: PaginationState
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        when (paginationState) {
+            is PaginationState.LoadingMore -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = SurfaceBrand,
+                    strokeWidth = 2.dp
+                )
+            }
+            is PaginationState.EndReached -> {
+                Text(
+                    text = "End of list",
+                    fontSize = FontSize.REGULAR,
+                    color = TextSecondary,
+                    textAlign = TextAlign.Center
+                )
+            }
+            is PaginationState.Error -> {
+                Text(
+                    text = "Error loading more items",
+                    fontSize = FontSize.REGULAR,
+                    color = TextSecondary,
+                    textAlign = TextAlign.Center
+                )
+            }
+            else -> {}
+        }
     }
 }

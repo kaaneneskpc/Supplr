@@ -1,5 +1,6 @@
 package com.kaaneneskpc.supplr.data.domain
 
+import com.kaaneneskpc.supplr.shared.domain.PaginatedResult
 import com.kaaneneskpc.supplr.shared.domain.Product
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
 import com.kaaneneskpc.supplr.shared.util.RequestState
@@ -12,4 +13,9 @@ interface ProductRepository {
     fun readProductByIdFlow(id: String): Flow<RequestState<Product>>
     fun readProductsByIdsFlow(ids: List<String>): Flow<RequestState<List<Product>>>
     fun readProductsByCategoryFlow(category: ProductCategory): Flow<RequestState<List<Product>>>
+    suspend fun readProductsByCategoryPaginated(
+        category: ProductCategory,
+        pageSize: Int = 10,
+        lastDocumentId: String? = null
+    ): RequestState<PaginatedResult<Product>>
 }

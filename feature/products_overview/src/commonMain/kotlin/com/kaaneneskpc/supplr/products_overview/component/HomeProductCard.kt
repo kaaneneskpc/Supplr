@@ -38,10 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import coil3.compose.LocalPlatformContext
-import coil3.request.ImageRequest
-import coil3.request.crossfade
+import com.kaaneneskpc.supplr.shared.component.CachedAsyncImage
 import com.kaaneneskpc.supplr.shared.domain.Product
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
 import com.kaaneneskpc.supplr.shared.fonts.Alpha
@@ -78,14 +75,15 @@ fun HomeProductCard(
             repeatMode = RepeatMode.Reverse
         )
     )
-
     Box(
         modifier = modifier
             .fillMaxHeight()
             .clip(RoundedCornerShape(size = 12.dp))
             .clickable { onClick(product.id) }
     ) {
-        AsyncImage(
+        CachedAsyncImage(
+            imageUrl = product.thumbnail,
+            contentDescription = "Product thumbnail",
             modifier = Modifier
                 .fillMaxSize()
                 .animateContentSize()
@@ -95,12 +93,8 @@ fun HomeProductCard(
                         .rotate(animatedRotation.value)
                     else Modifier
                 ),
-            model = ImageRequest.Builder(LocalPlatformContext.current)
-                .data(product.thumbnail)
-                .crossfade(enable = true)
-                .build(),
-            contentDescription = "Product thumbnail",
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            shape = RoundedCornerShape(size = 12.dp)
         )
         Box(
             modifier = Modifier
