@@ -52,8 +52,10 @@
 - 🔐 **Firebase Authentication & Firestore**
 - 🏗️ **Dependency Injection with Koin**
 - 🌐 **Networking with Ktor**
-- 🖼️ **Image Loading with Coil**
+- 🖼️ **Image Loading with Coil** - Platform-specific caching (25% memory, 100MB disk)
 - 🧪 **Testable & Modular Architecture**
+- 📄 **Cursor-based Pagination** - Efficient Firestore data fetching with `startAfter()`
+- ♾️ **Infinite Scroll** - Automatic page loading with LazyColumn scroll detection
 
 ---
 
@@ -171,7 +173,18 @@
 
 ## 🎉 Recent Updates
 
-### 🎁 Coupon and Discount Code System (Latest)
+### 🚀 Lazy Loading & Image Caching (Latest)
+- **Cursor-based Pagination** - Firestore `startAfter()` and `limit()` for efficient data fetching
+- **PaginatedResult<T>** - Generic data class with `items`, `lastDocumentId`, `hasNextPage`
+- **PaginationState** - UI state management (Idle, Loading, LoadingMore, EndReached, Error)
+- **Infinite Scroll** - LazyColumn scroll detection with automatic page fetching
+- **CachedAsyncImage** - Reusable composable with shimmer placeholder and error handling
+- **Platform-specific ImageLoader** - Android/iOS image loader with expect/actual pattern
+- **Memory Cache** - 25% of available memory for optimal performance
+- **Disk Cache** - 100MB in app cache directory for offline access
+- **Applied to** - CategorySearchScreen, ProductCard, HomeProductCard
+
+### 🎁 Coupon and Discount Code System
 - **Coupon Code Input** - Apply coupons at checkout
 - **Multiple Coupon Types** - Percentage, Fixed Amount, Free Shipping
 - **Real-time Validation** - Expiration, usage limit, minimum order checks
