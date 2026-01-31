@@ -19,8 +19,9 @@ Supplr is a modern, modular, and scalable e-commerce application targeting Andro
 - **Custom Canvas Charts:** Custom drawing components for analytics visualizations.
 - **Material3:** Modern UI components and responsive design.
 - **Animated Components:** Animations for enhanced user experience.
-- **Coil:** Image loading and caching operations.
-- **Loading Shimmer Effects:** Modern loading states.
+- **Coil3:** Image loading with **enhanced caching** (memory cache 25%, disk cache 100MB).
+- **Loading Shimmer Effects:** Modern loading states with shimmer placeholders.
+- **Lazy Loading & Pagination:** Cursor-based pagination for product lists.
 
 ### Payment & Integration
 - **Stripe SDK:** Payment processing for **Android** and **iOS** (**Android:** Real PaymentSheet, **iOS:** Simulated flow).
@@ -101,7 +102,7 @@ Supplr is a modern, modular, and scalable e-commerce application targeting Andro
     - Kotlin Coroutines & Flow
     - Kotlinx Serialization
     - Multiplatform Settings
-    - Coil (coil3-network-ktor)
+    - Coil3 (coil3-network-ktor) with custom **ImageLoaderFactory** (expect/actual pattern)
 
 - **DI Layer (di/):**
   - Dependency management with Koin.
@@ -327,6 +328,17 @@ Supplr is a modern, modular, and scalable e-commerce application targeting Andro
   - Profile photo URL management
   - Navigation drawer integration
 
+- **🚀 Lazy Loading & Image Caching (shared, data, categories):**
+  - **Pagination:** Cursor-based pagination using Firestore `startAfter()` and `limit()`
+  - **PaginatedResult:** Generic pagination data class with `items`, `lastDocumentId`, `hasNextPage`
+  - **PaginationState:** UI state management (Idle, Loading, LoadingMore, EndReached, Error)
+  - **Infinite Scroll:** LazyColumn scroll detection with automatic page fetching
+  - **ImageLoaderFactory:** Platform-specific (Android/iOS) image loader with caching
+  - **CachedAsyncImage:** Reusable composable with shimmer placeholder and error handling
+  - **Memory Cache:** 25% of available memory
+  - **Disk Cache:** 100MB in app cache directory
+  - **Applied to:** CategorySearchScreen, ProductCard, HomeProductCard
+
 ---
 
 ## 11. Potential Additions / Improvement Suggestions
@@ -347,6 +359,7 @@ Supplr is a modern, modular, and scalable e-commerce application targeting Andro
 - **Offline-first support (local cache, sync).**
 - **More detailed logging and monitoring.**
 - **Compose Multiplatform expansion for more platforms (web, desktop).**
+- **Extend pagination to more screens:** ProductsOverviewScreen, FavoritesScreen, OrderHistoryScreen.**
 
 ---
 
