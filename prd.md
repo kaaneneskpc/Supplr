@@ -22,6 +22,7 @@ Supplr is a modern, modular, and scalable e-commerce application targeting Andro
 - **Coil3:** Image loading with **enhanced caching** (memory cache 25%, disk cache 100MB).
 - **Loading Shimmer Effects:** Modern loading states with shimmer placeholders.
 - **Lazy Loading & Pagination:** Cursor-based pagination for product lists.
+- **Code Splitting:** Module-based lazy loading with **ModuleLoader** utility.
 
 ### Payment & Integration
 - **Stripe SDK:** Payment processing for **Android** and **iOS** (**Android:** Real PaymentSheet, **iOS:** Simulated flow).
@@ -53,6 +54,7 @@ Supplr is a modern, modular, and scalable e-commerce application targeting Andro
     - locations/      : User address management, add/edit, categorization (Home, Work, Other).
     - contact_us/     : Contact page.
     - order_history/  : 📦 User order history, order details, and status tracking.
+    - gamification/   : 🎮 Gamification features (Leaderboard, Spin Wheel, prizes).
 - data/            : Data layer, repositories, and services.
 - shared/          : Shared domain models, utils, constants.
 - di/              : Dependency injection modules (Koin).
@@ -121,6 +123,7 @@ Supplr is a modern, modular, and scalable e-commerce application targeting Andro
 
 ### New Feature Modules
   - **admin_panel:** 📊 **Advanced Analytics Dashboard** - Real-time business metrics, interactive charts, revenue analysis, top-selling products, user statistics.
+  - **gamification:** 🎮 **Gamification System** - Leaderboard rankings, Spin Wheel daily prizes, user engagement features.
   - **manage_product:** Screen and business logic for admin product add, edit, and delete operations.
   - **products_overview:** Product listing module featuring new and discounted products with quick access on home screen.
   - **payment_completed:** Screen showing order summary and success message after order completion.
@@ -327,6 +330,24 @@ Supplr is a modern, modular, and scalable e-commerce application targeting Andro
   - Birth date for personalized discounts
   - Profile photo URL management
   - Navigation drawer integration
+
+- **🎮 Gamification System (gamification):**
+  - **Leaderboard:** View top shoppers with rankings
+  - **User Rankings:** Track personal position among all users
+  - **Spin Wheel:** Daily spin for prizes and discounts
+  - **Prize Rewards:** Earn coupons, discounts, special offers
+  - **Animated UI:** Smooth transitions and engaging experience
+  - **Real-time Data:** Live updates from Firestore
+  - **LeaderboardViewModel:** Manages leaderboard state and user rank
+  - **SpinWheelViewModel:** Handles spin logic and prize awarding
+
+- **⚡ Code Splitting & Lazy Loading (di):**
+  - **ModuleLoader:** Centralized utility for lazy module loading
+  - **ModuleType Enum:** ADMIN, SECONDARY, GAMIFICATION modules
+  - **Lazy Loading:** Modules loaded on-demand for faster startup
+  - **Navigation Integration:** Automatic module loading before navigation
+  - **Startup Optimization:** Only core and auth modules at startup
+  - **FeatureModules:** Separate Koin modules for each feature area
 
 - **🚀 Lazy Loading & Image Caching (shared, data, categories):**
   - **Pagination:** Cursor-based pagination using Firestore `startAfter()` and `limit()`

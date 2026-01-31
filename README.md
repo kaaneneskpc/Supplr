@@ -34,6 +34,7 @@
 - 🎁 **Coupon & Discounts**: Apply coupon codes at checkout (percentage, fixed, free shipping)
 - 👤 **Profile Settings**: Communication preferences, security settings, account management
 - 🔐 **Security Features**: Two-factor authentication, password change, account deletion
+- 🎮 **Gamification**: Leaderboard rankings and Spin Wheel for daily prizes
 
 ### 📊 Admin Features
 - 🛠️ **Admin Panel**: Comprehensive product and analytics management
@@ -56,6 +57,7 @@
 - 🧪 **Testable & Modular Architecture**
 - 📄 **Cursor-based Pagination** - Efficient Firestore data fetching with `startAfter()`
 - ♾️ **Infinite Scroll** - Automatic page loading with LazyColumn scroll detection
+- ⚡ **Code Splitting** - Module-based lazy loading for faster startup performance
 
 ---
 
@@ -80,6 +82,7 @@
     - locations/         : User address management with categories.
     - checkout/          : Payment processing with Stripe integration.
     - order_history/     : 📦 Customer order history and tracking.
+    - gamification/      : 🎮 Gamification with Leaderboard and Spin Wheel.
 - data/            : Data layer, repositories, and services.
 - shared/          : Shared domain models, utils, constants.
 - di/              : Dependency injection modules (Koin).
@@ -181,7 +184,22 @@
 
 ## 🎉 Recent Updates
 
-### 🚀 Lazy Loading & Image Caching (Latest)
+### 🎮 Gamification System (Latest)
+- **Leaderboard** - View top shoppers and compete with other customers
+- **User Rankings** - Track your position among all users
+- **Spin Wheel** - Daily spin for amazing prizes and discounts
+- **Prize Rewards** - Earn coupons, discounts, and special offers
+- **Animated UI** - Smooth animations and engaging user experience
+- **Real-time Updates** - Live leaderboard data from Firestore
+
+### ⚡ Code Splitting & Performance (Latest)
+- **Module-based Lazy Loading** - Feature modules load on-demand for faster startup
+- **ModuleLoader Utility** - Centralized module loading with `ModuleType` enum
+- **Lazy Module Types** - Admin, Secondary, and Gamification modules
+- **Navigation Integration** - Automatic module loading before screen navigation
+- **Startup Optimization** - Only core and auth modules loaded at app start
+
+### 🚀 Lazy Loading & Image Caching
 - **Cursor-based Pagination** - Firestore `startAfter()` and `limit()` for efficient data fetching
 - **PaginatedResult<T>** - Generic data class with `items`, `lastDocumentId`, `hasNextPage`
 - **PaginationState** - UI state management (Idle, Loading, LoadingMore, EndReached, Error)
