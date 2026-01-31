@@ -31,6 +31,10 @@ enum class DrawerItem(
         title = "Contact Us",
         icon = Resources.Icon.Edit
     ),
+    Gamification(
+        title = "Games & Rewards",
+        icon = Resources.Icon.Dollar
+    ),
     SignOut(
         title = "Sign Out",
         icon = Resources.Icon.SignOut

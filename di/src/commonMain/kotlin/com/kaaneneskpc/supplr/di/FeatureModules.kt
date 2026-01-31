@@ -14,6 +14,7 @@ import com.kaaneneskpc.supplr.data.BlogRepositoryImpl
 import com.kaaneneskpc.supplr.data.CouponRepositoryImpl
 import com.kaaneneskpc.supplr.data.CustomerRepositoryImpl
 import com.kaaneneskpc.supplr.data.FavoritesRepositoryImpl
+import com.kaaneneskpc.supplr.data.GamificationRepositoryImpl
 import com.kaaneneskpc.supplr.data.OrderRepositoryImpl
 import com.kaaneneskpc.supplr.data.ProductRepositoryImpl
 import com.kaaneneskpc.supplr.data.ReviewRepositoryImpl
@@ -24,6 +25,7 @@ import com.kaaneneskpc.supplr.data.domain.BlogRepository
 import com.kaaneneskpc.supplr.data.domain.CouponRepository
 import com.kaaneneskpc.supplr.data.domain.CustomerRepository
 import com.kaaneneskpc.supplr.data.domain.FavoritesRepository
+import com.kaaneneskpc.supplr.data.domain.GamificationRepository
 import com.kaaneneskpc.supplr.data.domain.LocationRepository
 import com.kaaneneskpc.supplr.data.domain.OrderRepository
 import com.kaaneneskpc.supplr.data.domain.PaymentRepository
@@ -32,6 +34,8 @@ import com.kaaneneskpc.supplr.data.domain.ReviewRepository
 import com.kaaneneskpc.supplr.data.usecase.GetDashboardAnalyticsUseCase
 import com.kaaneneskpc.supplr.data.usecase.GetUserStatisticsUseCase
 import com.kaaneneskpc.supplr.favorites.FavoritesViewModel
+import com.kaaneneskpc.supplr.gamification.leaderboard.LeaderboardViewModel
+import com.kaaneneskpc.supplr.gamification.spin_wheel.SpinWheelViewModel
 import com.kaaneneskpc.supplr.home.HomeViewModel
 import com.kaaneneskpc.supplr.locations.LocationsViewModel
 import com.kaaneneskpc.supplr.manage_product.ManageProductViewModel
@@ -92,4 +96,10 @@ val secondaryModule = module {
     viewModelOf(::ChangePasswordViewModel)
     viewModelOf(::TwoFactorAuthViewModel)
     viewModelOf(::DeleteAccountViewModel)
+}
+
+val gamificationModule = module {
+    single<GamificationRepository> { GamificationRepositoryImpl(get(), get()) }
+    viewModelOf(::LeaderboardViewModel)
+    viewModelOf(::SpinWheelViewModel)
 }

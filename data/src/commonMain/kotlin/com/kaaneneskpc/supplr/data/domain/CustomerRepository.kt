@@ -84,4 +84,9 @@ interface CustomerRepository {
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     )
+    suspend fun addRewardPoints(
+        points: Int,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    )
 }

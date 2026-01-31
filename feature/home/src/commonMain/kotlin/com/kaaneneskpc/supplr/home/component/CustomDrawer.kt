@@ -30,7 +30,8 @@ fun CustomDrawer(
     onFavoritesClick: () -> Unit,
     onLocationsClick: () -> Unit,
     onOrderHistoryClick: () -> Unit,
-    onSettingsClick: () -> Unit
+    onSettingsClick: () -> Unit,
+    onGamificationClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -67,6 +68,7 @@ fun CustomDrawer(
                         DrawerItem.Locations -> onLocationsClick()
                         DrawerItem.OrderHistory -> onOrderHistoryClick()
                         DrawerItem.Settings -> onSettingsClick()
+                        DrawerItem.Gamification -> onGamificationClick()
                         else -> {}
                     }
                 }

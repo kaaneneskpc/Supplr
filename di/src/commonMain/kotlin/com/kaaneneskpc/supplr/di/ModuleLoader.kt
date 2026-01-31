@@ -8,7 +8,8 @@ object ModuleLoader {
 
     enum class ModuleType {
         ADMIN,
-        SECONDARY
+        SECONDARY,
+        GAMIFICATION
     }
 
     fun loadModuleIfNeeded(moduleType: ModuleType) {
@@ -24,6 +25,7 @@ object ModuleLoader {
         return when (moduleType) {
             ModuleType.ADMIN -> adminModule
             ModuleType.SECONDARY -> secondaryModule
+            ModuleType.GAMIFICATION -> gamificationModule
         }
     }
 

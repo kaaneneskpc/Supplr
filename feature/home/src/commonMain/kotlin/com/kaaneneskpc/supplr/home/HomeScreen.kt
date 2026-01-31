@@ -84,6 +84,7 @@ fun HomeScreen(
     navigateToLocations: () -> Unit,
     navigateToOrderHistory: () -> Unit,
     navigateToSettings: () -> Unit,
+    navigateToGamification: () -> Unit,
 ) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState()
@@ -155,7 +156,8 @@ fun HomeScreen(
             onFavoritesClick = navigateToFavorites,
             onLocationsClick = navigateToLocations,
             onOrderHistoryClick = navigateToOrderHistory,
-            onSettingsClick = navigateToSettings
+            onSettingsClick = navigateToSettings,
+            onGamificationClick = navigateToGamification
         )
         Box(
             modifier = Modifier

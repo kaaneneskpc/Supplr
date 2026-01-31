@@ -55,6 +55,7 @@ kotlin {
             implementation(project(":feature:favorites"))
             implementation(project(":feature:locations"))
             implementation(project(":feature:order_history"))
+            implementation(project(":feature:gamification"))
         }
     }
 }

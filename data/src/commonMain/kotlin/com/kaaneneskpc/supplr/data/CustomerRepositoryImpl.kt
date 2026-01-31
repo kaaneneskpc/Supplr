@@ -89,7 +89,8 @@ class CustomerRepositoryImpl : CustomerRepository {
                             profilePhotoUrl = document.get("profilePhotoUrl"),
                             birthDate = document.get("birthDate"),
                             communicationPreferences = document.get("communicationPreferences"),
-                            isTwoFactorEnabled = document.get("isTwoFactorEnabled") ?: false
+                            isTwoFactorEnabled = document.get("isTwoFactorEnabled") ?: false,
+                            rewardPoints = document.get("rewardPoints") ?: 0
                         )
                         send(RequestState.Success(data = customer))
                     } else {
@@ -434,6 +435,35 @@ class CustomerRepositoryImpl : CustomerRepository {
             }
         } catch (e: Exception) {
             onError("Error sending verification email: ${e.message}")
+        }
+    }
+
+    override suspend fun addRewardPoints(
+        points: Int,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            val userId = getCurrentUserId()
+            if (userId != null) {
+                val firestore = Firebase.firestore
+                val customerDoc = firestore.collection("customer")
+                    .document(userId)
+                    .get()
+                if (customerDoc.exists) {
+                    val currentPoints: Int = customerDoc.get("rewardPoints") ?: 0
+                    firestore.collection("customer")
+                        .document(userId)
+                        .update("rewardPoints" to (currentPoints + points))
+                    onSuccess()
+                } else {
+                    onError("Customer not found.")
+                }
+            } else {
+                onError("User is not available.")
+            }
+        } catch (e: Exception) {
+            onError("Error adding reward points: ${e.message}")
         }
     }
 }

@@ -21,7 +21,8 @@ data class Customer(
     val profilePhotoUrl: String? = null,
     val birthDate: Long? = null,
     val communicationPreferences: CommunicationPreferences? = null,
-    val isTwoFactorEnabled: Boolean = false
+    val isTwoFactorEnabled: Boolean = false,
+    val rewardPoints: Int = 0
 )
 
 @Serializable

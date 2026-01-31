@@ -67,4 +67,10 @@ sealed class Screen {
     data object TwoFactorAuth : Screen()
     @Serializable
     data object DeleteAccount : Screen()
+    @Serializable
+    data object Gamification : Screen()
+    @Serializable
+    data object Leaderboard : Screen()
+    @Serializable
+    data object SpinWheel : Screen()
 }

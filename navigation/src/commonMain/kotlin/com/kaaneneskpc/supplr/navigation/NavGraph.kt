@@ -30,6 +30,9 @@ import com.kaaneneskpc.supplr.profile.settings.SettingsScreen
 import com.kaaneneskpc.supplr.profile.settings.ChangePasswordScreen
 import com.kaaneneskpc.supplr.profile.settings.TwoFactorAuthScreen
 import com.kaaneneskpc.supplr.profile.settings.DeleteAccountScreen
+import com.kaaneneskpc.supplr.gamification.GamificationScreen
+import com.kaaneneskpc.supplr.gamification.leaderboard.LeaderboardScreen
+import com.kaaneneskpc.supplr.gamification.spin_wheel.SpinWheelScreen
 import com.kaaneneskpc.supplr.shared.domain.ProductCategory
 import com.kaaneneskpc.supplr.di.ModuleLoader
 
@@ -94,6 +97,10 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
                 navigateToSettings = {
                     ModuleLoader.loadModuleIfNeeded(ModuleLoader.ModuleType.SECONDARY)
                     navController.navigate(Screen.Settings)
+                },
+                navigateToGamification = {
+                    ModuleLoader.loadModuleIfNeeded(ModuleLoader.ModuleType.GAMIFICATION)
+                    navController.navigate(Screen.Gamification)
                 }
             )
         }
@@ -316,6 +323,33 @@ fun NavGraph(startDestination: Screen = Screen.Auth) {
             val orderId = it.toRoute<Screen.OrderDetail>().orderId
             OrderDetailScreen(
                 orderId = orderId,
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+        composable<Screen.Gamification> {
+            GamificationScreen(
+                navigateBack = {
+                    navController.navigateUp()
+                },
+                navigateToLeaderboard = {
+                    navController.navigate(Screen.Leaderboard)
+                },
+                navigateToSpinWheel = {
+                    navController.navigate(Screen.SpinWheel)
+                }
+            )
+        }
+        composable<Screen.Leaderboard> {
+            LeaderboardScreen(
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+        composable<Screen.SpinWheel> {
+            SpinWheelScreen(
                 navigateBack = {
                     navController.navigateUp()
                 }
