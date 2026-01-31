@@ -145,6 +145,10 @@
 | <img height="600px" alt="Screenshot_20260117_183037" src="https://github.com/user-attachments/assets/6b7a6f79-df63-4dde-9b4c-f1d860b9cec9" />
 | <img height="600px" alt="Screenshot_20260107_195052" src="https://github.com/user-attachments/assets/315251fc-aee9-4a64-b631-1cfa197cdcae" />
 | <img height="600px" alt="Screenshot_20260107_194446" src="https://github.com/user-attachments/assets/08e6a71e-8ec7-4882-b483-66e83d4cd181" />
+| <img height="600px" alt="Screenshot_20260131_195059" src="https://github.com/user-attachments/assets/9fadebe4-e8c3-4540-8b1f-6edfbc27434a" />
+| <img height="600px" alt="Screenshot_20260131_174534" src="https://github.com/user-attachments/assets/00e265f8-f3ea-46da-9e70-a5faec6ee7a2" />
+| <img height="600px" alt="Screenshot_20260131_174413" src="https://github.com/user-attachments/assets/2623f2e9-2f4f-4b5b-964b-2c81a58f1cea" />
+| <img height="600px" alt="Screenshot_20260131_174405" src="https://github.com/user-attachments/assets/82f6ff8f-5820-49f3-8cff-0fa43e5445b7" />
 
 
 ### IOS
@@ -170,6 +174,10 @@
 | <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-07 at 19 54 29" src="https://github.com/user-attachments/assets/6fa0c634-f93e-4bdb-8b89-406d4c10c7c2" />
 | <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-07 at 19 53 51" src="https://github.com/user-attachments/assets/c134f54a-591d-449a-8b7b-b8f7e77a2678" />
 | <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-07 at 19 53 46" src="https://github.com/user-attachments/assets/3a4c0760-f4ad-4eea-8804-c8350da1c0d1" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-31 at 19 57 07" src="https://github.com/user-attachments/assets/53f09c6c-a551-4142-8609-863e294142a2" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-31 at 19 57 00" src="https://github.com/user-attachments/assets/0d34d82e-12a2-40d8-aebe-9f51d4ebbcc7" />
+| <img height="600px" alt="Simulator Screenshot - iPhone 16 Pro - 2026-01-31 at 19 56 54" src="https://github.com/user-attachments/assets/19ff3cdb-b89f-4386-bc22-1d03fb8616e3" />
+
 
 ## 🎉 Recent Updates
 
