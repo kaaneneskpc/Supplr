@@ -45,6 +45,11 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(project(":shared"))
         }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
+        }
     }
 }
 

@@ -54,6 +54,12 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.darwin.client)
         }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
+            implementation(project(":data"))
+        }
     }
 }
 
