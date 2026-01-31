@@ -54,7 +54,7 @@
 - 🏗️ **Dependency Injection with Koin**
 - 🌐 **Networking with Ktor**
 - 🖼️ **Image Loading with Coil** - Platform-specific caching (25% memory, 100MB disk)
-- 🧪 **Testable & Modular Architecture**
+- 🧪 **Comprehensive Unit Testing** - 50+ tests with Turbine, Coroutines Test
 - 📄 **Cursor-based Pagination** - Efficient Firestore data fetching with `startAfter()`
 - ♾️ **Infinite Scroll** - Automatic page loading with LazyColumn scroll detection
 - ⚡ **Code Splitting** - Module-based lazy loading for faster startup performance
@@ -184,7 +184,15 @@
 
 ## 🎉 Recent Updates
 
-### 🎮 Gamification System (Latest)
+### 🧪 Unit Testing Infrastructure (Latest)
+- **Comprehensive Test Suite** - 50+ unit tests across domain, repository, and ViewModel layers
+- **Testing Libraries** - kotlin-test, kotlinx-coroutines-test, Turbine
+- **Domain Tests** - RequestState, Product, Customer, CartItem, PaginatedResult
+- **Fake Repositories** - FakeFavoritesRepository, FakeProductRepository for isolated testing
+- **ViewModel Tests** - FavoritesViewModel with StateFlow and callback verification
+- **Run Tests** - `./gradlew :shared:testDebugUnitTest :data:testDebugUnitTest`
+
+### 🎮 Gamification System
 - **Leaderboard** - View top shoppers and compete with other customers
 - **User Rankings** - Track your position among all users
 - **Spin Wheel** - Daily spin for amazing prizes and discounts

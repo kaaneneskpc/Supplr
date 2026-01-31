@@ -255,11 +255,47 @@ Supplr is a modern, modular, and scalable e-commerce application targeting Andro
 
 ## 9. Testability
 
-- **Repository interfaces and ViewModels easily testable.**
-- **UI tests with mock and fake data.**
-- **Common tests with Kotlin Multiplatform.**
-- **Analytics Testing:** Chart rendering and data processing tests.
-- **Admin Panel Testing:** Role-based access and security rule tests.
+### 9.1. Unit Testing Infrastructure
+- **Testing Libraries:**
+  - `kotlin-test` - Multiplatform test assertions
+  - `kotlinx-coroutines-test` - Coroutine testing with `runTest`, `StandardTestDispatcher`
+  - `turbine` - Flow testing with `test {}` block for StateFlow assertions
+  - `koin-test` - Dependency injection testing
+
+- **Test Source Sets:**
+  - `shared/src/commonTest/` - Domain model tests
+  - `data/src/commonTest/` - Repository tests with fake implementations
+  - `feature/*/src/commonTest/` - ViewModel tests
+
+- **Test Patterns:**
+  - **Arrange-Act-Assert** convention for all tests
+  - Variable naming: `inputX`, `expectedX`, `actualX`, `mockX`
+  - **Fake Repositories:** `FakeFavoritesRepository`, `FakeProductRepository` for isolating logic
+
+### 9.2. Domain Layer Tests
+- `RequestStateTest` - Sealed class states (Idle, Loading, Success, Error)
+- `ProductTest` - Product data class operations
+- `CustomerTest` - Customer data class and nested types
+- `CartItemTest` - Cart item operations and validation
+- `PaginatedResultTest` - Pagination logic and state management
+
+### 9.3. Repository Tests
+- `FavoritesRepositoryTest` - Favorites CRUD with Flow testing
+- `ProductRepositoryTest` - Product filtering, pagination, category queries
+
+### 9.4. ViewModel Tests
+- `FavoritesViewModelTest` - StateFlow emissions, callback verification
+- Uses `Dispatchers.setMain(testDispatcher)` for coroutine testing
+- Turbine for StateFlow subscription testing
+
+### 9.5. Running Tests
+```bash
+# Domain and data tests
+./gradlew :shared:testDebugUnitTest :data:testDebugUnitTest
+
+# Feature tests
+./gradlew :feature:favorites:testDebugUnitTest
+```
 
 ---
 
